@@ -1,0 +1,42 @@
+{
+	"name": "wikimedia/css-sanitizer",
+	"description": "Classes to parse and sanitize CSS",
+	"license": "Apache-2.0",
+	"homepage": "https://www.mediawiki.org/wiki/Css-sanitizer",
+	"authors": [
+		{
+			"name": "Brad Jorsch",
+			"email": "bjorsch@wikimedia.org"
+		}
+	],
+	"autoload": {
+		"classmap": [
+		]
+	},
+	"autoload-dev": {
+		"files": [
+		]
+	},
+	"require": {
+		"php": ">=5.5.9",
+		"ext-mbstring": "*",
+		"ext-iconv": "*",
+		"mediawiki/at-ease": "1.1.0",
+		"wikimedia/utfnormal": "1.1.0"
+	},
+	"require-dev": {
+		"jakub-onderka/php-parallel-lint": "0.9.2",
+		"mediawiki/mediawiki-codesniffer": "0.7.2",
+		"phpunit/phpunit": "4.8.31"
+	},
+	"scripts": {
+		"phpcs": "phpcs -p -s",
+		"fix": "phpcbf",
+		"phpunit": "phpunit $PHPUNIT_ARGS",
+		"coverage": "phpunit --coverage-html coverage $PHPUNIT_ARGS",
+		"test": [
+			"composer phpcs",
+			"composer phpunit"
+		]
+	}
+}

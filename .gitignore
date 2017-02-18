@@ -1,0 +1,11 @@
+# Editors
+*~
+.*.swp
+
+# Composer
+/vendor
+/composer.lock
+
+# Building and testing
+/coverage
+/doc
