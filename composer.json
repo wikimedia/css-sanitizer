@@ -16,6 +16,8 @@
 	},
 	"autoload-dev": {
 		"files": [
+			"tests/Grammar/MatcherTestBase.php",
+			"tests/Grammar/TestMatcherFactory.php"
 		]
 	},
 	"require": {
