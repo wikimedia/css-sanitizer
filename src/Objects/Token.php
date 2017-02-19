@@ -513,7 +513,9 @@ class Token extends ComponentValue {
 				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE
 			],
 			'-' => [
-				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, self::T_NUMBER,
+				// Add '-' here from Editor's Draft, to go with the draft's
+				// adding of tokens beginning with "--" that we also picked up.
+				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
 				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE
 			],
 			self::T_NUMBER => [

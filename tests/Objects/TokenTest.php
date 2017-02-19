@@ -529,7 +529,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ $minusToken, $functionToken, true ],
 			[ $minusToken, $urlToken, true ],
 			[ $minusToken, $badurlToken, true ],
-			[ $minusToken, $minusToken, false ],
+			[ $minusToken, $minusToken, true ],
 			[ $minusToken, $numberToken, true ],
 			[ $minusToken, $percentageToken, true ],
 			[ $minusToken, $dimensionToken, true ],

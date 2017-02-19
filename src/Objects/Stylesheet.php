@@ -10,7 +10,11 @@ use Wikimedia\CSS\Util;
 
 /**
  * Represent a stylesheet
- * @note This isn't a "CSS stylesheet" though.
+ * @note This isn't necessarily a "CSS stylesheet" though.
+ * @warning If you're not using the provided Sanitizer classes to further sanitize
+ *  the CSS, you'll want to manually filter out any at-rules named "charset"
+ *  before stringifying and/or prepend `@charset "utf-8";` after stringifying
+ *  this object.
  */
 class Stylesheet implements CSSObject {
 
