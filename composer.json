@@ -11,6 +11,7 @@
 	],
 	"autoload": {
 		"classmap": [
+			"src/"
 		]
 	},
 	"autoload-dev": {
@@ -30,11 +31,13 @@
 		"phpunit/phpunit": "4.8.31"
 	},
 	"scripts": {
+		"lint": "parallel-lint . --exclude vendor",
 		"phpcs": "phpcs -p -s",
 		"fix": "phpcbf",
 		"phpunit": "phpunit $PHPUNIT_ARGS",
 		"coverage": "phpunit --coverage-html coverage $PHPUNIT_ARGS",
 		"test": [
+			"composer lint",
 			"composer phpcs",
 			"composer phpunit"
 		]
