@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS;
 
+use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSObject;
 use Wikimedia\CSS\Objects\Token;
@@ -58,6 +59,23 @@ class Util {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Find the first non-whitespace ComponentValue in a list
+	 * @param TokenList|ComponentValueList $list
+	 * @return ComponentValue|null
+	 */
+	public static function findFirstNonWhitespace( $list ) {
+		if ( !$list instanceof TokenList && !$list instanceof ComponentValueList ) {
+			throw new \InvalidArgumentException( 'List must be TokenList or ComponentValueList' );
+		}
+		foreach ( $list as $v ) {
+			if ( !$v instanceof Token || $v->type() !== Token::T_WHITESPACE ) {
+				return $v;
+			}
+		}
+		return null;
 	}
 
 	/**

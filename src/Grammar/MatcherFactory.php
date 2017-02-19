@@ -707,6 +707,133 @@ class MatcherFactory {
 		return $this->cache[__METHOD__];
 	}
 
+	/**
+	 * Matcher for a CSS media query
+	 * @see https://www.w3.org/TR/2016/WD-mediaqueries-4-20160706/#mq-syntax
+	 * @param bool $strict Only allow defined query types
+	 * @return Matcher
+	 */
+	public function cssMediaQuery( $strict = true ) {
+		$key = __METHOD__ . ':' . ( $strict ? 'strict' : 'unstrict' );
+		if ( !isset( $this->cache[$key] ) ) {
+			if ( $strict ) {
+				$generalEnclosed = new NothingMatcher();
+
+				$mediaType = new KeywordMatcher( [
+					'all', 'print', 'screen', 'speech',
+					// deprecated
+					'tty', 'tv', 'projection', 'handheld', 'braille', 'embossed', 'aural'
+				] );
+
+				$rangeFeatures = [
+					'width', 'height', 'aspect-ratio', 'resolution', 'color', 'color-index', 'monochrome',
+					// deprecated
+					'device-width', 'device-height', 'device-aspect-ratio'
+				];
+				$discreteFeatures = [
+					'orientation', 'scan', 'grid', 'update', 'overflow-block', 'overflow-inline', 'color-gamut',
+					'pointer', 'hover', 'any-pointer', 'any-hover', 'scripting'
+				];
+				$mfName = new KeywordMatcher( array_merge(
+					$rangeFeatures,
+					array_map( function ( $f ) {
+						return "min-$f";
+					}, $rangeFeatures ),
+					array_map( function ( $f ) {
+						return "max-$f";
+					}, $rangeFeatures ),
+					$discreteFeatures
+				) );
+			} else {
+				$anythingPlus = new AnythingMatcher( [ 'quantifier' => '+' ] );
+				$generalEnclosed = new Alternative( [
+					new FunctionMatcher( null, $anythingPlus ),
+					new BlockMatcher( Token::T_LEFT_PAREN,
+						new Juxtaposition( [ $this->ident(), $anythingPlus ] )
+					),
+				] );
+				$mediaType = $this->ident();
+				$mfName = $this->ident();
+			}
+
+			$posInt = $this->calc(
+				new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+					return $t->typeFlag() === 'integer' && preg_match( '/^\+?\d+$/', $t->representation() );
+				} ),
+				'integer'
+			);
+			$eq = new DelimMatcher( '=' );
+			$oeq = Quantifier::optional( new Juxtaposition( [ new NoWhitespace, $eq ] ) );
+			$ltgteq = Quantifier::optional( new Alternative( [
+				$eq,
+				new Juxtaposition( [ new DelimMatcher( [ '<', '>' ] ), $oeq ] ),
+			] ) );
+			$lteq = new Juxtaposition( [ new DelimMatcher( '<' ), $oeq ] );
+			$gteq = new Juxtaposition( [ new DelimMatcher( '>' ), $oeq ] );
+			$mfValue = new Alternative( [
+				$this->number(),
+				$this->dimension(),
+				$this->ident(),
+				new Juxtaposition( [ $posInt, new DelimMatcher( '/' ), $posInt ] ),
+			] );
+
+			$mediaInParens = new NothingMatcher(); // temporary
+			$mediaNot = new Juxtaposition( [ new KeywordMatcher( 'not' ), &$mediaInParens ] );
+			$mediaAnd = new Juxtaposition( [
+				&$mediaInParens,
+				Quantifier::plus( new Juxtaposition( [ new KeywordMatcher( 'and' ), &$mediaInParens ] ) )
+			] );
+			$mediaOr = new Juxtaposition( [
+				&$mediaInParens,
+				Quantifier::plus( new Juxtaposition( [ new KeywordMatcher( 'or' ), &$mediaInParens ] ) )
+			] );
+			$mediaCondition = new Alternative( [ $mediaNot, $mediaAnd, $mediaOr, &$mediaInParens ] );
+			$mediaConditionWithoutOr = new Alternative( [ $mediaNot, $mediaAnd, &$mediaInParens ] );
+			$mediaFeature = new BlockMatcher( Token::T_LEFT_PAREN, new Alternative( [
+				new Juxtaposition( [ $mfName, new TokenMatcher( Token::T_COLON ), $mfValue ] ), // <mf-plain>
+				$mfName, // <mf-boolean>
+				new Juxtaposition( [ $mfName, $ltgteq, $mfValue ] ), // <mf-range>, 1st alternative
+				new Juxtaposition( [ $mfValue, $ltgteq, $mfName ] ), // <mf-range>, 2nd alternative
+				new Juxtaposition( [ $mfValue, $lteq, $mfName, $lteq, $mfValue ] ), // <mf-range>, 3rd alt
+				new Juxtaposition( [ $mfValue, $gteq, $mfName, $gteq, $mfValue ] ), // <mf-range>, 4th alt
+			] ) );
+			$mediaInParens = new Alternative( [
+				new BlockMatcher( Token::T_LEFT_PAREN, $mediaCondition ),
+				$mediaFeature,
+				$generalEnclosed,
+			] );
+
+			$this->cache[$key] = new Alternative( [
+				$mediaCondition,
+				new Juxtaposition( [
+					Quantifier::optional( new KeywordMatcher( [ 'not', 'only' ] ) ),
+					$mediaType,
+					Quantifier::optional( new Juxtaposition( [
+						new KeywordMatcher( 'and' ),
+						$mediaConditionWithoutOr,
+					] ) )
+				] )
+			] );
+		}
+
+		return $this->cache[$key];
+	}
+
+	/**
+	 * Matcher for a CSS media query list
+	 * @see https://www.w3.org/TR/2016/WD-mediaqueries-4-20160706/#mq-syntax
+	 * @param bool $strict Only allow defined query types
+	 * @return Matcher
+	 */
+	public function cssMediaQueryList( $strict = true ) {
+		$key = __METHOD__ . ':' . ( $strict ? 'strict' : 'unstrict' );
+		if ( !isset( $this->cache[$key] ) ) {
+			$this->cache[$key] = Quantifier::hash( $this->cssMediaQuery( $strict ), 0, INF );
+		}
+
+		return $this->cache[$key];
+	}
+
 	/************************************************************************//**
 	 * @name   CSS Selectors Level 3
 	 * @{

@@ -107,6 +107,31 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function testFindFirstNonWhitespace() {
+		$values1 = [ new Token( Token::T_WHITESPACE ) ];
+		$values2 = [ $values1[0], new Token( Token::T_COMMA ) ];
+		$values3 = [ $values1[0], SimpleBlock::newFromDelimiter( Token::T_LEFT_PAREN ) ];
+
+		$this->assertNull( Util::findFirstNonWhitespace( new TokenList( [] ) ) );
+		$this->assertNull( Util::findFirstNonWhitespace( new ComponentValueList( [] ) ) );
+		$this->assertNull( Util::findFirstNonWhitespace( new TokenList( $values1 ) ) );
+		$this->assertNull( Util::findFirstNonWhitespace( new ComponentValueList( $values1 ) ) );
+		$this->assertSame( $values2[1], Util::findFirstNonWhitespace( new TokenList( $values2 ) ) );
+		$this->assertSame(
+			$values2[1], Util::findFirstNonWhitespace( new ComponentValueList( $values2 ) )
+		);
+		$this->assertSame(
+			$values3[1], Util::findFirstNonWhitespace( new ComponentValueList( $values3 ) )
+		);
+
+		try {
+			Util::findFirstNonWhitespace( new RuleList( [] ) );
+			$this->fail( 'Expected exception not thrown' );
+		} catch ( \InvalidArgumentException $ex ) {
+			$this->assertSame( 'List must be TokenList or ComponentValueList', $ex->getMessage() );
+		}
+	}
+
 	public function testStringify() {
 		// Each object's toTokenArray() is already tested and each token type's
 		// as well. Here we just need to test that combining works right.

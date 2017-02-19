@@ -16,6 +16,7 @@
 	},
 	"autoload-dev": {
 		"files": [
+			"tests/Sanitizer/RuleSanitizerTestBase.php",
 			"tests/Grammar/MatcherTestBase.php",
 			"tests/Grammar/TestMatcherFactory.php"
 		]

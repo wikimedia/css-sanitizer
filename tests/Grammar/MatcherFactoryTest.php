@@ -35,6 +35,8 @@ class MatcherFactoryTest extends \PHPUnit_Framework_TestCase {
 			$matcher = TestMatcherFactory::singleton()->url( 'dummy' );
 		} elseif ( $what === 'url' || $what === 'urlstring' ) {
 			$matcher = MatcherFactory::singleton()->$what( 'dummy' );
+		} elseif ( $what === 'cssMediaQuery unstrict' ) {
+			$matcher = MatcherFactory::singleton()->cssMediaQuery( false );
 		} else {
 			$matcher = MatcherFactory::singleton()->$what();
 			if ( $what === 'significantWhitespace' || $what === 'optionalWhitespace' ) {
@@ -439,6 +441,36 @@ class MatcherFactoryTest extends \PHPUnit_Framework_TestCase {
 			[ 'position', 'center left 10%' ],
 			[ 'position', 'bottom 10% center' ],
 			[ 'position', 'left 10% center' ],
+
+			[ 'cssMediaQuery', 'screen' ],
+			[ 'cssMediaQuery', '(width: 700px)' ],
+			[ 'cssMediaQuery', '(color)' ],
+			[ 'cssMediaQuery', '(400px <= min-width <= 700px)' ],
+			[ 'cssMediaQuery', '(400px <= min-width < = 700px)', false ],
+			[ 'cssMediaQuery', '(400px >= min-width > = 700px)', false ],
+			[ 'cssMediaQuery', '(400px <= min-width >= 700px)', false ],
+			[ 'cssMediaQuery', '(width >= 700px)' ],
+			[ 'cssMediaQuery', 'width >= 700px', false ],
+			[ 'cssMediaQuery', '(width > = 700px)', false ],
+			[ 'cssMediaQuery', '(width < = 700px)', false ],
+			[ 'cssMediaQuery', '(width > 700px)' ],
+			[ 'cssMediaQuery', '(width = 700px)' ],
+			[ 'cssMediaQuery', '(width 700px)' ], // Crazy, but allowed
+			[ 'cssMediaQuery', 'print and (min-resolution: 118dpcm)' ],
+			[ 'cssMediaQuery', '((width>100px) and (height>800px)) or ((width>800px) and (height>100px))' ],
+			[ 'cssMediaQuery', 'not screen' ],
+			[ 'cssMediaQuery', 'only screen' ],
+			[ 'cssMediaQuery', 'not (width = 700px)' ],
+			[ 'cssMediaQuery', '(aspect-ratio: 16/9)' ],
+			[ 'cssMediaQuery', 'bogus', false ],
+			[ 'cssMediaQuery', 'screen and (bogus)', false ],
+
+			[ 'cssMediaQuery unstrict', 'bogus' ],
+			[ 'cssMediaQuery unstrict', 'screen and (bogus)' ],
+			[ 'cssMediaQuery unstrict', '( foobar( baz ? quux? ) ) and ( bogus ? x y z )' ],
+
+			[ 'cssMediaQueryList', 'screen and (color), projection and (color)' ],
+			[ 'cssMediaQueryList', '' ],
 
 			[ 'cssSelector', '', null ],
 
