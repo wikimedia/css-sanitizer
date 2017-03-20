@@ -38,7 +38,6 @@ class QualifiedRuleTest extends \PHPUnit_Framework_TestCase {
 
 	public function testBasics() {
 		$identToken = new Token( Token::T_IDENT, [ 'value' => 'foobar', 'position' => [ 123, 42 ] ] );
-		$commentToken = new Token( Token::T_MW_PP_COMMENT, '@nowrap' );
 		$ws = new Token( Token::T_WHITESPACE );
 		$Iws = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
 		$leftBraceToken = new Token( Token::T_LEFT_BRACE );
@@ -47,14 +46,10 @@ class QualifiedRuleTest extends \PHPUnit_Framework_TestCase {
 		$rule = new QualifiedRule( $identToken );
 
 		$this->assertSame( [ 123, 42 ], $rule->getPosition() );
-		$this->assertSame( [], $rule->getPPComments() );
 		$this->assertInstanceOf( ComponentValueList::class, $rule->getPrelude() );
 		$this->assertCount( 0, $rule->getPrelude() );
 		$this->assertInstanceOf( SimpleBlock::class, $rule->getBlock() );
 		$this->assertSame( Token::T_LEFT_BRACE, $rule->getBlock()->getStartTokenType() );
-
-		$rule->setPPComments( [ $commentToken ] );
-		$this->assertSame( [ $commentToken ], $rule->getPPComments() );
 
 		$block = new SimpleBlock( $leftBraceToken );
 		$block->getValue()->add( $ws );
@@ -65,14 +60,13 @@ class QualifiedRuleTest extends \PHPUnit_Framework_TestCase {
 		$rule->getPrelude()->add( $ws );
 
 		$this->assertEquals(
-			[ $commentToken, $Iws, $identToken, $ws, $leftBraceToken, $ws, $rightBraceToken ],
+			[ $identToken, $ws, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
 		);
 		$this->assertSame( Util::stringify( $rule ), (string)$rule );
 
 		$rule = new QualifiedRule();
 		$this->assertSame( [ -1, -1 ], $rule->getPosition() );
-		$this->assertSame( [], $rule->getPPComments() );
 		$this->assertInstanceOf( ComponentValueList::class, $rule->getPrelude() );
 		$this->assertCount( 0, $rule->getPrelude() );
 	}

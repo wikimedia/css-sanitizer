@@ -55,7 +55,6 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 		$atToken = new Token( Token::T_AT_KEYWORD, [ 'value' => 'foobar', 'position' => [ 123, 42 ] ] );
 		$colon = new Token( Token::T_COLON );
 		$ident = new Token( Token::T_IDENT, 'bar' );
-		$commentToken = new Token( Token::T_MW_PP_COMMENT, '@nowrap' );
 		$ws = new Token( Token::T_WHITESPACE );
 		$Iws = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
 		$leftBraceToken = new Token( Token::T_LEFT_BRACE );
@@ -63,20 +62,16 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 
 		$rule = new AtRule( $atToken );
 		$this->assertSame( [ 123, 42 ], $rule->getPosition() );
-		$this->assertSame( [], $rule->getPPComments() );
 		$this->assertSame( 'foobar', $rule->getName() );
 		$this->assertInstanceOf( ComponentValueList::class, $rule->getPrelude() );
 		$this->assertCount( 0, $rule->getPrelude() );
 		$this->assertNull( $rule->getBlock() );
 
-		$rule->setPPComments( [ $commentToken ] );
-		$this->assertSame( [ $commentToken ], $rule->getPPComments() );
-
 		$rule->getPrelude()->add( $ws );
 		$rule->getPrelude()->add( $ws );
 
 		$this->assertEquals(
-			[ $commentToken, $Iws, $atToken, $ws, $ws, new Token( Token::T_SEMICOLON ) ],
+			[ $atToken, $ws, $ws, new Token( Token::T_SEMICOLON ) ],
 			$rule->toTokenArray()
 		);
 		$this->assertSame( Util::stringify( $rule ), (string)$rule );
@@ -87,7 +82,7 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( $block, $rule->getBlock() );
 
 		$this->assertEquals(
-			[ $commentToken, $Iws, $atToken, $ws, $ws, $leftBraceToken, $ws, $rightBraceToken ],
+			[ $atToken, $ws, $ws, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
 		);
 		$this->assertSame( Util::stringify( $rule ), (string)$rule );
@@ -95,14 +90,14 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 		$rule->getPrelude()->clear();
 		$rule->getPrelude()->add( $colon );
 		$this->assertEquals(
-			[ $commentToken, $Iws, $atToken, $colon, $leftBraceToken, $ws, $rightBraceToken ],
+			[ $atToken, $colon, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
 		);
 
 		$rule->getPrelude()->clear();
 		$rule->getPrelude()->add( $ident );
 		$this->assertEquals(
-			[ $commentToken, $Iws, $atToken, $ident, $leftBraceToken, $ws, $rightBraceToken ],
+			[ $atToken, $ident, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
 		);
 

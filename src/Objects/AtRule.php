@@ -94,10 +94,7 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 	 */
 	public function toTokenArray() {
 		$ret = [];
-		if ( $this->ppComments ) {
-			$ret = $this->ppComments;
-			$ret[] = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
-		}
+
 		$ret[] = new Token(
 			Token::T_AT_KEYWORD, [ 'value' => $this->name, 'position' => [ $this->line, $this->pos ] ]
 		);

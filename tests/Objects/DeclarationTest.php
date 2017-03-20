@@ -37,7 +37,6 @@ class DeclarationTest extends \PHPUnit_Framework_TestCase {
 
 	public function testBasics() {
 		$identToken = new Token( Token::T_IDENT, [ 'value' => 'foobar', 'position' => [ 123, 42 ] ] );
-		$commentToken = new Token( Token::T_MW_PP_COMMENT, '@nowrap' );
 		$ws = new Token( Token::T_WHITESPACE );
 		$Iws = $ws->copyWithSignificance( false );
 		$colonToken = new Token( Token::T_COLON );
@@ -46,35 +45,28 @@ class DeclarationTest extends \PHPUnit_Framework_TestCase {
 
 		$declaration = new Declaration( $identToken );
 		$this->assertSame( [ 123, 42 ], $declaration->getPosition() );
-		$this->assertSame( [], $declaration->getPPComments() );
 		$this->assertSame( 'foobar', $declaration->getName() );
 		$this->assertSame( false, $declaration->getImportant() );
 		$this->assertInstanceOf( ComponentValueList::class, $declaration->getValue() );
 		$this->assertCount( 0, $declaration->getValue() );
 
-		$declaration->setPPComments( [ $commentToken ] );
-		$this->assertSame( [ $commentToken ], $declaration->getPPComments() );
-
 		$declaration->getValue()->add( $ws );
 
-		$this->assertEquals(
-			[ $commentToken, $Iws, $identToken, $colonToken, $ws ],
-			$declaration->toTokenArray()
-		);
+		$this->assertEquals( [ $identToken, $colonToken, $ws ], $declaration->toTokenArray() );
 		$this->assertSame( Util::stringify( $declaration ), (string)$declaration );
 
 		$declaration->setImportant( true );
 		$this->assertSame( true, $declaration->getImportant() );
 
 		$this->assertEquals(
-			[ $commentToken, $Iws, $identToken, $colonToken, $ws, $bangToken, $importantToken ],
+			[ $identToken, $colonToken, $ws, $bangToken, $importantToken ],
 			$declaration->toTokenArray()
 		);
 		$this->assertSame( Util::stringify( $declaration ), (string)$declaration );
 
 		$declaration->getValue()->remove( $declaration->getValue()->count() - 1 );
 		$this->assertEquals(
-			[ $commentToken, $Iws, $identToken, $colonToken, $Iws, $bangToken, $importantToken ],
+			[ $identToken, $colonToken, $Iws, $bangToken, $importantToken ],
 			$declaration->toTokenArray()
 		);
 		$this->assertSame( Util::stringify( $declaration ), (string)$declaration );

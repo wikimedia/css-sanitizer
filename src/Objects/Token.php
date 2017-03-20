@@ -42,7 +42,6 @@ class Token extends ComponentValue {
 	const T_LEFT_BRACE = "{";
 	const T_RIGHT_BRACE = "}";
 	const T_EOF = "EOF";
-	const T_MW_PP_COMMENT = "mw-preprocessor-comment";
 
 	/** @var string One of the T_* constants */
 	protected $type;
@@ -225,16 +224,6 @@ class Token extends ComponentValue {
 			case self::T_LEFT_BRACE:
 			case self::T_RIGHT_BRACE:
 			case self::T_EOF:
-				break;
-
-			case self::T_MW_PP_COMMENT:
-				if ( !isset( $value['value'] ) ) {
-					throw new \InvalidArgumentException( "Token type $this->type requires a value" );
-				}
-				$this->value = (string)$value['value'];
-				if ( !preg_match( '/^@[a-z_].*$/i', $this->value ) ) {
-					throw new \InvalidArgumentException( "Invalid value for Token type $this->type" );
-				}
 				break;
 
 			default:
@@ -487,9 +476,6 @@ class Token extends ComponentValue {
 
 			case self::T_EOF:
 				return '';
-
-			case self::T_MW_PP_COMMENT:
-				return '/*' . $this->value . '*/';
 
 			default:
 				throw new \UnexpectedValueException( "Unknown token type \"$this->type\"." );

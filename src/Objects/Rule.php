@@ -16,9 +16,6 @@ abstract class Rule implements CSSObject {
 	/** @var int Line and position in the input where this rule starts */
 	protected $line = -1, $pos = -1;
 
-	/** @var Token[] Any preprocessor comments preceeding this rule */
-	protected $ppComments = [];
-
 	/**
 	 * @param Token $token Token starting the rule
 	 */
@@ -32,22 +29,5 @@ abstract class Rule implements CSSObject {
 	 */
 	public function getPosition() {
 		return [ $this->line, $this->pos ];
-	}
-
-	/**
-	 * Return the declaration's preprocessor comments
-	 * @return Token[]
-	 */
-	public function getPPComments() {
-		return $this->ppComments;
-	}
-
-	/**
-	 * Set the preprocessor comments
-	 * @param Token[] $comments
-	 */
-	public function setPPComments( array $comments ) {
-		Util::assertAllTokensOfType( $comments, Token::T_MW_PP_COMMENT, '$comments' );
-		$this->ppComments = $comments;
 	}
 }

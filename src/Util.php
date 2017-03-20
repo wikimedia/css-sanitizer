@@ -87,7 +87,7 @@ class Util {
 
 			// Filter!
 			$tokens = array_filter( $tokens, function ( $t ) {
-				return $t->type() !== Token::T_MW_PP_COMMENT && $t->significant();
+				return $t->significant();
 			} );
 		}
 

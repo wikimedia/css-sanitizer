@@ -260,12 +260,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ Token::T_LEFT_BRACE, null ],
 			[ Token::T_RIGHT_BRACE, null ],
 
-			[ Token::T_MW_PP_COMMENT, null, $iae( 'Token type mw-preprocessor-comment requires a value' ) ],
-			[ Token::T_MW_PP_COMMENT, 'x', $iae( 'Invalid value for Token type mw-preprocessor-comment' ) ],
-			[ Token::T_MW_PP_COMMENT, '@', $iae( 'Invalid value for Token type mw-preprocessor-comment' ) ],
-			[ Token::T_MW_PP_COMMENT, '@9', $iae( 'Invalid value for Token type mw-preprocessor-comment' ) ],
-			[ Token::T_MW_PP_COMMENT, '@foobar' ],
-
 			[ 'bogus', null, $iae( 'Unknown token type "bogus"' ) ],
 		];
 	}
@@ -410,7 +404,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ new Token( Token::T_LEFT_BRACE ), '{' ],
 			[ new Token( Token::T_RIGHT_BRACE ), '}' ],
 			[ new Token( Token::T_EOF ), '' ],
-			[ new Token( Token::T_MW_PP_COMMENT, '@nowrap' ), '/*@nowrap*/' ],
 		];
 	}
 

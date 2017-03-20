@@ -25,9 +25,6 @@ class Declaration implements DeclarationOrAtRule {
 	/** @var bool */
 	protected $important = false;
 
-	/** @var Token[] Any preprocessor comments preceeding this declaration */
-	protected $ppComments = [];
-
 	/**
 	 * @param Token $token Token starting the declaration
 	 */
@@ -80,14 +77,6 @@ class Declaration implements DeclarationOrAtRule {
 	}
 
 	/**
-	 * Return the declaration's preprocessor comments
-	 * @return Token[]
-	 */
-	public function getPPComments() {
-		return $this->ppComments;
-	}
-
-	/**
 	 * Set the 'important' flag
 	 * @param bool $flag
 	 */
@@ -96,24 +85,12 @@ class Declaration implements DeclarationOrAtRule {
 	}
 
 	/**
-	 * Set the preprocessor comments
-	 * @param Token[] $comments
-	 */
-	public function setPPComments( array $comments ) {
-		Util::assertAllTokensOfType( $comments, Token::T_MW_PP_COMMENT, '$comments' );
-		$this->ppComments = $comments;
-	}
-
-	/**
 	 * Return an array of Tokens that correspond to this object.
 	 * @return Token[]
 	 */
 	public function toTokenArray() {
 		$ret = [];
-		if ( $this->ppComments ) {
-			$ret = $this->ppComments;
-			$ret[] = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
-		}
+
 		$ret[] = new Token(
 			Token::T_IDENT,
 			[ 'value' => $this->name, 'position' => [ $this->line, $this->pos ] ]

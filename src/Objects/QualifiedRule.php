@@ -63,10 +63,7 @@ class QualifiedRule extends Rule {
 	 */
 	public function toTokenArray() {
 		$ret = [];
-		if ( $this->ppComments ) {
-			$ret = $this->ppComments;
-			$ret[] = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
-		}
+
 		// Manually looping and appending turns out to be noticably faster than array_merge.
 		foreach ( $this->prelude->toTokenArray() as $v ) {
 			$ret[] = $v;
