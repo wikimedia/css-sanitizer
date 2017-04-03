@@ -236,8 +236,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 500.0 ],
 				$iae( 'Ending code point must be an integer' ) ],
 			[ Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 500 ] ],
-			[ Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 41 ],
-				$iae( 'End may not be less than start' ) ],
 
 			[ Token::T_BAD_STRING, null ],
 			[ Token::T_BAD_URL, null ],

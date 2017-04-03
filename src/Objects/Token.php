@@ -198,9 +198,6 @@ class Token extends ComponentValue {
 				} else {
 					$this->end = $value['end'];
 				}
-				if ( $this->end < $this->start ) {
-					throw new \InvalidArgumentException( 'End may not be less than start' );
-				}
 				break;
 
 			case self::T_BAD_STRING:

@@ -302,7 +302,7 @@ class DataSourceTokenizerTest extends \PHPUnit_Framework_TestCase {
 			],
 
 			'unicode range' => [
-				'U+12-FdDd U+10????? u+0-f u+98- 120 U+???-abcd U-123 U+x',
+				'U+12-FdDd U+10????? u+0-f u+98- 120 U+???-abcd U-123 U+x U+200-100 U+FFFFFF',
 				[
 					self::t( Token::T_UNICODE_RANGE, 1, 1, '', [ 'start' => 0x12, 'end' => 0xfddd ] ),
 					self::t( Token::T_WHITESPACE, 1, 10 ),
@@ -324,7 +324,11 @@ class DataSourceTokenizerTest extends \PHPUnit_Framework_TestCase {
 					self::t( Token::T_IDENT, 1, 54, 'U' ),
 					self::t( Token::T_DELIM, 1, 55, '+' ),
 					self::t( Token::T_IDENT, 1, 56, 'x' ),
-					self::t( Token::T_EOF, 1, 57 ),
+					self::t( Token::T_WHITESPACE, 1, 57 ),
+					self::t( Token::T_UNICODE_RANGE, 1, 58, '', [ 'start' => 0x200, 'end' => 0x100 ] ),
+					self::t( Token::T_WHITESPACE, 1, 67 ),
+					self::t( Token::T_UNICODE_RANGE, 1, 68, '', [ 'start' => 0xffffff, 'end' => 0xffffff ] ),
+					self::t( Token::T_EOF, 1, 76 ),
 				]
 			],
 
