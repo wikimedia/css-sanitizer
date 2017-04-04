@@ -58,20 +58,27 @@ class QualifiedRule extends Rule {
 	}
 
 	/**
-	 * Return an array of Tokens that correspond to this object.
-	 * @return Token[]
+	 * @param string $function Function to call, toTokenArray() or toComponentValueArray()
 	 */
-	public function toTokenArray() {
+	private function toTokenOrCVArray( $function ) {
 		$ret = [];
 
 		// Manually looping and appending turns out to be noticably faster than array_merge.
-		foreach ( $this->prelude->toTokenArray() as $v ) {
+		foreach ( $this->prelude->$function() as $v ) {
 			$ret[] = $v;
 		}
-		foreach ( $this->block->toTokenArray() as $v ) {
+		foreach ( $this->block->$function() as $v ) {
 			$ret[] = $v;
 		}
 		return $ret;
+	}
+
+	public function toTokenArray() {
+		return $this->toTokenOrCVArray( __FUNCTION__ );
+	}
+
+	public function toComponentValueArray() {
+		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}
 
 	public function __toString() {

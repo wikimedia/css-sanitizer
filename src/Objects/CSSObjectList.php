@@ -23,10 +23,18 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	protected $offset = 0;
 
 	/**
+	 * Additional validation for objects
+	 * @param CSSObject[] $objects
+	 */
+	protected static function testObjects( array $objects ) {
+	}
+
+	/**
 	 * @param CSSObject[] $objects
 	 */
 	public function __construct( array $objects = [] ) {
-		Util::assertAllInstanceOf( $objects, static::$objectType, get_class( $this ) );
+		Util::assertAllInstanceOf( $objects, static::$objectType, static::class );
+		static::testObjects( $objects );
 		$this->objects = array_values( $objects );
 	}
 
@@ -40,15 +48,17 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 		if ( $objects instanceof static ) {
 			$objects = $objects->objects;
 		} elseif ( is_array( $objects ) ) {
-			Util::assertAllInstanceOf( $objects, static::$objectType, get_class( $this ) );
+			Util::assertAllInstanceOf( $objects, static::$objectType, static::class );
 			$objects = array_values( $objects );
+			static::testObjects( $objects );
 		} else {
 			if ( !$objects instanceof static::$objectType ) {
 				throw new \InvalidArgumentException(
-					get_class( $this ) . ' may only contain instances of ' . static::$objectType . '.'
+					static::class . ' may only contain instances of ' . static::$objectType . '.'
 				);
 			}
 			$objects = [ $objects ];
+			static::testObjects( $objects );
 		}
 
 		if ( $index === null ) {
@@ -155,9 +165,10 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	public function offsetSet( $offset, $value ) {
 		if ( !$value instanceof static::$objectType ) {
 			throw new \InvalidArgumentException(
-				get_class( $this ) . ' may only contain instances of ' . static::$objectType . '.'
+				static::class . ' may only contain instances of ' . static::$objectType . '.'
 			);
 		}
+		static::testObjects( [ $value ] );
 		if ( !is_numeric( $offset ) || (float)(int)$offset !== (float)$offset ) {
 			throw new \InvalidArgumentException( 'Offset must be an integer.' );
 		}
@@ -199,12 +210,15 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 		return [];
 	}
 
-	public function toTokenArray() {
+	/**
+	 * @param string $function Function to call, toTokenArray() or toComponentValueArray()
+	 */
+	private function toTokenOrCVArray( $function ) {
 		$ret = [];
 		$l = count( $this->objects );
 		for ( $i = 0; $i < $l; $i++ ) {
 			// Manually looping and appending turns out to be noticably faster than array_merge.
-			foreach ( $this->objects[$i]->toTokenArray() as $v ) {
+			foreach ( $this->objects[$i]->$function() as $v ) {
 				$ret[] = $v;
 			}
 			$sep = $this->getSeparator( $this->objects[$i], $i + 1 < $l ? $this->objects[$i + 1] : null );
@@ -213,6 +227,14 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 			}
 		}
 		return $ret;
+	}
+
+	public function toTokenArray() {
+		return $this->toTokenOrCVArray( __FUNCTION__ );
+	}
+
+	public function toComponentValueArray() {
+		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}
 
 	public function __toString() {

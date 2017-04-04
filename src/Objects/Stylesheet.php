@@ -48,6 +48,10 @@ class Stylesheet implements CSSObject {
 		return $this->ruleList->toTokenArray();
 	}
 
+	public function toComponentValueArray() {
+		return $this->ruleList->toComponentValueArray();
+	}
+
 	public function __toString() {
 		return Util::stringify( $this );
 	}

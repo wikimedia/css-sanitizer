@@ -418,6 +418,58 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @dataProvider provideToComponentValueArray
+	 * @param Token $token
+	 * @param bool $ok
+	 */
+	public function testToComponentValueArray( $token, $ok ) {
+		if ( !$ok ) {
+			$this->setExpectedException(
+				\UnexpectedValueException::class,
+				"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
+			);
+		}
+		$this->assertSame( [ $token ], $token->toComponentValueArray() );
+	}
+
+	public static function provideToComponentValueArray() {
+		return [
+			[ new Token( Token::T_IDENT, 'foobar' ), true ],
+			[ new Token( Token::T_FUNCTION, 'foobar' ), false ],
+			[ new Token( Token::T_AT_KEYWORD, 'foobar' ), true ],
+			[ new Token( Token::T_HASH, [ 'value' => 'foobar', 'typeFlag' => 'id' ] ), true ],
+			[ new Token( Token::T_STRING, 'foobar' ), true ],
+			[ new Token( Token::T_URL, 'http://www.example.com/' ), true ],
+			[ new Token( Token::T_BAD_STRING ), true ],
+			[ new Token( Token::T_BAD_URL ), true ],
+			[ new Token( Token::T_DELIM, '*' ), true ],
+			[ self::nt( Token::T_NUMBER, 123, '123', 'integer' ), true ],
+			[ self::nt( Token::T_PERCENTAGE, 123, '123', 'integer' ), true ],
+			[ self::nt( Token::T_DIMENSION, 123, '123', 'integer', 'px' ), true ],
+			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 42 ] ), true ],
+			[ new Token( Token::T_INCLUDE_MATCH ), true ],
+			[ new Token( Token::T_DASH_MATCH ), true ],
+			[ new Token( Token::T_PREFIX_MATCH ), true ],
+			[ new Token( Token::T_SUFFIX_MATCH ), true ],
+			[ new Token( Token::T_SUBSTRING_MATCH ), true ],
+			[ new Token( Token::T_COLUMN ), true ],
+			[ new Token( Token::T_WHITESPACE ), true ],
+			[ new Token( Token::T_CDO ), true ],
+			[ new Token( Token::T_CDC ), true ],
+			[ new Token( Token::T_COLON ), true ],
+			[ new Token( Token::T_SEMICOLON ), true ],
+			[ new Token( Token::T_COMMA ), true ],
+			[ new Token( Token::T_LEFT_BRACKET ), false ],
+			[ new Token( Token::T_RIGHT_BRACKET ), true ],
+			[ new Token( Token::T_LEFT_PAREN ), false ],
+			[ new Token( Token::T_RIGHT_PAREN ), true ],
+			[ new Token( Token::T_LEFT_BRACE ), false ],
+			[ new Token( Token::T_RIGHT_BRACE ), true ],
+			[ new Token( Token::T_EOF ), true ],
+		];
+	}
+
+	/**
 	 * @dataProvider provideSeparate
 	 * @param Token $firstToken
 	 * @param Token $secondToken

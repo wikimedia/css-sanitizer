@@ -59,6 +59,8 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 		$Iws = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
 		$leftBraceToken = new Token( Token::T_LEFT_BRACE );
 		$rightBraceToken = new Token( Token::T_RIGHT_BRACE );
+		$leftBracketToken = new Token( Token::T_LEFT_BRACKET );
+		$rightBracketToken = new Token( Token::T_RIGHT_BRACKET );
 
 		$rule = new AtRule( $atToken );
 		$this->assertSame( [ 123, 42 ], $rule->getPosition() );
@@ -74,6 +76,10 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 			[ $atToken, $ws, $ws, new Token( Token::T_SEMICOLON ) ],
 			$rule->toTokenArray()
 		);
+		$this->assertEquals(
+			[ $atToken, $ws, $ws, new Token( Token::T_SEMICOLON ) ],
+			$rule->toComponentValueArray()
+		);
 		$this->assertSame( Util::stringify( $rule ), (string)$rule );
 
 		$block = new SimpleBlock( $leftBraceToken );
@@ -85,6 +91,10 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 			[ $atToken, $ws, $ws, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
 		);
+		$this->assertEquals(
+			[ $atToken, $ws, $ws, $block ],
+			$rule->toComponentValueArray()
+		);
 		$this->assertSame( Util::stringify( $rule ), (string)$rule );
 
 		$rule->getPrelude()->clear();
@@ -93,12 +103,32 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 			[ $atToken, $colon, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
 		);
+		$this->assertEquals(
+			[ $atToken, $colon, $block ],
+			$rule->toComponentValueArray()
+		);
 
 		$rule->getPrelude()->clear();
 		$rule->getPrelude()->add( $ident );
 		$this->assertEquals(
 			[ $atToken, $ident, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
+		);
+		$this->assertEquals(
+			[ $atToken, $ident, $block ],
+			$rule->toComponentValueArray()
+		);
+
+		$block2 = new SimpleBlock( $leftBracketToken );
+		$rule->getPrelude()->clear();
+		$rule->getPrelude()->add( $block2 );
+		$this->assertEquals(
+			[ $atToken, $leftBracketToken, $rightBracketToken, $leftBraceToken, $ws, $rightBraceToken ],
+			$rule->toTokenArray()
+		);
+		$this->assertEquals(
+			[ $atToken, $block2, $block ],
+			$rule->toComponentValueArray()
 		);
 
 		$rule = AtRule::newFromName( 'qwerty' );

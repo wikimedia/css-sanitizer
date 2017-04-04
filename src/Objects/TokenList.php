@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use Wikimedia\CSS\Parser\Parser;
+
 /**
  * Represent a list of CSS tokens
  */
@@ -15,5 +17,17 @@ class TokenList extends CSSObjectList {
 	// We can greatly simplify this, assuming no separator
 	public function toTokenArray() {
 		return $this->objects;
+	}
+
+	// This one, though, is complicated
+	public function toComponentValueArray() {
+		$parser = Parser::newFromTokens( $this->objects );
+		$ret = $parser->parseComponentValueList();
+		if ( $parser->getParseErrors() ) {
+			$ex = new \UnexpectedValueException( 'TokenList cannot be converted to a ComponentValueList' );
+			$ex->parseErrors = $parser->getParseErrors();
+			throw $ex;
+		}
+		return $ret->toComponentValueArray();
 	}
 }

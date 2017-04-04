@@ -91,10 +91,6 @@ class SimpleBlock extends ComponentValue {
 		return $this->value;
 	}
 
-	/**
-	 * Return an array of Tokens that correspond to this object.
-	 * @return Token[]
-	 */
 	public function toTokenArray() {
 		$ret = [
 			new Token( $this->startTokenType, [ 'position' => [ $this->line, $this->pos ] ] ),

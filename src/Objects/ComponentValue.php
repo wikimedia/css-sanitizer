@@ -21,4 +21,8 @@ abstract class ComponentValue implements CSSObject {
 	public function getPosition() {
 		return [ $this->line, $this->pos ];
 	}
+
+	public function toComponentValueArray() {
+		return [ $this ];
+	}
 }

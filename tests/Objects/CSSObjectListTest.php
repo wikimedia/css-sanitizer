@@ -380,18 +380,28 @@ class CSSObjectListTest extends \PHPUnit_Framework_TestCase {
 		$value3 = new TestCSSObjectListItem( 3 );
 		$list = new TestCSSObjectList( [ $value1, $value2, $value3 ] );
 		$this->assertEquals( [
-			new Token( Token::T_STRING, 1 ),
-			new Token( Token::T_STRING, 2 ),
-			new Token( Token::T_STRING, 3 ),
+			new Token( Token::T_STRING, 'T1' ),
+			new Token( Token::T_STRING, 'T2' ),
+			new Token( Token::T_STRING, 'T3' ),
 		], $list->toTokenArray() );
+		$this->assertEquals( [
+			new Token( Token::T_STRING, 'CV1' ),
+			new Token( Token::T_STRING, 'CV2' ),
+			new Token( Token::T_STRING, 'CV3' ),
+		], $list->toComponentValueArray() );
 		$this->assertSame( Util::stringify( $list ), (string)$list );
 
 		$list->separator = [ new Token( Token::T_SEMICOLON ) ];
 		$this->assertEquals( [
-			new Token( Token::T_STRING, 1 ), new Token( Token::T_SEMICOLON ),
-			new Token( Token::T_STRING, 2 ), new Token( Token::T_SEMICOLON ),
-			new Token( Token::T_STRING, 3 ), new Token( Token::T_SEMICOLON ),
+			new Token( Token::T_STRING, 'T1' ), new Token( Token::T_SEMICOLON ),
+			new Token( Token::T_STRING, 'T2' ), new Token( Token::T_SEMICOLON ),
+			new Token( Token::T_STRING, 'T3' ), new Token( Token::T_SEMICOLON ),
 		], $list->toTokenArray() );
+		$this->assertEquals( [
+			new Token( Token::T_STRING, 'CV1' ), new Token( Token::T_SEMICOLON ),
+			new Token( Token::T_STRING, 'CV2' ), new Token( Token::T_SEMICOLON ),
+			new Token( Token::T_STRING, 'CV3' ), new Token( Token::T_SEMICOLON ),
+		], $list->toComponentValueArray() );
 		$this->assertSame( Util::stringify( $list ), (string)$list );
 	}
 }
@@ -414,7 +424,11 @@ class TestCSSObjectListItem implements CSSObject {
 	}
 
 	public function toTokenArray() {
-		return [ new Token( Token::T_STRING, $this->id ) ];
+		return [ new Token( Token::T_STRING, 'T' . $this->id ) ];
+	}
+
+	public function toComponentValueArray() {
+		return [ new Token( Token::T_STRING, 'CV' . $this->id ) ];
 	}
 }
 

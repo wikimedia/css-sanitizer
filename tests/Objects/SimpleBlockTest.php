@@ -50,6 +50,7 @@ class SimpleBlockTest extends \PHPUnit_Framework_TestCase {
 				[ new Token( $start ), new Token( $end ) ],
 				$block->toTokenArray()
 			);
+			$this->assertSame( [ $block ], $block->toComponentValueArray() );
 			$this->assertSame( Util::stringify( $block ), (string)$block );
 
 			$block = SimpleBlock::newFromDelimiter( $start );
@@ -68,6 +69,7 @@ class SimpleBlockTest extends \PHPUnit_Framework_TestCase {
 			[ new Token( Token::T_LEFT_BRACE ), $Iws, $colon, $Iws, new Token( Token::T_RIGHT_BRACE ) ],
 			$block->toTokenArray()
 		);
+		$this->assertSame( [ $block ], $block->toComponentValueArray() );
 		$this->assertSame( Util::stringify( $block ), (string)$block );
 
 		$block->getValue()->add( $ws, 0 );
@@ -76,6 +78,7 @@ class SimpleBlockTest extends \PHPUnit_Framework_TestCase {
 			[ new Token( Token::T_LEFT_BRACE ), $ws, $colon, $ws, new Token( Token::T_RIGHT_BRACE ) ],
 			$block->toTokenArray()
 		);
+		$this->assertSame( [ $block ], $block->toComponentValueArray() );
 		$this->assertSame( Util::stringify( $block ), (string)$block );
 
 		// Brackets (and parens) don't
@@ -85,6 +88,7 @@ class SimpleBlockTest extends \PHPUnit_Framework_TestCase {
 			[ new Token( Token::T_LEFT_BRACKET ), $colon, new Token( Token::T_RIGHT_BRACKET ) ],
 			$block->toTokenArray()
 		);
+		$this->assertSame( [ $block ], $block->toComponentValueArray() );
 		$this->assertSame( Util::stringify( $block ), (string)$block );
 	}
 }

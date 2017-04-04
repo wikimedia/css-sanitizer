@@ -42,6 +42,8 @@ class QualifiedRuleTest extends \PHPUnit_Framework_TestCase {
 		$Iws = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
 		$leftBraceToken = new Token( Token::T_LEFT_BRACE );
 		$rightBraceToken = new Token( Token::T_RIGHT_BRACE );
+		$leftBracketToken = new Token( Token::T_LEFT_BRACKET );
+		$rightBracketToken = new Token( Token::T_RIGHT_BRACKET );
 
 		$rule = new QualifiedRule( $identToken );
 
@@ -63,7 +65,23 @@ class QualifiedRuleTest extends \PHPUnit_Framework_TestCase {
 			[ $identToken, $ws, $leftBraceToken, $ws, $rightBraceToken ],
 			$rule->toTokenArray()
 		);
+		$this->assertEquals(
+			[ $identToken, $ws, $block ],
+			$rule->toComponentValueArray()
+		);
 		$this->assertSame( Util::stringify( $rule ), (string)$rule );
+
+		$block2 = new SimpleBlock( $leftBracketToken );
+		$rule->getPrelude()->clear();
+		$rule->getPrelude()->add( $block2 );
+		$this->assertEquals(
+			[ $leftBracketToken, $rightBracketToken, $leftBraceToken, $ws, $rightBraceToken ],
+			$rule->toTokenArray()
+		);
+		$this->assertEquals(
+			[ $block2, $block ],
+			$rule->toComponentValueArray()
+		);
 
 		$rule = new QualifiedRule();
 		$this->assertSame( [ -1, -1 ], $rule->getPosition() );

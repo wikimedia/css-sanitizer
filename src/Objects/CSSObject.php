@@ -29,4 +29,11 @@ interface CSSObject {
 	 * @return Token[]
 	 */
 	public function toTokenArray();
+
+	/**
+	 * Return an array of ComponentValues that correspond to this object.
+	 * @warning Do not return any Tokens that aren't valid in a ComponentValueList.
+	 * @return ComponentValue[]
+	 */
+	public function toComponentValueArray();
 }

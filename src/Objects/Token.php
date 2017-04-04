@@ -308,6 +308,21 @@ class Token extends ComponentValue {
 		return [ $this ];
 	}
 
+	public function toComponentValueArray() {
+		switch ( $this->type ) {
+			case self::T_FUNCTION:
+			case self::T_LEFT_BRACKET:
+			case self::T_LEFT_PAREN:
+			case self::T_LEFT_BRACE:
+				throw new \UnexpectedValueException(
+					"Token type \"$this->type\" is not valid in a ComponentValueList."
+				);
+
+			default:
+				return [ $this ];
+		}
+	}
+
 	/**
 	 * Escape an ident-like string
 	 * @param string $s

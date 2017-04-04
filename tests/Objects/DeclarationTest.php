@@ -42,6 +42,9 @@ class DeclarationTest extends \PHPUnit_Framework_TestCase {
 		$colonToken = new Token( Token::T_COLON );
 		$bangToken = new Token( Token::T_DELIM, '!' );
 		$importantToken = new Token( Token::T_IDENT, 'important' );
+		$funcToken = new Token( Token::T_FUNCTION, 'foo' );
+		$rp = new Token( Token::T_RIGHT_PAREN );
+		$func = new CSSFunction( $funcToken );
 
 		$declaration = new Declaration( $identToken );
 		$this->assertSame( [ 123, 42 ], $declaration->getPosition() );
@@ -50,24 +53,39 @@ class DeclarationTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf( ComponentValueList::class, $declaration->getValue() );
 		$this->assertCount( 0, $declaration->getValue() );
 
-		$declaration->getValue()->add( $ws );
+		$declaration->getValue()->add( [ $func, $ws ] );
 
-		$this->assertEquals( [ $identToken, $colonToken, $ws ], $declaration->toTokenArray() );
+		$this->assertEquals(
+			[ $identToken, $colonToken, $funcToken, $rp, $ws ],
+			$declaration->toTokenArray()
+		);
+		$this->assertEquals(
+			[ $identToken, $colonToken, $func, $ws ],
+			$declaration->toComponentValueArray()
+		);
 		$this->assertSame( Util::stringify( $declaration ), (string)$declaration );
 
 		$declaration->setImportant( true );
 		$this->assertSame( true, $declaration->getImportant() );
 
 		$this->assertEquals(
-			[ $identToken, $colonToken, $ws, $bangToken, $importantToken ],
+			[ $identToken, $colonToken, $funcToken, $rp, $ws, $bangToken, $importantToken ],
 			$declaration->toTokenArray()
+		);
+		$this->assertEquals(
+			[ $identToken, $colonToken, $func, $ws, $bangToken, $importantToken ],
+			$declaration->toComponentValueArray()
 		);
 		$this->assertSame( Util::stringify( $declaration ), (string)$declaration );
 
 		$declaration->getValue()->remove( $declaration->getValue()->count() - 1 );
 		$this->assertEquals(
-			[ $identToken, $colonToken, $Iws, $bangToken, $importantToken ],
+			[ $identToken, $colonToken, $funcToken, $rp, $Iws, $bangToken, $importantToken ],
 			$declaration->toTokenArray()
+		);
+		$this->assertEquals(
+			[ $identToken, $colonToken, $func, $Iws, $bangToken, $importantToken ],
+			$declaration->toComponentValueArray()
 		);
 		$this->assertSame( Util::stringify( $declaration ), (string)$declaration );
 	}

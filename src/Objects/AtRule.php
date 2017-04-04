@@ -89,21 +89,20 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 	}
 
 	/**
-	 * Return an array of Tokens that correspond to this object.
-	 * @return Token[]
+	 * @param string $function Function to call, toTokenArray() or toComponentValueArray()
 	 */
-	public function toTokenArray() {
+	private function toTokenOrCVArray( $function ) {
 		$ret = [];
 
 		$ret[] = new Token(
 			Token::T_AT_KEYWORD, [ 'value' => $this->name, 'position' => [ $this->line, $this->pos ] ]
 		);
 		// Manually looping and appending turns out to be noticably faster than array_merge.
-		foreach ( $this->prelude->toTokenArray() as $v ) {
+		foreach ( $this->prelude->$function() as $v ) {
 			$ret[] = $v;
 		}
 		if ( $this->block ) {
-			foreach ( $this->block->toTokenArray() as $v ) {
+			foreach ( $this->block->$function() as $v ) {
 				$ret[] = $v;
 			}
 		} else {
@@ -111,6 +110,14 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 		}
 
 		return $ret;
+	}
+
+	public function toTokenArray() {
+		return $this->toTokenOrCVArray( __FUNCTION__ );
+	}
+
+	public function toComponentValueArray() {
+		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}
 
 	public function __toString() {

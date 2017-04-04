@@ -52,6 +52,7 @@ class CSSFunctionTest extends \PHPUnit_Framework_TestCase {
 			[ $funcToken, $spaceToken, $rightParenToken ],
 			$function->toTokenArray()
 		);
+		$this->assertSame( [ $function ], $function->toComponentValueArray() );
 		$this->assertSame( Util::stringify( $function ), (string)$function );
 
 		$function = CSSFunction::newFromName( 'qwerty' );
