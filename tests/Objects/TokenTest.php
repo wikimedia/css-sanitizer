@@ -103,15 +103,17 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			// Extra junk is ignored
 			$value2 = ( is_string( $value ) ? [ 'value' => $value ] : (array)$value ) + [
 				'value' => 'XXX',
-				'typeFlag' => 'XXX',
 				'unit' => 'XXX',
 				'start' => 'XXX',
 			];
+			if ( $type !== Token::T_EOF ) {
+				$value2 += [ 'typeFlag' => 'XXX' ];
+			}
 			if ( !in_array( $type, [ Token::T_NUMBER, Token::T_PERCENTAGE, Token::T_DIMENSION ], true ) ) {
-				$value2['representation'] = 'XXX';
+				$value2 += [ 'representation' => 'XXX' ];
 			}
 			if ( $type !== Token::T_UNICODE_RANGE ) {
-				$value2['end'] = 'XXX';
+				$value2 += [ 'end' => 'XXX' ];
 			}
 
 			$token = new Token( $type, $value2 );
@@ -136,6 +138,8 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ Token::T_EOF, [ 'position' => [ 1, 2.0 ] ],
 				$iae( 'Position must be an array of two integers' ) ],
 			[ Token::T_EOF, [ 'position' => [ 42, 23 ] ] ],
+			[ Token::T_EOF, [ 'typeFlag' => 'recursion-depth-exceeded' ] ],
+			[ Token::T_EOF, [ 'typeFlag' => 'foo' ], $iae( 'Invalid type flag for Token type EOF' ) ],
 
 			[ Token::T_COLON, [ 'significant' => false ] ],
 

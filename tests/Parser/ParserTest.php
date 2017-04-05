@@ -723,4 +723,48 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 
 		];
 	}
+
+	public function testDepthLimit() {
+		$l = Parser::CV_DEPTH_LIMIT;
+
+		// Make sure it's not exceeded by non-nested CVs.
+		$parser = Parser::newFromString( str_repeat( 'x ', $l ) );
+		$list = $parser->parseComponentValueList();
+		$this->assertEquals( Parser::CV_DEPTH_LIMIT * 2, $list->count() );
+		$this->assertEquals( [], $parser->getParseErrors() );
+
+		// Just at the limit, not over.
+		$parser = Parser::newFromString( str_repeat( '{', $l ) . str_repeat( '}', $l ) . '?' );
+		$list = $parser->parseComponentValueList();
+		$this->assertEquals( 2, $list->count() );
+		$this->assertInstanceOf( SimpleBlock::class, $list[0] );
+		$this->assertEquals(
+			new Token( Token::T_DELIM, [ 'position' => [ 1, 201 ], 'value' => '?' ] ),
+			$list[1]
+		);
+		$this->assertEquals( [], $parser->getParseErrors() );
+
+		$overlimit = str_repeat( '{', $l ) . 'x' . str_repeat( '}', $l ) . '?';
+
+		// This one is over. This also tests "unexpected EOF" error suppression for blocks.
+		$parser = Parser::newFromString( $overlimit );
+		$list = $parser->parseComponentValueList();
+		$this->assertEquals( 1, $list->count() );
+		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 101 ] ], $parser->getParseErrors() );
+
+		// Test "unexpected EOF" error suppression for functions
+		$parser = Parser::newFromString( 'foo(' . $overlimit . ')' );
+		$list = $parser->parseComponentValue();
+		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 104 ] ], $parser->getParseErrors() );
+
+		// Test "unexpected EOF" error suppression for at-rules
+		$parser = Parser::newFromString( '@foo {' . $overlimit . '}' );
+		$list = $parser->parseRule();
+		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 107 ] ], $parser->getParseErrors() );
+
+		// Test "unexpected EOF" error suppression for qualified rules
+		$parser = Parser::newFromString( '.foo {' . $overlimit . '}' );
+		$list = $parser->parseRule();
+		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 107 ] ], $parser->getParseErrors() );
+	}
 }

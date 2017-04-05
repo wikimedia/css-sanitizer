@@ -113,6 +113,9 @@ Error Tags
 
 * **newline-in-string**: A newline was encountered inside a quoted string.
 
+* **recursion-depth-exceeded**: Blocks and/or functions were nested too deeply.
+  The rest of the input was ignored.
+
 * **unclosed-comment**: An unclosed comment was encountered.
 
 * **unclosed-string**: An unclosed string was encountered.

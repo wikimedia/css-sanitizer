@@ -45,6 +45,8 @@ use Wikimedia\CSS\Sanitizer\Sanitizer;
  *  - Parser::parseDeclarationList() to parse an inline style attribute
  */
 class Parser {
+	/** Maximum depth of nested ComponentValues */
+	const CV_DEPTH_LIMIT = 100; // Arbitrary number that seems like it should be enough
 
 	/** @var Tokenizer */
 	protected $tokenizer;
@@ -54,6 +56,9 @@ class Parser {
 
 	/** @var array Parse errors. Each error is [ string $tag, int $line, int $pos ] */
 	protected $parseErrors = [];
+
+	/** @var int Recursion depth, incremented in self::consumeComponentValue() */
+	protected $cvDepth = 0;
 
 	/**
 	 * @param Tokenizer $tokenizer CSS Tokenizer
@@ -104,13 +109,15 @@ class Parser {
 	 * Consume a token
 	 */
 	protected function consumeToken() {
-		$this->currentToken = $this->tokenizer->consumeToken();
+		if ( !$this->currentToken || $this->currentToken->type() !== Token::T_EOF ) {
+			$this->currentToken = $this->tokenizer->consumeToken();
 
-		// Copy any parse errors encountered
-		foreach ( $this->tokenizer->getParseErrors() as $error ) {
-			$this->parseErrors[] = $error;
+			// Copy any parse errors encountered
+			foreach ( $this->tokenizer->getParseErrors() as $error ) {
+				$this->parseErrors[] = $error;
+			}
+			$this->tokenizer->clearParseErrors();
 		}
-		$this->tokenizer->clearParseErrors();
 	}
 
 	/**
@@ -497,7 +504,9 @@ class Parser {
 
 				case Token::T_EOF:
 					// Parse error from the editor's draft as of 2017-01-11
-					$this->parseError( 'unexpected-eof-in-rule', $this->currentToken );
+					if ( $this->currentToken->typeFlag() !== 'recursion-depth-exceeded' ) {
+						$this->parseError( 'unexpected-eof-in-rule', $this->currentToken );
+					}
 					return $rule;
 
 				case Token::T_LEFT_BRACE:
@@ -524,7 +533,9 @@ class Parser {
 		while ( true ) {
 			switch ( $this->currentToken->type() ) {
 				case Token::T_EOF:
-					$this->parseError( 'unexpected-eof-in-rule', $this->currentToken );
+					if ( $this->currentToken->typeFlag() !== 'recursion-depth-exceeded' ) {
+						$this->parseError( 'unexpected-eof-in-rule', $this->currentToken );
+					}
 					return null;
 
 				case Token::T_LEFT_BRACE:
@@ -547,18 +558,40 @@ class Parser {
 	 * @return ComponentValue
 	 */
 	protected function consumeComponentValue() {
+		if ( ++$this->cvDepth > static::CV_DEPTH_LIMIT ) {
+			$this->parseError( 'recursion-depth-exceeded', $this->currentToken );
+			// There's no way to safely recover from this without more recursion.
+			// So just eat the rest of the input, then return a
+			// specially-flagged EOF so we can avoid 100 "unexpected EOF"
+			// errors.
+			$position = $this->currentToken->getPosition();
+			while ( $this->currentToken->type() !== Token::T_EOF ) {
+				$this->consumeToken();
+			}
+			$this->currentToken = new Token( Token::T_EOF, [
+				'position' => $position,
+				'typeFlag' => 'recursion-depth-exceeded'
+			] );
+		}
+
 		switch ( $this->currentToken->type() ) {
 			case Token::T_LEFT_BRACE:
 			case Token::T_LEFT_BRACKET:
 			case Token::T_LEFT_PAREN:
-				return $this->consumeSimpleBlock();
+				$ret = $this->consumeSimpleBlock();
+				break;
 
 			case Token::T_FUNCTION:
-				return $this->consumeFunction();
+				$ret = $this->consumeFunction();
+				break;
 
 			default:
-				return $this->currentToken;
+				$ret = $this->currentToken;
+				break;
 		}
+
+		$this->cvDepth--;
+		return $ret;
 	}
 
 	/**
@@ -574,7 +607,9 @@ class Parser {
 			switch ( $this->currentToken->type() ) {
 				case Token::T_EOF:
 					// Parse error from the editor's draft as of 2017-01-12
-					$this->parseError( 'unexpected-eof-in-block', $this->currentToken );
+					if ( $this->currentToken->typeFlag() !== 'recursion-depth-exceeded' ) {
+						$this->parseError( 'unexpected-eof-in-block', $this->currentToken );
+					}
 					return $block;
 
 				case $endTokenType:
@@ -603,7 +638,9 @@ class Parser {
 			switch ( $this->currentToken->type() ) {
 				case Token::T_EOF:
 					// Parse error from the editor's draft as of 2017-01-12
-					$this->parseError( 'unexpected-eof-in-function', $this->currentToken );
+					if ( $this->currentToken->typeFlag() !== 'recursion-depth-exceeded' ) {
+						$this->parseError( 'unexpected-eof-in-function', $this->currentToken );
+					}
 					return $function;
 
 				case Token::T_RIGHT_PAREN:

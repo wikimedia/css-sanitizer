@@ -220,7 +220,17 @@ class Token extends ComponentValue {
 			case self::T_RIGHT_PAREN:
 			case self::T_LEFT_BRACE:
 			case self::T_RIGHT_BRACE:
+				break;
+
 			case self::T_EOF:
+				// Let EOF have a typeFlag of 'recursion-depth-exceeded', used
+				// to avoid cascading errors when that occurs.
+				if ( isset( $value['typeFlag'] ) && $value['typeFlag'] !== '' ) {
+					$this->typeFlag = $value['typeFlag'];
+					if ( $this->typeFlag !== 'recursion-depth-exceeded' ) {
+						throw new \InvalidArgumentException( "Invalid type flag for Token type $this->type" );
+					}
+				}
 				break;
 
 			default:
