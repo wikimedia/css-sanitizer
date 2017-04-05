@@ -260,14 +260,16 @@ class Encoder {
 		}
 
 		// 1. Transport encoding
-		$encoding = isset( $encodings['transport'] ) ? strtolower( $encodings['transport'] ) : null;
+		$encoding = isset( $encodings['transport'] )
+			? trim( strtolower( $encodings['transport'] ), "\t\n\f\r " )
+			: null;
 		if ( $encoding !== null && isset( self::$encodings[$encoding] ) ) {
 			return self::doConvert( self::$encodings[$encoding], $text );
 		}
 
 		// 2. @charset rule
 		if ( preg_match( '/^@charset "([\x00-\x21\x23-\x7f]{0,1012})";/', $text, $m ) ) {
-			$encoding = strtolower( $m[1] );
+			$encoding = trim( strtolower( $m[1] ), "\t\n\f\r " );
 			if ( $encoding === 'utf-16be' || $encoding === 'utf-16le' ) {
 				// It's obviously lying.
 				$encoding = 'utf-8';
@@ -278,7 +280,9 @@ class Encoder {
 		}
 
 		// 3. Environment encoding
-		$encoding = isset( $encodings['environment'] ) ? strtolower( $encodings['environment'] ) : null;
+		$encoding = isset( $encodings['environment'] )
+			? trim( strtolower( $encodings['environment'] ), "\t\n\f\r " )
+			: null;
 		if ( $encoding !== null && isset( self::$encodings[$encoding] ) ) {
 			return self::doConvert( self::$encodings[$encoding], $text );
 		}

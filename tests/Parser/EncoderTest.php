@@ -67,6 +67,21 @@ class EncoderTest extends \PHPUnit_Framework_TestCase {
 				'@charset "piglatin1"; fóo',
 				[ 'transport' => 'bogus', 'environment' => 'latin1' ],
 			],
+			'Transport encoding with whitespace' => [
+				'@charset "iso-2022-cn";',
+				'@charset "iso-2022-cn";',
+				[ 'transport' => "\rutf-8\n", 'environment' => 'iso-2022-cn' ],
+			],
+			'@charset with whitespace' => [
+				"@charset \"\funicode-1-1-utf-8\n\";",
+				"@charset \"\funicode-1-1-utf-8\n\";",
+				[ 'transport' => 'bogus', 'environment' => 'iso-2022-cn' ],
+			],
+			'environment with whitespace' => [
+				"@charset \"piglatin1\"; f\xf3o",
+				'@charset "piglatin1"; fóo',
+				[ 'transport' => 'bogus', 'environment' => "\rlatin1\n" ],
+			],
 			'fallback to UTF-8' => [
 				"@charset \"piglatin1\"; f\xf3o",
 				'@charset "piglatin1"; f�o',
