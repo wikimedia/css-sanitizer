@@ -1,0 +1,72 @@
+<?php
+/**
+ * @file
+ * @license https://opensource.org/licenses/Apache-2.0 Apache-2.0
+ */
+
+namespace Wikimedia\CSS\Grammar;
+
+use InvalidArgumentException;
+use Wikimedia\CSS\Objects\ComponentValueList;
+use Wikimedia\CSS\Objects\Token;
+
+/**
+ * @covers \Wikimedia\CSS\Grammar\Match
+ */
+class MatchTest extends \PHPUnit_Framework_TestCase {
+
+	/**
+	 * @expectedException InvalidArgumentException
+	 * @expectedExceptionMessage $capturedMatches may only contain instances of
+	 *  Wikimedia\CSS\Grammar\Match (found stdClass at index 0)
+	 */
+	public function testException() {
+		new Match( new ComponentValueList(), 1, 2, null, [ new \stdClass ] );
+	}
+
+	public function testMatch() {
+		$tok1 = new Token( Token::T_IDENT, 'a' );
+		$tok2 = new Token( Token::T_IDENT, 'b' );
+		$tok3 = new Token( Token::T_IDENT, 'c' );
+		$tok4 = new Token( Token::T_IDENT, 'd' );
+		$tok5 = new Token( Token::T_IDENT, 'e' );
+		$list = new ComponentValueList( [ $tok1, $tok2, $tok3, $tok4, $tok5 ] );
+
+		$match = new Match( $list, 1, 3 );
+		$this->assertSame( 1, $match->getStart() );
+		$this->assertSame( 3, $match->getLength() );
+		$this->assertSame( 4, $match->getNext() );
+		$this->assertSame( [ $tok2, $tok3, $tok4 ], $match->getValues() );
+		$this->assertNull( $match->getName() );
+		$this->assertSame( [], $match->getCapturedMatches() );
+
+		$match2 = new Match( $list, 2, 0, 'foo', [ $match ] );
+		$this->assertSame( 2, $match2->getStart() );
+		$this->assertSame( 0, $match2->getLength() );
+		$this->assertSame( 2, $match2->getNext() );
+		$this->assertSame( [], $match2->getValues() );
+		$this->assertSame( 'foo', $match2->getName() );
+		$this->assertSame( [ $match ], $match2->getCapturedMatches() );
+
+		$this->assertNotSame( $match->getUniqueID(), $match2->getUniqueID() );
+
+		$match3 = new Match( $list, 1, 3 );
+		$match4 = new Match( $list, 2, 0, 'foo', [ $match3 ] );
+		$this->assertSame( $match->getUniqueID(), $match3->getUniqueID() );
+		$this->assertSame( $match2->getUniqueID(), $match4->getUniqueID() );
+	}
+
+	public function testFixWhitespace() {
+		$tok1 = new Token( Token::T_WHITESPACE );
+		$tok2 = new Token( Token::T_WHITESPACE );
+		$tok3 = new Token( Token::T_WHITESPACE );
+		$tok4 = new Token( Token::T_WHITESPACE );
+
+		$match2 = new Match( new ComponentValueList( [ $tok1, $tok2, $tok3 ] ), 0, 3 );
+		$match = new Match( new ComponentValueList( [ $tok1, $tok2, $tok3 ] ), 0, 3, null, [ $match2 ] );
+
+		$match->fixWhitespace( $tok2, $tok4 );
+		$this->assertSame( [ $tok1, $tok4, $tok3 ], $match->getValues() );
+		$this->assertSame( [ $tok1, $tok4, $tok3 ], $match2->getValues() );
+	}
+}
