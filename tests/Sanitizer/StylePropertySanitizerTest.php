@@ -85,12 +85,6 @@ class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 			[ 'padding: 0 0 calc(10px * 10) 0' ],
 			[ 'float: left' ],
 			[ 'clear: both' ],
-			[ 'width: auto' ],
-			[ 'min-width: 10q' ],
-			[ 'max-width: none' ],
-			[ 'height: auto' ],
-			[ 'min-height: 10q' ],
-			[ 'max-height: none' ],
 			[ 'line-height: normal' ],
 			[ 'line-height: 3' ],
 			[ 'vertical-align: middle' ],
@@ -227,6 +221,7 @@ class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 
 			// cssMulticol
 			[ 'column-width: 30em' ],
+			[ 'column-width: min-content' ],
 			[ 'column-count: 3' ],
 			[ 'columns: 3 30em' ],
 			[ 'column-gap: 1px' ],
@@ -311,6 +306,7 @@ class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 			[ 'flex-basis: calc( 1px + 10% )' ],
 			[ 'flex: 2' ],
 			[ 'flex: content 3 4' ],
+			[ 'flex: 3 4 max-content' ],
 
 			// cssTransforms1
 			[ 'transform: matrix( 1, 2, 3, 4, 5, 6 )' ],
@@ -513,6 +509,18 @@ class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 			[ 'mask-border-repeat: stretch round' ],
 			[ 'mask-border: stretch round none 1 2 3 alpha' ],
 			[ 'mask-type: luminance' ],
+
+			// cssSizing3
+			[ 'width: auto' ],
+			[ 'width: min-content' ],
+			[ 'min-width: 10q' ],
+			[ 'min-width: max-content' ],
+			[ 'max-width: none' ],
+			[ 'max-width: fit-content(10%)' ],
+			[ 'height: auto' ],
+			[ 'height: min-content' ],
+			[ 'min-height: 10q' ],
+			[ 'max-height: none' ],
 		];
 	}
 }

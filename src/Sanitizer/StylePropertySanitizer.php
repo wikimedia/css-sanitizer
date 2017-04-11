@@ -77,6 +77,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssFilter1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssShapes1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssMasking1( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssSizing3( $matcherFactory ) );
 	}
 
 	/**
@@ -117,12 +118,6 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['clear'] = new KeywordMatcher( [ 'none', 'left', 'right', 'both' ] );
 
 		// https://www.w3.org/TR/2011/REC-CSS2-20110607/visudet.html
-		$props['width'] = $autoLengthPct;
-		$props['min-width'] = $matcherFactory->lengthPercentage();
-		$props['max-width'] = new Alternative( [ $none, $matcherFactory->lengthPercentage() ] );
-		$props['height'] = $autoLengthPct;
-		$props['min-height'] = $matcherFactory->lengthPercentage();
-		$props['max-height'] = $props['max-width'];
 		$props['line-height'] = new Alternative( [
 			new KeywordMatcher( 'normal' ),
 			$matcherFactory->length(),
@@ -611,7 +606,11 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$auto = new KeywordMatcher( 'auto' );
 		$normal = new KeywordMatcher( 'normal' );
 
-		$props['column-width'] = new Alternative( [ $matcherFactory->length(), $auto ] );
+		$props['column-width'] = new Alternative( array_merge(
+			[ $matcherFactory->length(), $auto ],
+			// Additional values from https://www.w3.org/TR/2018/WD-css-sizing-3-20180304/
+			$this->getSizingAdditions( $matcherFactory )
+		) );
 		$props['column-count'] = new Alternative( [ $matcherFactory->integer(), $auto ] );
 		$props['columns'] = UnorderedGroup::someOf( [ $props['column-width'], $props['column-count'] ] );
 		// Copy these from similar items in the Border module
@@ -915,8 +914,8 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['flex-grow'] = $matcherFactory->number();
 		$props['flex-shrink'] = $matcherFactory->number();
 		$props['flex-basis'] = new Alternative( [
-			new KeywordMatcher( [ 'content', 'auto' ] ),
-			$matcherFactory->lengthPercentage(),
+			new KeywordMatcher( [ 'content' ] ),
+			$this->cssSizing3( $matcherFactory )['width']
 		] );
 		$props['flex'] = new Alternative( [
 			new KeywordMatcher( 'none' ),
@@ -1819,6 +1818,63 @@ class StylePropertySanitizer extends PropertySanitizer {
 			$props['mask-border-mode'],
 		] );
 		$props['mask-type'] = new KeywordMatcher( [ 'luminance', 'alpha' ] );
+
+		$this->cache[__METHOD__] = $props;
+		return $props;
+	}
+
+	/**
+	 * Additional keywords and functions from CSS Intrinsic and Extrinsic Sizing Level 3
+	 * @see https://www.w3.org/TR/2018/WD-css-sizing-3-20180304/
+	 * @param MatcherFactory $matcherFactory Factory for Matchers
+	 * @return Matcher[] Array of matchers
+	 */
+	protected function getSizingAdditions( MatcherFactory $matcherFactory ) {
+		if ( !isset( $this->cache[__METHOD__] ) ) {
+			$lengthPct = $matcherFactory->lengthPercentage();
+			$this->cache[__METHOD__] = [
+				new KeywordMatcher( [
+					'max-content', 'min-content',
+					// Browser-prefixed versions of the keywords, needed by Firefox and iOS Safari as of May 2018
+					'-moz-max-content', '-moz-min-content',
+					'-webkit-max-content', '-webkit-min-content',
+				] ),
+				new FunctionMatcher( 'fit-content', $lengthPct ),
+				// Browser-prefixed versions of the function, needed by Firefox and iOS Safari as of May 2018
+				new FunctionMatcher( '-moz-fit-content', $lengthPct ),
+				new FunctionMatcher( '-webkit-fit-content', $lengthPct ),
+			];
+		}
+		return $this->cache[__METHOD__];
+	}
+
+	/**
+	 * Properties for CSS Intrinsic and Extrinsic Sizing Level 3
+	 * @see https://www.w3.org/TR/2018/WD-css-sizing-3-20180304/
+	 * @param MatcherFactory $matcherFactory Factory for Matchers
+	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
+	 */
+	protected function cssSizing3( MatcherFactory $matcherFactory ) {
+		// @codeCoverageIgnoreStart
+		if ( isset( $this->cache[__METHOD__] ) ) {
+			return $this->cache[__METHOD__];
+		}
+		// @codeCoverageIgnoreEnd
+
+		$none = new KeywordMatcher( 'none' );
+		$auto = new KeywordMatcher( 'auto' );
+		$lengthPct = $matcherFactory->lengthPercentage();
+		$sizingValues = array_merge( [ $lengthPct ], $this->getSizingAdditions( $matcherFactory ) );
+
+		$props['width'] = new Alternative( array_merge( [ $auto ], $sizingValues ) );
+		$props['min-width'] = $props['width'];
+		$props['max-width'] = new Alternative( array_merge( [ $none ], $sizingValues ) );
+		$props['height'] = $props['width'];
+		$props['min-height'] = $props['min-width'];
+		$props['max-height'] = $props['max-width'];
+
+		// Copying is ok as long as it's the identical object.
+		$props['box-sizing'] = $this->cssUI4( $matcherFactory )['box-sizing'];
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
