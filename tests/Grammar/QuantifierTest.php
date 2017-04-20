@@ -10,6 +10,7 @@ use UnexpectedValueException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\Quantifier
@@ -53,13 +54,14 @@ class QuantifierTest extends MatcherTestBase {
 	 * @param array $expect [ $start => $out, ... ]
 	 */
 	public function testGenerateMatches( $values, $skipWS, $min, $max, $commas, $expect ) {
-		$matcher = new Quantifier( new TokenMatcher( Token::T_IDENT ), $min, $max, $commas );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$matcher = TestingAccessWrapper::newFromObject(
+			new Quantifier( new TokenMatcher( Token::T_IDENT ), $min, $max, $commas )
+		);
 
 		$list = new ComponentValueList( $values );
 		$options = [ 'skip-whitespace' => $skipWS ];
 		foreach ( $expect as $start => $out ) {
-			$this->assertPositions( $start, $out, $generateMatches( $list, $start, $options ),
+			$this->assertPositions( $start, $out, $matcher->generateMatches( $list, $start, $options ),
 				"Start position $start" );
 		}
 	}
@@ -175,16 +177,15 @@ class QuantifierTest extends MatcherTestBase {
 		$matcher->expects( $this->once() )->method( 'generateMatches' )
 			->willReturn( new \ArrayIterator( [ new Match( $list, 1, 0 ) ] ) );
 
-		$quantifier = Quantifier::optional( $matcher );
-		$generateMatches = $this->getGenerateMatches( $quantifier );
+		$quantifier = TestingAccessWrapper::newFromObject( Quantifier::optional( $matcher ) );
 
 		// Need to actually process the returned generator to call the method.
-		$generateMatches( $list, 1, [] )->current();
+		$quantifier->generateMatches( $list, 1, [] )->current();
 	}
 
 	public function testCaptures() {
 		$m = new KeywordMatcher( [ 'A' ] );
-		$matcher = Quantifier::count( $m->capture( 'foo' ), 0, 3 );
+		$matcher = TestingAccessWrapper::newFromObject( Quantifier::count( $m->capture( 'foo' ), 0, 3 ) );
 
 		$A = new Token( Token::T_IDENT, 'A' );
 		$list = new ComponentValueList( [ $A, $A, $A, $A ] );
@@ -193,8 +194,7 @@ class QuantifierTest extends MatcherTestBase {
 		$foo1 = new Match( $list, 1, 1, 'foo' );
 		$foo2 = new Match( $list, 2, 1, 'foo' );
 
-		$generateMatches = $this->getGenerateMatches( $matcher );
-		$ret = $generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
+		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertEquals( [
 			new Match( $list, 0, 3, null, [ $foo0, $foo1, $foo2 ] ),
 			new Match( $list, 0, 2, null, [ $foo0, $foo1 ] ),

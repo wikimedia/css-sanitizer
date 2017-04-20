@@ -11,6 +11,7 @@ use Wikimedia\CSS\Grammar\TokenMatcher;
 use Wikimedia\CSS\Grammar\UrlMatcher;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Util;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Sanitizer\StylePropertySanitizer
@@ -41,9 +42,7 @@ class StylePropertySanitizerTest extends \PHPUnit_Framework_TestCase {
 	public function testDeclarations( $input, $error = null ) {
 		$declaration = Parser::newFromString( $input )->parseDeclaration();
 		$san = $this->getSanitizer();
-		$rm = new \ReflectionMethod( $san, 'doSanitize' );
-		$rm->setAccessible( true );
-		$ret = $rm->invoke( $san, $declaration );
+		$ret = TestingAccessWrapper::newFromObject( $san )->doSanitize( $declaration );
 		if ( $error ) {
 			$this->assertNull( $ret );
 			if ( $error === 'bad-value-for-property' && $declaration->getValue()->count() ) {

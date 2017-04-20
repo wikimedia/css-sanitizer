@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\FunctionMatcher
@@ -25,8 +26,9 @@ class FunctionMatcherTest extends MatcherTestBase {
 	}
 
 	public function testNoName() {
-		$matcher = new FunctionMatcher( null, new TokenMatcher( Token::T_COMMA ) );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$m = TestingAccessWrapper::newFromObject(
+			new FunctionMatcher( null, new TokenMatcher( Token::T_COMMA ) )
+		);
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$c = new Token( Token::T_COMMA );
@@ -41,20 +43,21 @@ class FunctionMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $v ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $v ] : [], $m->generateMatches( $list, $i, $options ),
 				"Skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $m->generateMatches( $list, $i, $options ),
 				"Not skipping whitespace, index $i" );
 		}
 	}
 
 	public function testStringName() {
-		$matcher = new FunctionMatcher( 'foo', new TokenMatcher( Token::T_COMMA ) );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$m = TestingAccessWrapper::newFromObject(
+			new FunctionMatcher( 'foo', new TokenMatcher( Token::T_COMMA ) )
+		);
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$c = new Token( Token::T_COMMA );
@@ -69,22 +72,21 @@ class FunctionMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $v ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $v ] : [], $m->generateMatches( $list, $i, $options ),
 				"Skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $m->generateMatches( $list, $i, $options ),
 				"Not skipping whitespace, index $i" );
 		}
 	}
 
 	public function testCallbackName() {
-		$matcher = new FunctionMatcher( function ( $name ) {
+		$m = TestingAccessWrapper::newFromObject( new FunctionMatcher( function ( $name ) {
 			return $name === 'Foo';
-		}, new TokenMatcher( Token::T_COMMA ) );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		}, new TokenMatcher( Token::T_COMMA ) ) );
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$c = new Token( Token::T_COMMA );
@@ -99,20 +101,21 @@ class FunctionMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $v ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $v ] : [], $m->generateMatches( $list, $i, $options ),
 				"Skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $m->generateMatches( $list, $i, $options ),
 				"Not skipping whitespace, index $i" );
 		}
 	}
 
 	public function testCaptures() {
-		$matcher = new FunctionMatcher( null, TokenMatcher::create( Token::T_COMMA )->capture( 'foo' ) );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$m = TestingAccessWrapper::newFromObject(
+			new FunctionMatcher( null, TokenMatcher::create( Token::T_COMMA )->capture( 'foo' ) )
+		);
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$c = new Token( Token::T_COMMA );
@@ -122,7 +125,7 @@ class FunctionMatcherTest extends MatcherTestBase {
 		$rp = new Token( Token::T_RIGHT_PAREN );
 
 		$list = new ComponentValueList( [ $f1 ] );
-		$ret = iterator_to_array( $generateMatches( $list, 0, [ 'skip-whitespace' => true ] ) );
+		$ret = iterator_to_array( $m->generateMatches( $list, 0, [ 'skip-whitespace' => true ] ) );
 		$this->assertEquals( [
 			new Match( $list, 0, 1, null, [ new Match( $f1->getValue(), 1, 2, 'foo' ) ] ),
 		], $ret );

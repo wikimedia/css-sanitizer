@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\Alternative
@@ -45,9 +46,8 @@ class AlternativeTest extends MatcherTestBase {
 		}
 
 		$list = new ComponentValueList();
-		$alternative = new Alternative( $matchers );
-		$generateMatches = $this->getGenerateMatches( $alternative );
-		$this->assertPositions( 0, $expect, $generateMatches( $list, 0, [] ) );
+		$alternative = TestingAccessWrapper::newFromObject( new Alternative( $matchers ) );
+		$this->assertPositions( 0, $expect, $alternative->generateMatches( $list, 0, [] ) );
 	}
 
 	public static function provideGenerateMatches() {
@@ -78,9 +78,10 @@ class AlternativeTest extends MatcherTestBase {
 		$m4 = $matcher->capture( 'foo' );
 
 		$list = new ComponentValueList( [ new Token( Token::T_COLON ) ] );
-		$alternative = new Alternative( [ $m1, $m2, $m3, $m4 ] );
-		$generateMatches = $this->getGenerateMatches( $alternative );
-		$ret = iterator_to_array( $generateMatches( $list, 0, [ 'skip-whitespace' => true ] ) );
+		$alternative = TestingAccessWrapper::newFromObject( new Alternative( [ $m1, $m2, $m3, $m4 ] ) );
+		$ret = iterator_to_array(
+			$alternative->generateMatches( $list, 0, [ 'skip-whitespace' => true ] )
+		);
 		$this->assertEquals( [
 			new Match( $list, 0, 1, null, [ new Match( $list, 0, 1, 'foo' ) ] ),
 			new Match( $list, 0, 1, null, [ new Match( $list, 0, 1, 'bar' ) ] ),

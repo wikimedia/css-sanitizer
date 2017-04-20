@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\DelimMatcher
@@ -16,8 +17,7 @@ use Wikimedia\CSS\Objects\Token;
 class DelimMatcherTest extends MatcherTestBase {
 
 	public function testEverything() {
-		$matcher = new DelimMatcher( [ '+', 'x', 'x' ] );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$m = TestingAccessWrapper::newFromObject( new DelimMatcher( [ '+', 'x', 'x' ] ) );
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$cv1 = new Token( Token::T_DELIM, '+' );
@@ -31,13 +31,13 @@ class DelimMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $v ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $v ] : [], $m->generateMatches( $list, $i, $options ),
 				"Skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $m->generateMatches( $list, $i, $options ),
 				"Not skipping whitespace, index $i" );
 		}
 	}

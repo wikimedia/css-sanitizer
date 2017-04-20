@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\KeywordMatcher
@@ -16,8 +17,7 @@ use Wikimedia\CSS\Objects\Token;
 class KeywordMatcherTest extends MatcherTestBase {
 
 	public function testEverything() {
-		$matcher = new KeywordMatcher( [ 'foo', 'bar', 'bAr' ] );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$m = TestingAccessWrapper::newFromObject( new KeywordMatcher( [ 'foo', 'bar', 'bAr' ] ) );
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$cv1 = new Token( Token::T_IDENT, 'foo' );
@@ -31,13 +31,13 @@ class KeywordMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $v ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $v ] : [], $m->generateMatches( $list, $i, $options ),
 				"Skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $m->generateMatches( $list, $i, $options ),
 				"Not skipping whitespace, index $i" );
 		}
 	}

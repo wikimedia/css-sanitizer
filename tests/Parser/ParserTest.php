@@ -18,6 +18,7 @@ use Wikimedia\CSS\Objects\RuleList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Stylesheet;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Parser\Parser
@@ -28,7 +29,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 		$parser = Parser::newFromString( 'foobar', [ 'options' ] );
 		$this->assertInstanceOf( Parser::class, $parser );
 
-		$ds = $this->getMock( DataSource::class );
+		$ds = $this->getMockBuilder( DataSource::class )->getMock();
 		$parser = Parser::newFromDataSource( $ds, [ 'options' ] );
 		$this->assertInstanceOf( Parser::class, $parser );
 
@@ -64,11 +65,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase {
 	 * @return object
 	 */
 	private static function mk( $obj, $vars ) {
-		$rc = new \ReflectionClass( $obj );
+		$wrapper = TestingAccessWrapper::newFromObject( $obj );
 		foreach ( $vars as $k => $v ) {
-			$rp = $rc->getProperty( $k );
-			$rp->setAccessible( true );
-			$rp->setValue( $obj, $v );
+			$wrapper->$k = $v;
 		}
 		return $obj;
 	}

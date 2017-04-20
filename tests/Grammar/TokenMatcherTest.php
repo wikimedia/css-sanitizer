@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\TokenMatcher
@@ -16,8 +17,7 @@ use Wikimedia\CSS\Objects\Token;
 class TokenMatcherTest extends MatcherTestBase {
 
 	public function testStandard() {
-		$matcher = new TokenMatcher( Token::T_IDENT );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$m = TestingAccessWrapper::newFromObject( new TokenMatcher( Token::T_IDENT ) );
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$cv1 = new Token( Token::T_IDENT, 'foo' );
@@ -31,22 +31,23 @@ class TokenMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $v ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $v ] : [], $m->generateMatches( $list, $i, $options ),
 				"Skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $m->generateMatches( $list, $i, $options ),
 				"Not skipping whitespace, index $i" );
 		}
 	}
 
 	public function testCallback() {
-		$matcher = new TokenMatcher( Token::T_IDENT, function ( Token $token ) {
-			return $token->value() === strtolower( $token->value() );
-		} );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$m = TestingAccessWrapper::newFromObject(
+			new TokenMatcher( Token::T_IDENT, function ( Token $token ) {
+				return $token->value() === strtolower( $token->value() );
+			} )
+		);
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$cv1 = new Token( Token::T_IDENT, 'foo' );
@@ -60,13 +61,13 @@ class TokenMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $v ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $v ] : [], $m->generateMatches( $list, $i, $options ),
 				"Skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
-			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $generateMatches( $list, $i, $options ),
+			$this->assertPositions( $i, $v ? [ $i + 1 ] : [], $m->generateMatches( $list, $i, $options ),
 				"Not skipping whitespace, index $i" );
 		}
 	}

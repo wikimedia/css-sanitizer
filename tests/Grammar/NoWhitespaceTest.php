@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\NoWhitespace
@@ -16,7 +17,7 @@ use Wikimedia\CSS\Objects\Token;
 class NoWhitespaceTest extends MatcherTestBase {
 
 	public function testStandard() {
-		$generateMatches = $this->getGenerateMatches( new NoWhitespace );
+		$matcher = TestingAccessWrapper::newFromObject( new NoWhitespace );
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$v1 = new Token( Token::T_IDENT, 'foo' );
@@ -29,7 +30,7 @@ class NoWhitespaceTest extends MatcherTestBase {
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
 				$v === false ? [] : [ new Match( $list, $i, 0 ) ],
-				iterator_to_array( $generateMatches( $list, $i, $options ) ),
+				iterator_to_array( $matcher->generateMatches( $list, $i, $options ) ),
 				"Skipping whitespace, index $i"
 			);
 		}
@@ -38,7 +39,7 @@ class NoWhitespaceTest extends MatcherTestBase {
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
 				$v === false ? [] : [ new Match( $list, $i, 0 ) ],
-				iterator_to_array( $generateMatches( $list, $i, $options ) ),
+				iterator_to_array( $matcher->generateMatches( $list, $i, $options ) ),
 				"Not skipping whitespace, index $i"
 			);
 		}

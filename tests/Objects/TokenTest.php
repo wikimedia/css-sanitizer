@@ -7,6 +7,7 @@
 namespace Wikimedia\CSS\Objects;
 
 use InvalidArgumentException;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Objects\Token
@@ -29,9 +30,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 
 		if ( $hackRepr ) {
 			// Assign separately to allow testing the value != representation case.
-			$rp = new \ReflectionProperty( $token, 'representation' );
-			$rp->setAccessible( true );
-			$rp->setValue( $token, $repr );
+			TestingAccessWrapper::newFromObject( $token )->representation = $repr;
 		}
 
 		return $token;
@@ -415,9 +414,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testStringificationError() {
 		$t = new Token( Token::T_WHITESPACE );
-		$rp = new \ReflectionProperty( $t, 'type' );
-		$rp->setAccessible( true );
-		$rp->setValue( $t, 'bogus' );
+		TestingAccessWrapper::newFromObject( $t )->type = 'bogus';
 		$t->__toString();
 	}
 

@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\MatcherFactory
@@ -16,10 +17,7 @@ use Wikimedia\CSS\Parser\Parser;
 class MatcherFactoryTest extends \PHPUnit_Framework_TestCase {
 
 	public function testSingleton() {
-		$rp = new \ReflectionProperty( MatcherFactory::class, 'instance' );
-		$rp->setAccessible( true );
-		$rp->setValue( null, null );
-
+		TestingAccessWrapper::newFromClass( MatcherFactory::class )->instance = null;
 		$s1 = MatcherFactory::singleton();
 		$this->assertSame( $s1, MatcherFactory::singleton() );
 	}

@@ -12,6 +12,7 @@ use Wikimedia\CSS\Grammar\MatcherFactory;
 use Wikimedia\CSS\Grammar\NothingMatcher;
 use Wikimedia\CSS\Objects\Declaration;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Sanitizer\PropertySanitizer
@@ -58,12 +59,10 @@ class PropertySanitizerTest extends \PHPUnit_Framework_TestCase {
 
 	public function testSanitize() {
 		$ID = Token::T_IDENT;
-		$san = new PropertySanitizer( [
+		$san = TestingAccessWrapper::newFromObject( new PropertySanitizer( [
 			'foo' => new AnythingMatcher,
 			'bar' => new NothingMatcher,
-		] );
-		$rm = new \ReflectionMethod( $san, 'doSanitize' );
-		$rm->setAccessible( true );
+		] ) );
 
 		$global = new Token( $ID, [ 'value' => 'global', 'position' => [ 1, 2 ] ] );
 		$foo = new Declaration( new Token( $ID, [ 'value' => 'foo', 'position' => [ 3, 4 ] ] ) );
@@ -85,11 +84,11 @@ class PropertySanitizerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( [ [ 'expected-declaration', 1, 2 ] ], $san->getSanitizationErrors() );
 		$san->clearSanitizationErrors();
 
-		$this->assertSame( $foo, $rm->invoke( $san, $foo ) );
+		$this->assertSame( $foo, $san->doSanitize( $foo ) );
 		$this->assertSame( [], $san->getSanitizationErrors() );
 		$san->clearSanitizationErrors();
 
-		$this->assertSame( $foo2, $rm->invoke( $san, $foo2 ) );
+		$this->assertSame( $foo2, $san->doSanitize( $foo2 ) );
 		$this->assertSame( [], $san->getSanitizationErrors() );
 		$san->clearSanitizationErrors();
 
@@ -113,7 +112,7 @@ class PropertySanitizerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( [ [ 'expected-declaration', 1, 2 ] ], $san->getSanitizationErrors() );
 		$san->clearSanitizationErrors();
 
-		$this->assertSame( $bar, $rm->invoke( $san, $bar ) );
+		$this->assertSame( $bar, $san->doSanitize( $bar ) );
 		$this->assertSame( [], $san->getSanitizationErrors() );
 		$san->clearSanitizationErrors();
 

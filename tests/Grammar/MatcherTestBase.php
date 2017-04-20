@@ -8,21 +8,9 @@ namespace Wikimedia\CSS\Grammar;
 
 use \Iterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
+use Wikimedia\TestingAccessWrapper;
 
 class MatcherTestBase extends \PHPUnit_Framework_TestCase {
-
-	/**
-	 * Get a handle to call $matcher->generateMatches()
-	 * @param Matcher $matcher
-	 * @return callable
-	 */
-	protected function getGenerateMatches( Matcher $matcher ) {
-		$rm = new \ReflectionMethod( $matcher, 'generateMatches' );
-		$rm->setAccessible( true );
-		return function ( $values, $start, $options ) use ( $rm, $matcher ) {
-			return $rm->invoke( $matcher, $values, $start, $options );
-		};
-	}
 
 	/**
 	 * Strip the tokens from a Match
@@ -30,18 +18,11 @@ class MatcherTestBase extends \PHPUnit_Framework_TestCase {
 	 * @return Match|null
 	 */
 	public static function stripMatch( $match ) {
-		static $rp = null;
-
 		if ( $match === null ) {
 			return null;
 		}
 
-		if ( !$rp ) {
-			$rp = new \ReflectionProperty( Match::class, 'values' );
-			$rp->setAccessible( true );
-		}
-
-		$rp->setValue( $match, '...' );
+		TestingAccessWrapper::newFromObject( $match )->values = '...';
 		if ( $match->getCapturedMatches() ) {
 			self::stripMatches( $match->getCapturedMatches() );
 		}

@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Objects\SimpleBlock;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\UnorderedGroup
@@ -64,11 +65,11 @@ class UnorderedGroupTest extends MatcherTestBase {
 		$list = new ComponentValueList( $values );
 		$options = [ 'skip-whitespace' => $skipWS ];
 
-		$generateMatches = $this->getGenerateMatches( UnorderedGroup::allOf( $matchers ) );
-		$this->assertPositions( 0, $expectAll, $generateMatches( $list, 0, $options ), 'allOf' );
+		$m = TestingAccessWrapper::newFromObject( UnorderedGroup::allOf( $matchers ) );
+		$this->assertPositions( 0, $expectAll, $m->generateMatches( $list, 0, $options ), 'allOf' );
 
-		$generateMatches = $this->getGenerateMatches( UnorderedGroup::someOf( $matchers ) );
-		$this->assertPositions( 0, $expectSome, $generateMatches( $list, 0, $options ), 'someOf' );
+		$m = TestingAccessWrapper::newFromObject( UnorderedGroup::someOf( $matchers ) );
+		$this->assertPositions( 0, $expectSome, $m->generateMatches( $list, 0, $options ), 'someOf' );
 	}
 
 	public static function provideGenerateMatches() {
@@ -149,18 +150,18 @@ class UnorderedGroupTest extends MatcherTestBase {
 		$list = new ComponentValueList( [ $A, $A, $A, $A ] );
 		$options = [ 'skip-whitespace' => false ];
 
-		$generateMatches = $this->getGenerateMatches( UnorderedGroup::allOf( $matchers ) );
-		$this->assertPositions( 0, [ 3, 2, 1, 0 ], $generateMatches( $list, 0, $options ), 'allOf' );
+		$m = TestingAccessWrapper::newFromObject( UnorderedGroup::allOf( $matchers ) );
+		$this->assertPositions( 0, [ 3, 2, 1, 0 ], $m->generateMatches( $list, 0, $options ), 'allOf' );
 
-		$generateMatches = $this->getGenerateMatches( UnorderedGroup::someOf( $matchers ) );
-		$this->assertPositions( 0, [ 3, 2, 1, 0 ], $generateMatches( $list, 0, $options ), 'someOf' );
+		$m = TestingAccessWrapper::newFromObject( UnorderedGroup::someOf( $matchers ) );
+		$this->assertPositions( 0, [ 3, 2, 1, 0 ], $m->generateMatches( $list, 0, $options ), 'someOf' );
 	}
 
 	public function testCaptures() {
 		$m = Quantifier::optional( new KeywordMatcher( [ 'A' ] ) );
-		$matcher = UnorderedGroup::allOf( [
+		$matcher = TestingAccessWrapper::newFromObject( UnorderedGroup::allOf( [
 			$m->capture( 'foo' ), $m->capture( 'bar' ), $m->capture( 'foo' )
-		] );
+		] ) );
 
 		$A = new Token( Token::T_IDENT, 'A' );
 		$list = new ComponentValueList( [ $A, $A, $A, $A ] );
@@ -178,8 +179,7 @@ class UnorderedGroupTest extends MatcherTestBase {
 		$bar20 = new Match( $list, 2, 0, 'bar' );
 		$bar21 = new Match( $list, 2, 1, 'bar' );
 
-		$generateMatches = $this->getGenerateMatches( $matcher );
-		$ret = $generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
+		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertEquals( [
 			new Match( $list, 0, 3, null, [ $foo01, $bar11, $foo21 ] ),
 			new Match( $list, 0, 2, null, [ $foo01, $bar11, $foo20 ] ),

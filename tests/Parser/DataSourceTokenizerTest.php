@@ -7,6 +7,7 @@
 namespace Wikimedia\CSS\Parser;
 
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Parser\DataSourceTokenizer
@@ -14,23 +15,21 @@ use Wikimedia\CSS\Objects\Token;
 class DataSourceTokenizerTest extends \PHPUnit_Framework_TestCase {
 
 	public function testCharacterNormalization() {
-		$t = new DataSourceTokenizer( new StringDataSource( "\x00-\f-\r-\r\n-\n\r-" ) );
+		$t = TestingAccessWrapper::newFromObject(
+			new DataSourceTokenizer( new StringDataSource( "\x00-\f-\r-\r\n-\n\r-" ) )
+		);
 
-		$rc = new \ReflectionClass( $t );
-		$m = $rc->getMethod( 'nextChar' );
-		$m->setAccessible( true );
-
-		$this->assertSame( '�', $m->invokeArgs( $t, [] ) );
-		$this->assertSame( '-', $m->invokeArgs( $t, [] ) );
-		$this->assertSame( "\n", $m->invokeArgs( $t, [] ) );
-		$this->assertSame( '-', $m->invokeArgs( $t, [] ) );
-		$this->assertSame( "\n", $m->invokeArgs( $t, [] ) );
-		$this->assertSame( '-', $m->invokeArgs( $t, [] ) );
-		$this->assertSame( "\n", $m->invokeArgs( $t, [] ) );
-		$this->assertSame( '-', $m->invokeArgs( $t, [] ) );
-		$this->assertSame( "\n", $m->invokeArgs( $t, [] ) );
-		$this->assertSame( "\n", $m->invokeArgs( $t, [] ) );
-		$this->assertSame( '-', $m->invokeArgs( $t, [] ) );
+		$this->assertSame( '�', $t->nextChar() );
+		$this->assertSame( '-', $t->nextChar() );
+		$this->assertSame( "\n", $t->nextChar() );
+		$this->assertSame( '-', $t->nextChar() );
+		$this->assertSame( "\n", $t->nextChar() );
+		$this->assertSame( '-', $t->nextChar() );
+		$this->assertSame( "\n", $t->nextChar() );
+		$this->assertSame( '-', $t->nextChar() );
+		$this->assertSame( "\n", $t->nextChar() );
+		$this->assertSame( "\n", $t->nextChar() );
+		$this->assertSame( '-', $t->nextChar() );
 	}
 
 	/**

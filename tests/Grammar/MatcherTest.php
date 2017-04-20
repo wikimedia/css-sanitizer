@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\Matcher
@@ -70,12 +71,9 @@ class MatcherTest extends MatcherTestBase {
 	}
 
 	public function testNext() {
-		$matcher = $this->getMockForAbstractClass( Matcher::class );
-		$rm = new \ReflectionMethod( $matcher, 'next' );
-		$rm->setAccessible( true );
-		$next = function ( $values, $start, $options ) use ( $rm, $matcher ) {
-			return $rm->invoke( $matcher, $values, $start, $options );
-		};
+		$matcher = TestingAccessWrapper::newFromObject(
+			$this->getMockForAbstractClass( Matcher::class )
+		);
 
 		$list = new ComponentValueList( [
 			new Token( Token::T_WHITESPACE ),
@@ -90,19 +88,20 @@ class MatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => false ];
 		for ( $i = -1; $i < 8; $i++ ) {
-			$this->assertSame( $i + 1, $next( $list, $i, $options ), "Not skipping whitespace, index $i" );
+			$this->assertSame( $i + 1, $matcher->next( $list, $i, $options ),
+				"Not skipping whitespace, index $i" );
 		}
 
 		$options = [ 'skip-whitespace' => true ];
-		$this->assertSame( 1, $next( $list, -1, $options ) );
-		$this->assertSame( 1, $next( $list, 0, $options ) );
-		$this->assertSame( 2, $next( $list, 1, $options ) );
-		$this->assertSame( 6, $next( $list, 2, $options ) );
-		$this->assertSame( 6, $next( $list, 3, $options ) );
-		$this->assertSame( 6, $next( $list, 4, $options ) );
-		$this->assertSame( 6, $next( $list, 5, $options ) );
-		$this->assertSame( 8, $next( $list, 6, $options ) );
-		$this->assertSame( 8, $next( $list, 7, $options ) );
+		$this->assertSame( 1, $matcher->next( $list, -1, $options ) );
+		$this->assertSame( 1, $matcher->next( $list, 0, $options ) );
+		$this->assertSame( 2, $matcher->next( $list, 1, $options ) );
+		$this->assertSame( 6, $matcher->next( $list, 2, $options ) );
+		$this->assertSame( 6, $matcher->next( $list, 3, $options ) );
+		$this->assertSame( 6, $matcher->next( $list, 4, $options ) );
+		$this->assertSame( 6, $matcher->next( $list, 5, $options ) );
+		$this->assertSame( 8, $matcher->next( $list, 6, $options ) );
+		$this->assertSame( 8, $matcher->next( $list, 7, $options ) );
 	}
 
 	/**
@@ -219,12 +218,11 @@ class MatcherTest extends MatcherTestBase {
 	}
 
 	public function testMakeMatch() {
-		$rm = new \ReflectionMethod( Matcher::class, 'makeMatch' );
-		$rm->setAccessible( true );
-
 		$dummy = new ComponentValueList();
-		$matcher = $this->getMockForAbstractClass( Matcher::class );
-		$matcher2 = $matcher->capture( 'foo' );
+		$matcher = TestingAccessWrapper::newFromObject(
+			$this->getMockForAbstractClass( Matcher::class )
+		);
+		$matcher2 = TestingAccessWrapper::newFromObject( $matcher->capture( 'foo' ) );
 
 		$m0 = new Match( $dummy, 0, 0 );
 		$m1 = new Match( $dummy, 1, 0, 'm1' );
@@ -238,26 +236,26 @@ class MatcherTest extends MatcherTestBase {
 		$stack = [ [ $m0 ], [ $m1 ], [ $m4 ], [ $m7 ] ];
 		$expect = [ $m1, $m4, $m5, $m6, $m8 ];
 
-		$this->assertMatch( new Match( $dummy, 1, 1 ), $rm->invoke( $matcher, $dummy, 1, 2 ) );
-		$this->assertMatch( new Match( $dummy, 1, 1, 'foo' ), $rm->invoke( $matcher2, $dummy, 1, 2 ) );
+		$this->assertMatch( new Match( $dummy, 1, 1 ), $matcher->makeMatch( $dummy, 1, 2 ) );
+		$this->assertMatch( new Match( $dummy, 1, 1, 'foo' ), $matcher2->makeMatch( $dummy, 1, 2 ) );
 
-		$this->assertMatch( new Match( $dummy, 1, 1 ), $rm->invoke( $matcher, $dummy, 1, 2, $m0 ) );
+		$this->assertMatch( new Match( $dummy, 1, 1 ), $matcher->makeMatch( $dummy, 1, 2, $m0 ) );
 		$this->assertMatch(
-			new Match( $dummy, 1, 1, 'foo' ), $rm->invoke( $matcher2, $dummy, 1, 2, $m0 )
-		);
-
-		$this->assertMatch(
-			new Match( $dummy, 1, 1, null, [ $m8 ] ), $rm->invoke( $matcher, $dummy, 1, 2, $m8 )
-		);
-		$this->assertMatch(
-			new Match( $dummy, 1, 1, 'foo', [ $m8 ] ), $rm->invoke( $matcher2, $dummy, 1, 2, $m8 )
+			new Match( $dummy, 1, 1, 'foo' ), $matcher2->makeMatch( $dummy, 1, 2, $m0 )
 		);
 
 		$this->assertMatch(
-			new Match( $dummy, 1, 1, null, $expect ), $rm->invoke( $matcher, $dummy, 1, 2, $m8, $stack )
+			new Match( $dummy, 1, 1, null, [ $m8 ] ), $matcher->makeMatch( $dummy, 1, 2, $m8 )
 		);
 		$this->assertMatch(
-			new Match( $dummy, 1, 1, 'foo', $expect ), $rm->invoke( $matcher2, $dummy, 1, 2, $m8, $stack )
+			new Match( $dummy, 1, 1, 'foo', [ $m8 ] ), $matcher2->makeMatch( $dummy, 1, 2, $m8 )
+		);
+
+		$this->assertMatch(
+			new Match( $dummy, 1, 1, null, $expect ), $matcher->makeMatch( $dummy, 1, 2, $m8, $stack )
+		);
+		$this->assertMatch(
+			new Match( $dummy, 1, 1, 'foo', $expect ), $matcher2->makeMatch( $dummy, 1, 2, $m8, $stack )
 		);
 
 		$tok1 = new Token( Token::T_IDENT, 'a' );

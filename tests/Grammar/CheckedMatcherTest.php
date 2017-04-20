@@ -8,6 +8,7 @@ namespace Wikimedia\CSS\Grammar;
 
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\CheckedMatcher
@@ -26,11 +27,12 @@ class CheckedMatcherTest extends MatcherTestBase {
 			} );
 
 		$list = new ComponentValueList( [] );
-		$checked = new CheckedMatcher( $matcher, function ( $l, $m, $opts ) use ( $list ) {
-			$this->assertSame( $list, $l );
-			return ( $m->getLength() % 2 ) === 0;
-		} );
-		$generateMatches = $this->getGenerateMatches( $checked );
-		$this->assertPositions( 0, [ 0, 2, 4, 6, 8 ], $generateMatches( $list, 0, [] ) );
+		$checked = TestingAccessWrapper::newFromObject(
+			new CheckedMatcher( $matcher, function ( $l, $m, $opts ) use ( $list ) {
+				$this->assertSame( $list, $l );
+				return ( $m->getLength() % 2 ) === 0;
+			} )
+		);
+		$this->assertPositions( 0, [ 0, 2, 4, 6, 8 ], $checked->generateMatches( $list, 0, [] ) );
 	}
 }

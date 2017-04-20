@@ -11,6 +11,7 @@ use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\RuleList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Sanitizer\Sanitizer
@@ -18,15 +19,15 @@ use Wikimedia\CSS\Objects\Token;
 class SanitizerTest extends \PHPUnit_Framework_TestCase {
 
 	public function testErrors() {
-		$sanitizer = $this->getMockForAbstractClass( Sanitizer::class );
-		$rm = new \ReflectionMethod( $sanitizer, 'sanitizationError' );
-		$rm->setAccessible( true );
+		$sanitizer = TestingAccessWrapper::newFromObject(
+			$this->getMockForAbstractClass( Sanitizer::class )
+		);
 
 		$this->assertSame( [], $sanitizer->getSanitizationErrors() );
-		$rm->invoke( $sanitizer,
+		$sanitizer->sanitizationError(
 			'foobar', new Token( Token::T_WHITESPACE, [ 'position' => [ 42, 23 ] ] )
 		);
-		$rm->invoke( $sanitizer,
+		$sanitizer->sanitizationError(
 			'baz', new Token( Token::T_WHITESPACE, [ 'position' => [ 1, 2 ] ] )
 		);
 		$this->assertSame(
@@ -68,12 +69,10 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase {
 		$token1 = new Token( Token::T_WHITESPACE );
 		$token2 = new Token( Token::T_COMMA );
 
-		$sanitizer1 = $this->getMockForAbstractClass( Sanitizer::class );
-		$rp = new \ReflectionProperty( $sanitizer1, 'sanitizationErrors' );
-		$rp->setAccessible( true );
-		$rp->setValue( $sanitizer1, [ [ 'x', 1, 2 ] ] );
-		$rm = new \ReflectionMethod( $sanitizer1, 'sanitizeObj' );
-		$rm->setAccessible( true );
+		$sanitizer1 = TestingAccessWrapper::newFromObject(
+			$this->getMockForAbstractClass( Sanitizer::class )
+		);
+		$sanitizer1->sanitizationErrors = [ [ 'x', 1, 2 ] ];
 
 		$sanitizer2 = $this->getMockBuilder( Sanitizer::class )
 			->setMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
@@ -85,7 +84,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase {
 			->willReturn( [ [ 'foo', 42, 23 ] ] );
 		$sanitizer2->expects( $this->once() )->method( 'clearSanitizationErrors' );
 
-		$this->assertSame( $token2, $rm->invoke( $sanitizer1, $sanitizer2, $token1 ) );
+		$this->assertSame( $token2, $sanitizer1->sanitizeObj( $sanitizer2, $token1 ) );
 		$this->assertSame( [ [ 'x', 1, 2 ], [ 'foo', 42, 23 ] ], $sanitizer1->getSanitizationErrors() );
 	}
 
@@ -97,12 +96,10 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase {
 		$token3i = new Token( Token::T_COLON );
 		$token3o = new Token( Token::T_SEMICOLON );
 
-		$sanitizer1 = $this->getMockForAbstractClass( Sanitizer::class );
-		$rp = new \ReflectionProperty( $sanitizer1, 'sanitizationErrors' );
-		$rp->setAccessible( true );
-		$rp->setValue( $sanitizer1, [ [ 'x', 1, 2 ] ] );
-		$rm = new \ReflectionMethod( $sanitizer1, 'sanitizeList' );
-		$rm->setAccessible( true );
+		$sanitizer1 = TestingAccessWrapper::newFromObject(
+			$this->getMockForAbstractClass( Sanitizer::class )
+		);
+		$sanitizer1->sanitizationErrors = [ [ 'x', 1, 2 ] ];
 
 		$sanitizer2 = $this->getMockBuilder( Sanitizer::class )
 			->setMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
@@ -122,7 +119,7 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase {
 			->willReturn( [] );
 
 		$list = new ComponentValueList( [ $token1i, $token2i, $token3i ] );
-		$ret = $rm->invoke( $sanitizer1, $sanitizer2, $list );
+		$ret = $sanitizer1->sanitizeList( $sanitizer2, $list );
 		$this->assertInstanceOf( ComponentValueList::class, $ret );
 		$this->assertSame( [ $token1o, $token3o ], iterator_to_array( $ret ) );
 		$this->assertSame( [ [ 'x', 1, 2 ], [ 'foo', 42, 23 ] ], $sanitizer1->getSanitizationErrors() );
@@ -186,10 +183,8 @@ class SanitizerTest extends \PHPUnit_Framework_TestCase {
 		$r8 = new AtRule( new Token( $AT, [ 'value' => 'san2', 'position' => [ 8, 1 ] ] ) );
 		$test = new RuleList( [ $r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8 ] );
 
-		$san = $this->getMockForAbstractClass( Sanitizer::class );
-		$rm = new \ReflectionMethod( $san, 'sanitizeRules' );
-		$rm->setAccessible( true );
-		$ret = $rm->invoke( $san, [ $san1, $san2, $san3, $sanX ], $test );
+		$san = TestingAccessWrapper::newFromObject( $this->getMockForAbstractClass( Sanitizer::class ) );
+		$ret = $san->sanitizeRules( [ $san1, $san2, $san3, $sanX ], $test );
 		$this->assertInstanceOf( RuleList::class, $ret );
 		$this->assertSame( [ $r1, $r3, $r4, $r6, $r8 ], iterator_to_array( $ret ) );
 		$this->assertSame( [

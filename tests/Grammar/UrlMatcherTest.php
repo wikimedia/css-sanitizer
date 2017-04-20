@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\UrlMatcher
@@ -35,12 +36,11 @@ class UrlMatcherTest extends MatcherTestBase {
 			return $match;
 		} : null;
 		$options = $useModifiers ? [ 'modifierMatcher' => UrlMatcher::anyModifierMatcher() ] : [];
-		$matcher = new UrlMatcher( $cb, $options );
+		$m = TestingAccessWrapper::newFromObject( new UrlMatcher( $cb, $options ) );
 
 		$list = new ComponentValueList( $values );
-		$generateMatches = $this->getGenerateMatches( $matcher );
 		$opts = [ 'skip-whitespace' => true ];
-		$this->assertCount( $match ? 1 : 0, iterator_to_array( $generateMatches( $list, 0, $opts ) ) );
+		$this->assertCount( $match ? 1 : 0, iterator_to_array( $m->generateMatches( $list, 0, $opts ) ) );
 		$this->assertSame( $exUrl, $called );
 	}
 

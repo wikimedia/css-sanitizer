@@ -8,6 +8,7 @@ namespace Wikimedia\CSS\Grammar;
 
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\NonEmpty
@@ -33,9 +34,8 @@ class NonEmptyTest extends MatcherTestBase {
 			} );
 
 		$list = new ComponentValueList( [] );
-		$nonempty = new NonEmpty( $matcher );
-		$generateMatches = $this->getGenerateMatches( $nonempty );
-		$this->assertPositions( $start, $expect, $generateMatches( $list, $start, [] ) );
+		$nonempty = TestingAccessWrapper::newFromObject( new NonEmpty( $matcher ) );
+		$this->assertPositions( $start, $expect, $nonempty->generateMatches( $list, $start, [] ) );
 	}
 
 	public static function provideGenerateMatches() {
@@ -48,12 +48,11 @@ class NonEmptyTest extends MatcherTestBase {
 
 	public function testCaptures() {
 		$m = Quantifier::optional( new TokenMatcher( Token::T_COLON ) );
-		$matcher = new NonEmpty( $m->capture( 'foo' ) );
+		$matcher = TestingAccessWrapper::newFromObject( new NonEmpty( $m->capture( 'foo' ) ) );
 
 		$list = new ComponentValueList( [ new Token( Token::T_COLON ) ] );
 
-		$generateMatches = $this->getGenerateMatches( $matcher );
-		$ret = $generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
+		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertEquals( [
 			new Match( $list, 0, 1, null, [ new Match( $list, 0, 1, 'foo' ) ] ),
 		], iterator_to_array( $ret ) );

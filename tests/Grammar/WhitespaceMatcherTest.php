@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\WhitespaceMatcher
@@ -16,8 +17,8 @@ use Wikimedia\CSS\Objects\Token;
 class WhitespaceMatcherTest extends MatcherTestBase {
 
 	public function testStandard() {
-		$g1 = $this->getGenerateMatches( new WhitespaceMatcher( [ 'significant' => false ] ) );
-		$g2 = $this->getGenerateMatches( new WhitespaceMatcher( [ 'significant' => true ] ) );
+		$m1 = TestingAccessWrapper::newFromObject( new WhitespaceMatcher( [ 'significant' => false ] ) );
+		$m2 = TestingAccessWrapper::newFromObject( new WhitespaceMatcher( [ 'significant' => true ] ) );
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$v1 = new Token( Token::T_IDENT, 'foo' );
@@ -30,7 +31,7 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
 				[ new Match( $list, $i, $v - $i ) ],
-				iterator_to_array( $g1( $list, $i, $options ) ),
+				iterator_to_array( $m1->generateMatches( $list, $i, $options ) ),
 				"Insignificant, skipping whitespace, index $i"
 			);
 		}
@@ -39,7 +40,7 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
 				[ new Match( $list, $i, $v - $i ) ],
-				iterator_to_array( $g1( $list, $i, $options ) ),
+				iterator_to_array( $m1->generateMatches( $list, $i, $options ) ),
 				"Insignificant, not skipping whitespace, index $i"
 			);
 		}
@@ -60,7 +61,7 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 			}
 			$this->assertEquals(
 				$ex,
-				iterator_to_array( $g2( $list, $i, $options ) ),
+				iterator_to_array( $m2->generateMatches( $list, $i, $options ) ),
 				"Significant, skipping whitespace, index $i"
 			);
 		}
@@ -77,7 +78,7 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 			}
 			$this->assertEquals(
 				$ex,
-				iterator_to_array( $g2( $list, $i, $options ) ),
+				iterator_to_array( $m2->generateMatches( $list, $i, $options ) ),
 				"Significant, not skipping whitespace, index $i"
 			);
 		}

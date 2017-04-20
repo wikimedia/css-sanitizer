@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Grammar;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\Juxtaposition
@@ -32,12 +33,11 @@ class GroupTest extends MatcherTestBase {
 		if ( $optional ) {
 			$matchers = array_map( [ Quantifier::class, 'optional' ], $matchers );
 		}
-		$matcher = new Juxtaposition( $matchers, $commas );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$matcher = TestingAccessWrapper::newFromObject( new Juxtaposition( $matchers, $commas ) );
 
 		$list = new ComponentValueList( $values );
 		$options = [ 'skip-whitespace' => $skipWS ];
-		$this->assertPositions( 0, $expect, $generateMatches( $list, 0, $options ) );
+		$this->assertPositions( 0, $expect, $matcher->generateMatches( $list, 0, $options ) );
 	}
 
 	public static function provideGenerateMatches() {
@@ -168,21 +168,20 @@ class GroupTest extends MatcherTestBase {
 			Quantifier::optional( new KeywordMatcher( [ 'A' ] ) ),
 			Quantifier::optional( new KeywordMatcher( [ 'A' ] ) ),
 		];
-		$matcher = new Juxtaposition( $matchers );
+		$matcher = TestingAccessWrapper::newFromObject( new Juxtaposition( $matchers ) );
 
 		$A = new Token( Token::T_IDENT, 'A' );
 		$list = new ComponentValueList( [ $A, $A, $A, $A ] );
 
-		$generateMatches = $this->getGenerateMatches( $matcher );
-		$ret = $generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
+		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertPositions( 0, [ 3, 2, 1, 0 ], $ret );
 	}
 
 	public function testCaptures() {
 		$m = Quantifier::optional( new KeywordMatcher( [ 'A' ] ) );
-		$matcher = new Juxtaposition( [
+		$matcher = TestingAccessWrapper::newFromObject( new Juxtaposition( [
 			$m->capture( 'foo' ), $m->capture( 'bar' ), $m->capture( 'foo' )
-		] );
+		] ) );
 
 		$A = new Token( Token::T_IDENT, 'A' );
 		$list = new ComponentValueList( [ $A, $A, $A, $A ] );
@@ -198,8 +197,7 @@ class GroupTest extends MatcherTestBase {
 		$bar10 = new Match( $list, 1, 0, 'bar' );
 		$bar11 = new Match( $list, 1, 1, 'bar' );
 
-		$generateMatches = $this->getGenerateMatches( $matcher );
-		$ret = $generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
+		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertEquals( [
 			new Match( $list, 0, 3, null, [ $foo01, $bar11, $foo21 ] ),
 			new Match( $list, 0, 2, null, [ $foo01, $bar11, $foo20 ] ),

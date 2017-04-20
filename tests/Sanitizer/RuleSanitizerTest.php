@@ -11,6 +11,7 @@ use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Sanitizer\RuleSanitizer
@@ -68,10 +69,8 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 		$expectRule = AtRule::newFromName( 'foo' );
 		$expectRule->getPrelude()->add( $expect );
 
-		$san = $this->getSanitizer();
-		$rm = new \ReflectionMethod( $san, 'fixPreludeWhitespace' );
-		$rm->setAccessible( true );
-		$outRule = $rm->invoke( $san, $inRule, $cloneIfNecessary );
+		$outRule = TestingAccessWrapper::newFromObject( $this->getSanitizer() )
+			->fixPreludeWhitespace( $inRule, $cloneIfNecessary );
 
 		if ( $cloned ) {
 			$this->assertNotSame( $inRule, $outRule );

@@ -10,6 +10,7 @@ use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\AnythingMatcher
@@ -31,12 +32,11 @@ class AnythingMatcherTest extends MatcherTestBase {
 	 * @param array $options
 	 */
 	public function testStandard( $values, $match, $options = [ 'toplevel' => true ] ) {
-		$matcher = new AnythingMatcher( $options );
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$matcher = TestingAccessWrapper::newFromObject( new AnythingMatcher( $options ) );
 
 		$options = [ 'skip-whitespace' => true ];
 		$list = new ComponentValueList( $values );
-		$ret = $generateMatches( $list, 0, $options );
+		$ret = $matcher->generateMatches( $list, 0, $options );
 		$this->assertSame( $match, (bool)iterator_to_array( $ret ) );
 	}
 
@@ -102,13 +102,12 @@ class AnythingMatcherTest extends MatcherTestBase {
 		$bv->add( [ $ws, $nonws, $ws, $ws, $nonws, $ws ] );
 		$list = new ComponentValueList( [ $nonws, $ws, $ws, $block ] );
 
-		$matcher = new AnythingMatcher();
-		$generateMatches = $this->getGenerateMatches( $matcher );
+		$matcher = TestingAccessWrapper::newFromObject( new AnythingMatcher() );
 
 		$options = [ 'skip-whitespace' => true ];
 		$this->assertEquals(
 			[ new Match( $list, 0, 3 ) ],
-			iterator_to_array( $generateMatches( $list, 0, $options ) )
+			iterator_to_array( $matcher->generateMatches( $list, 0, $options ) )
 		);
 		$this->assertEquals(
 			[
@@ -116,17 +115,17 @@ class AnythingMatcherTest extends MatcherTestBase {
 					new Match( $list, 1, 1, 'significantWhitespace' ),
 				] )
 			],
-			iterator_to_array( $generateMatches( $list, 1, $options ) )
+			iterator_to_array( $matcher->generateMatches( $list, 1, $options ) )
 		);
 		$this->assertEquals(
 			[ new Match( $list, 3, 1 ) ],
-			iterator_to_array( $generateMatches( $list, 3, $options ) )
+			iterator_to_array( $matcher->generateMatches( $list, 3, $options ) )
 		);
 
 		$options = [ 'skip-whitespace' => false ];
 		$this->assertEquals(
 			[ new Match( $list, 0, 1 ) ],
-			iterator_to_array( $generateMatches( $list, 0, $options ) )
+			iterator_to_array( $matcher->generateMatches( $list, 0, $options ) )
 		);
 		$this->assertEquals(
 			[
@@ -134,7 +133,7 @@ class AnythingMatcherTest extends MatcherTestBase {
 					new Match( $list, 1, 1, 'significantWhitespace' ),
 				] )
 			],
-			iterator_to_array( $generateMatches( $list, 1, $options ) )
+			iterator_to_array( $matcher->generateMatches( $list, 1, $options ) )
 		);
 		$this->assertEquals(
 			[
@@ -145,7 +144,7 @@ class AnythingMatcherTest extends MatcherTestBase {
 					new Match( $bv, 5, 1, 'significantWhitespace' ),
 				] )
 			],
-			iterator_to_array( $generateMatches( $list, 3, $options ) )
+			iterator_to_array( $matcher->generateMatches( $list, 3, $options ) )
 		);
 	}
 }
