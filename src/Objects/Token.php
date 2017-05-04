@@ -341,18 +341,50 @@ class Token extends ComponentValue {
 	private static function escapeIdent( $s ) {
 		return preg_replace_callback(
 			'/
-				[^a-zA-Z0-9_\-\x{80}-\x{10ffff}] # Characters that are never allowed
-				| (?:^|(?<=^-))[0-9]             # Digits are not allowed at the start of an identifier
-				| (?<=^-)-                       # Two dashes are not allowed at the start of an identifier
+				[^a-zA-Z0-9_\-\x{80}-\x{10ffff}]   # Characters that are never allowed
+				| (?:^|(?<=^-))[0-9]               # Digits are not allowed at the start of an identifier
+				| [\p{Z}\p{Cc}\p{Cf}\p{Co}\p{Cs}]  # To be safe, control characters and whitespace
 			/ux',
-			function ( $m ) {
-				if ( $m[0] === "\n" || ctype_xdigit( $m[0] ) ) {
-					return sprintf( '\\%x ', ord( $m[0] ) );
-				}
-				return '\\' . $m[0];
-			},
+			[ __CLASS__, 'escapePregCallback' ],
 			$s
 		);
+	}
+
+	/**
+	 * Escape characters in a string
+	 *
+	 * - Double quote needs escaping as the string delimiter.
+	 * - Backslash needs escaping since it's the escape character.
+	 * - Newline (\n) isn't valid in a string, and so needs escaping.
+	 * - Carriage return (\r), form feed (\f), and U+0000 would be changed by
+	 *   CSS's input conversion rules, and so need escaping.
+	 * - Other non-space whitespace and controls don't need escaping, but it's
+	 *   safer to do so.
+	 *
+	 * @param string $s
+	 * @return string
+	 */
+	private static function escapeString( $s ) {
+		return preg_replace_callback(
+			'/[^ \P{Z}]|[\p{Cc}\p{Cf}\p{Co}\p{Cs}"\x5c]/u',
+			[ __CLASS__, 'escapePregCallback' ],
+			$s
+		);
+	}
+
+	/**
+	 * Callback for escaping functions
+	 * @param array $m Matches
+	 * @return string
+	 */
+	private static function escapePregCallback( $m ) {
+		// Newlines, carriage returns, form feeds, and hex digits have to be
+		// escaped numerically. Other non-space whitespace and controls don't
+		// have to be, but it's saner to do so.
+		if ( preg_match( '/[^ \P{Z}]|[\p{Cc}\p{Cf}\p{Co}\p{Cs}0-9a-fA-F]/u', $m[0] ) ) {
+			return sprintf( '\\%x ', \UtfNormal\Utils::utf8ToCodepoint( $m[0] ) );
+		}
+		return '\\' . $m[0];
 	}
 
 	public function __toString() {
@@ -370,28 +402,25 @@ class Token extends ComponentValue {
 				if ( $this->typeFlag === 'id' ) {
 					return '#' . self::escapeIdent( $this->value );
 				} else {
-					return '#' . preg_replace_callback( '/[^a-zA-Z0-9_\-\x{80}-\x{10ffff}]/u', function ( $m ) {
-						return $m[0] === "\n" ? '\\a ' : '\\' . $m[0];
-					}, $this->value );
+					return '#' . preg_replace_callback(
+						'/
+							[^a-zA-Z0-9_\-\x{80}-\x{10ffff}]   # Characters that are never allowed
+							| [\p{Z}\p{Cc}\p{Cf}\p{Co}\p{Cs}]  # To be safe, control characters and whitespace
+						/ux',
+						[ __CLASS__, 'escapePregCallback' ],
+						$this->value
+					);
 				}
 
 			case self::T_STRING:
 				// We could try to decide whether single or double quote is
 				// better, but it doesn't seem worth the effort.
-				return '"' . strtr( $this->value, [
-					'"' => '\\"',
-					'\\' => '\\\\',
-					"\n" => '\\a ',
-				] ) . '"';
+				return '"' . self::escapeString( $this->value ) . '"';
 
 			case self::T_URL:
 				// We could try to decide whether single or double quote is
 				// better, but it doesn't seem worth the effort.
-				return 'url("' . strtr( $this->value, [
-					'"' => '\\"',
-					'\\' => '\\\\',
-					"\n" => '\\a ',
-				] ) . '")';
+				return 'url("' . self::escapeString( $this->value )  . '")';
 
 			case self::T_BAD_STRING:
 				// It's supposed to round trip, so...
