@@ -360,13 +360,14 @@ class Token extends ComponentValue {
 	 *   CSS's input conversion rules, and so need escaping.
 	 * - Other non-space whitespace and controls don't need escaping, but it's
 	 *   safer to do so.
+	 * - Angle brackets are escaped numerically to make it safer to embed in HTML.
 	 *
 	 * @param string $s
 	 * @return string
 	 */
 	private static function escapeString( $s ) {
 		return preg_replace_callback(
-			'/[^ \P{Z}]|[\p{Cc}\p{Cf}\p{Co}\p{Cs}"\x5c]/u',
+			'/[^ \P{Z}]|[\p{Cc}\p{Cf}\p{Co}\p{Cs}"\x5c<>]/u',
 			[ __CLASS__, 'escapePregCallback' ],
 			$s
 		);
@@ -380,8 +381,9 @@ class Token extends ComponentValue {
 	private static function escapePregCallback( $m ) {
 		// Newlines, carriage returns, form feeds, and hex digits have to be
 		// escaped numerically. Other non-space whitespace and controls don't
-		// have to be, but it's saner to do so.
-		if ( preg_match( '/[^ \P{Z}]|[\p{Cc}\p{Cf}\p{Co}\p{Cs}0-9a-fA-F]/u', $m[0] ) ) {
+		// have to be, but it's saner to do so. Angle brackets are escaped
+		// numerically too to make it safer to embed in HTML.
+		if ( preg_match( '/[^ \P{Z}]|[\p{Cc}\p{Cf}\p{Co}\p{Cs}0-9a-fA-F<>]/u', $m[0] ) ) {
 			return sprintf( '\\%x ', \UtfNormal\Utils::utf8ToCodepoint( $m[0] ) );
 		}
 		return '\\' . $m[0];

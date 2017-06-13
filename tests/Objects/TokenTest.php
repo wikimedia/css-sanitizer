@@ -286,6 +286,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ new Token( Token::T_IDENT, "foo bar" ), 'foo\ bar' ],
 			[ new Token( Token::T_IDENT, "foo\nbar" ), 'foo\a bar' ],
 			[ new Token( Token::T_IDENT, "foo\x7fbar" ), 'foo\7f bar' ],
+			[ new Token( Token::T_IDENT, "<foo>" ), '\3c foo\3e ' ],
 
 			[ new Token( Token::T_FUNCTION, 'foobar' ), 'foobar(' ],
 			[ new Token( Token::T_FUNCTION, 'foobar(' ), 'foobar\((' ],
@@ -340,9 +341,12 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 				'#foo\a bar' ],
 			[ new Token( Token::T_HASH, [ 'value' => "foo\x7fbar", 'typeFlag' => 'unrestricted' ] ),
 				'#foo\7f bar' ],
+			[ new Token( Token::T_HASH, [ 'value' => "<foo>", 'typeFlag' => 'unrestricted' ] ),
+				'#\3c foo\3e ' ],
 
 			[ new Token( Token::T_STRING, 'foobar' ), '"foobar"' ],
 			[ new Token( Token::T_STRING, "foo\"b\\a\nr\r\f\t\x7f?" ), '"foo\"b\\\\a\a r\d \c \9 \7f ?"' ],
+			[ new Token( Token::T_STRING, "<foo>" ), '"\3c foo\3e "' ],
 
 			[ new Token( Token::T_URL, 'http://www.example.com/' ), 'url("http://www.example.com/")' ],
 			[ new Token( Token::T_URL, "foo\"b\\a\nr" ), 'url("foo\"b\\\\a\a r")' ],
