@@ -30,7 +30,7 @@ foreach ( $parser->getParseErrors() as list( $code, $line, $pos ) ) {
 	echo "Parse error: $error at line $line character $pos\n";
 }
 
-/** Apply sanitization to the stylehseet **/
+/** Apply sanitization to the stylesheet **/
 
 // If you need to customize the defaults, copy the code of this method and
 // modify it.
