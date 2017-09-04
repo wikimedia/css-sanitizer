@@ -46,13 +46,16 @@ class TokenListTokenizer implements Tokenizer {
 		}
 	}
 
+	/** @inheritDoc */
 	public function getParseErrors() {
 		return [];
 	}
 
+	/** @inheritDoc */
 	public function clearParseErrors() {
 	}
 
+	/** @inheritDoc */
 	public function consumeToken() {
 		return array_shift( $this->tokens ) ?: $this->eof;
 	}

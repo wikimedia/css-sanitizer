@@ -29,7 +29,7 @@ class CSSFunctionTest extends \PHPUnit_Framework_TestCase {
 		$function = new CSSFunction( $funcToken );
 		$function->getValue()->add( $spaceToken );
 
-		$function2 = clone( $function );
+		$function2 = clone $function;
 		$this->assertNotSame( $function, $function2 );
 		$this->assertNotSame( $function->getValue(), $function2->getValue() );
 		$this->assertEquals( $function, $function2 );

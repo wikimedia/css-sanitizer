@@ -46,6 +46,7 @@ class StringDataSource implements DataSource {
 		}
 	}
 
+	/** @inheritDoc */
 	public function readCharacter() {
 		if ( $this->putBack ) {
 			return array_pop( $this->putBack );
@@ -83,6 +84,7 @@ class StringDataSource implements DataSource {
 		}
 	}
 
+	/** @inheritDoc */
 	public function putBackCharacter( $char ) {
 		if ( $char !== self::EOF ) {
 			$this->putBack[] = $char;

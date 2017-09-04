@@ -27,6 +27,7 @@ abstract class RuleSanitizerTestBase extends \PHPUnit_Framework_TestCase {
 		throw new \BadMethodCallException( static::class . ' must override ' . __METHOD__ );
 	}
 
+	/** Test */
 	public function testBasicSanitize() {
 		$san = $this->getSanitizer();
 		$this->assertNull( $san->sanitize( new Token( Token::T_WHITESPACE ) ) );
@@ -44,7 +45,7 @@ abstract class RuleSanitizerTestBase extends \PHPUnit_Framework_TestCase {
 	public function testRules( $input, $handled, $output, $minified, $errors = [], $options = [] ) {
 		$san = $this->getSanitizer( $options );
 		$rule = Parser::newFromString( $input )->parseRule();
-		$oldRule = clone( $rule );
+		$oldRule = clone $rule;
 
 		$this->assertSame( $handled, $san->handlesRule( $rule ) );
 		$ret = $san->sanitize( $rule );
@@ -60,6 +61,7 @@ abstract class RuleSanitizerTestBase extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( (string)$oldRule, (string)$rule, 'Rule wasn\'t overwritten' );
 	}
 
+	/** Test */
 	public function testGetIndex() {
 		$index = $this->getSanitizer()->getIndex();
 		if ( is_array( $index ) ) {

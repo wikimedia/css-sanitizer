@@ -113,12 +113,14 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 
 	// \Countable interface
 
+	/** @inheritDoc */
 	public function count() {
 		return count( $this->objects );
 	}
 
 	// \SeekableIterator interface
 
+	/** @inheritDoc */
 	public function seek( $offset ) {
 		if ( $offset < 0 || $offset >= count( $this->objects ) ) {
 			throw new \OutOfBoundsException( 'Offset is out of range.' );
@@ -126,32 +128,39 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 		$this->offset = $offset;
 	}
 
+	/** @inheritDoc */
 	public function current() {
 		return isset( $this->objects[$this->offset] ) ? $this->objects[$this->offset] : null;
 	}
 
+	/** @inheritDoc */
 	public function key() {
 		return $this->offset;
 	}
 
+	/** @inheritDoc */
 	public function next() {
 		$this->offset++;
 	}
 
+	/** @inheritDoc */
 	public function rewind() {
 		$this->offset = 0;
 	}
 
+	/** @inheritDoc */
 	public function valid() {
 		return isset( $this->objects[$this->offset] );
 	}
 
 	// \ArrayAccess interface
 
+	/** @inheritDoc */
 	public function offsetExists( $offset ) {
 		return isset( $this->objects[$offset] );
 	}
 
+	/** @inheritDoc */
 	public function offsetGet( $offset ) {
 		if ( !is_numeric( $offset ) || (float)(int)$offset !== (float)$offset ) {
 			throw new \InvalidArgumentException( 'Offset must be an integer.' );
@@ -162,6 +171,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 		return $this->objects[$offset];
 	}
 
+	/** @inheritDoc */
 	public function offsetSet( $offset, $value ) {
 		if ( !$value instanceof static::$objectType ) {
 			throw new \InvalidArgumentException(
@@ -178,6 +188,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 		$this->objects[$offset] = $value;
 	}
 
+	/** @inheritDoc */
 	public function offsetUnset( $offset ) {
 		if ( isset( $this->objects[$offset] ) && $offset !== count( $this->objects ) - 1 ) {
 			throw new \OutOfBoundsException( 'Cannot leave holes in the list.' );
@@ -187,6 +198,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 
 	// CSSObject interface
 
+	/** @inheritDoc */
 	public function getPosition() {
 		$ret = null;
 		foreach ( $this->objects as $obj ) {
@@ -229,10 +241,12 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 		return $ret;
 	}
 
+	/** @inheritDoc */
 	public function toTokenArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}
 
+	/** @inheritDoc */
 	public function toComponentValueArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}

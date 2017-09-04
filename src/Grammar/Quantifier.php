@@ -91,6 +91,7 @@ class Quantifier extends Matcher {
 		return new static( $matcher, $min, $max, true );
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$used = [];
 
@@ -136,8 +137,8 @@ class Quantifier extends Matcher {
 			$canBeMore = count( $stack ) < $this->max;
 
 			// Commas are slightly tricky:
-			//  1. If there is a following comma, start the next Matcher after it.
-			//  2. If not, there can't be any more Matchers following.
+			// 1. If there is a following comma, start the next Matcher after it.
+			// 2. If not, there can't be any more Matchers following.
 			// And in either case optional whitespace is always allowed.
 			if ( $this->commas ) {
 				$n = $nextFrom;

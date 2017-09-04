@@ -25,6 +25,7 @@ class Alternative extends Matcher {
 		$this->matchers = $matchers;
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$used = [];
 		foreach ( $this->matchers as $matcher ) {

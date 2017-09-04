@@ -19,6 +19,7 @@ class QualifiedRule extends Rule {
 	/** @var SimpleBlock */
 	protected $block;
 
+	/** @inheritDoc */
 	public function __construct( Token $token = null ) {
 		parent::__construct( $token ?: new Token( Token::T_EOF ) );
 		$this->prelude = new ComponentValueList();
@@ -26,8 +27,8 @@ class QualifiedRule extends Rule {
 	}
 
 	public function __clone() {
-		$this->prelude = clone( $this->prelude );
-		$this->block = clone( $this->block );
+		$this->prelude = clone $this->prelude;
+		$this->block = clone $this->block;
 	}
 
 	/**
@@ -73,10 +74,12 @@ class QualifiedRule extends Rule {
 		return $ret;
 	}
 
+	/** @inheritDoc */
 	public function toTokenArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}
 
+	/** @inheritDoc */
 	public function toComponentValueArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}

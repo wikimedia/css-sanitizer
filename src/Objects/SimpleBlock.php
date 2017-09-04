@@ -36,7 +36,7 @@ class SimpleBlock extends ComponentValue {
 	}
 
 	public function __clone() {
-		$this->value = clone( $this->value );
+		$this->value = clone $this->value;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class SimpleBlock extends ComponentValue {
 
 	/**
 	 * Return the ending delimiter for a starting delimiter
-	 * @param string Token::T_* constant
+	 * @param string $delim Token::T_* constant
 	 * @return string|null Matching Token::T_* constant, if any
 	 */
 	public static function matchingDelimiter( $delim ) {
@@ -91,6 +91,7 @@ class SimpleBlock extends ComponentValue {
 		return $this->value;
 	}
 
+	/** @inheritDoc */
 	public function toTokenArray() {
 		$ret = [
 			new Token( $this->startTokenType, [ 'position' => [ $this->line, $this->pos ] ] ),

@@ -180,11 +180,11 @@ class MatcherTest extends MatcherTestBase {
 
 		// Test list. The whitespaces need to be cloned or it'll get confused.
 		$testBlock = SimpleBlock::newFromDelimiter( '[' );
-		$testBlock->getValue()->add( [ clone( $ws ), $tok, clone( $ws ), clone( $ws ), $tok, $Iws ] );
+		$testBlock->getValue()->add( [ clone $ws , $tok, clone $ws , clone $ws , $tok, $Iws ] );
 		$testList = new ComponentValueList( [
-			clone( $ws ), $tok, clone( $ws ), clone( $ws ), $tok, clone( $Iws ), $testBlock, clone( $ws )
+			clone $ws , $tok, clone $ws , clone $ws , $tok, clone $Iws , $testBlock, clone $ws
 		] );
-		$origList = clone( $testList );
+		$origList = clone $testList;
 
 		// Expect list. No cloning needed here.
 		$expectBlock = SimpleBlock::newFromDelimiter( '[' );
@@ -266,16 +266,5 @@ class MatcherTest extends MatcherTestBase {
 		$list = new ComponentValueList( [ $tok1, $tok2, $tok3, $tok4, $tok5 ] );
 		$match = new Match( $list, 2, 2 );
 		$this->assertSame( [ $tok3, $tok4 ], $match->getValues() );
-	}
-}
-
-class MatcherTestMock extends Matcher {
-	public $args;
-
-	public function __construct( $a = null, $b = null, $c = null, $d = null, $e = null ) {
-		$this->args = [ $a, $b, $c, $d, $e ];
-	}
-
-	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 	}
 }

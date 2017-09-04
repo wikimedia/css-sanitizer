@@ -23,6 +23,7 @@ class NonEmpty extends Matcher {
 		$this->matcher = $matcher;
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		foreach ( $this->matcher->generateMatches( $values, $start, $options ) as $match ) {
 			if ( $match->getLength() !== 0 ) {

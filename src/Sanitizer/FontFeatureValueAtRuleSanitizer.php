@@ -36,10 +36,12 @@ class FontFeatureValueAtRuleSanitizer extends RuleSanitizer {
 		$this->valueMatcher = $valueMatcher;
 	}
 
+	/** @inheritDoc */
 	public function handlesRule( Rule $rule ) {
 		return $rule instanceof AtRule && !strcasecmp( $rule->getName(), $this->name );
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof Rule || !$this->handlesRule( $object ) ) {
 			$this->sanitizationError( 'expected-at-rule', $object, [ $this->name ] );
@@ -57,7 +59,7 @@ class FontFeatureValueAtRuleSanitizer extends RuleSanitizer {
 			return null;
 		}
 
-		$ret = clone( $object );
+		$ret = clone $object;
 		$this->fixPreludeWhitespace( $ret, false );
 
 		// Parse the block's contents into a list of declarations, sanitize it,

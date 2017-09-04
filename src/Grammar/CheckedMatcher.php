@@ -28,6 +28,7 @@ class CheckedMatcher extends Matcher {
 		$this->check = $check;
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		foreach ( $this->matcher->generateMatches( $values, $start, $options ) as $match ) {
 			if ( call_user_func( $this->check, $values, $match, $options ) ) {

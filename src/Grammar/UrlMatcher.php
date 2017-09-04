@@ -54,6 +54,7 @@ class UrlMatcher extends FunctionMatcher {
 		] );
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		// First, is it a URL token?
 		$cv = isset( $values[$start] ) ? $values[$start] : null;

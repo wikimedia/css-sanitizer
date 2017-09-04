@@ -49,10 +49,12 @@ class FontFeatureValuesAtRuleSanitizer extends RuleSanitizer {
 		];
 	}
 
+	/** @inheritDoc */
 	public function handlesRule( Rule $rule ) {
 		return $rule instanceof AtRule && !strcasecmp( $rule->getName(), 'font-feature-values' );
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof Rule || !$this->handlesRule( $object ) ) {
 			$this->sanitizationError( 'expected-at-rule', $object, [ 'font-feature-values' ] );
@@ -75,7 +77,7 @@ class FontFeatureValuesAtRuleSanitizer extends RuleSanitizer {
 			return null;
 		}
 
-		$ret = clone( $object );
+		$ret = clone $object;
 		$this->fixPreludeWhitespace( $ret, false );
 		$this->sanitizeRuleBlock( $ret->getBlock(), $this->ruleSanitizers );
 

@@ -36,7 +36,7 @@ class PropertySanitizerTest extends \PHPUnit_Framework_TestCase {
 		$san->addKnownProperties( [ 'bar' => $m1 ] );
 
 		try {
-			$san->addKnownProperties( [ 'bar' => clone( $m1 ) ] );
+			$san->addKnownProperties( [ 'bar' => clone $m1 ] );
 			$this->fail( 'Expected exception not thrown' );
 		} catch ( \InvalidArgumentException $ex ) {
 			$this->assertSame( 'Duplicate definitions for properties: bar', $ex->getMessage() );

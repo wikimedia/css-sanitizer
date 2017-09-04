@@ -48,6 +48,7 @@ class StyleAttributeSanitizer extends Sanitizer {
 		return $sanitizer;
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof DeclarationList ) {
 			$this->sanitizationError( 'expected-declaration-list', $object );

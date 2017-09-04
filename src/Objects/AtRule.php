@@ -38,9 +38,9 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 	}
 
 	public function __clone() {
-		$this->prelude = clone( $this->prelude );
+		$this->prelude = clone $this->prelude;
 		if ( $this->block ) {
-			$this->block = clone( $this->block );
+			$this->block = clone $this->block;
 		}
 	}
 
@@ -112,10 +112,12 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 		return $ret;
 	}
 
+	/** @inheritDoc */
 	public function toTokenArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}
 
+	/** @inheritDoc */
 	public function toComponentValueArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}

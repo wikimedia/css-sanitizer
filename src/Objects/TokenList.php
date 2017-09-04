@@ -14,13 +14,15 @@ use Wikimedia\CSS\Parser\Parser;
 class TokenList extends CSSObjectList {
 	protected static $objectType = Token::class;
 
-	// We can greatly simplify this, assuming no separator
+	/** @inheritDoc */
 	public function toTokenArray() {
+		// We can greatly simplify this, assuming no separator
 		return $this->objects;
 	}
 
-	// This one, though, is complicated
+	/** @inheritDoc */
 	public function toComponentValueArray() {
+		// This one, though, is complicated
 		$parser = Parser::newFromTokens( $this->objects );
 		$ret = $parser->parseComponentValueList();
 		if ( $parser->getParseErrors() ) {

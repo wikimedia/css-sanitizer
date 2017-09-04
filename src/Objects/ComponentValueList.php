@@ -12,6 +12,7 @@ namespace Wikimedia\CSS\Objects;
 class ComponentValueList extends CSSObjectList {
 	protected static $objectType = ComponentValue::class;
 
+	/** @inheritDoc */
 	protected static function testObjects( array $objects ) {
 		foreach ( $objects as $object ) {
 			$type = $object instanceof Token ? $object->type() : 'n/a';
@@ -27,8 +28,9 @@ class ComponentValueList extends CSSObjectList {
 		}
 	}
 
-	// Much simpler
+	/** @inheritDoc */
 	public function toComponentValueArray() {
+		// Much simpler
 		return $this->objects;
 	}
 }

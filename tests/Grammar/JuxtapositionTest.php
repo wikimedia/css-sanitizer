@@ -14,7 +14,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Grammar\Juxtaposition
  */
-class GroupTest extends MatcherTestBase {
+class JuxtapositionTest extends MatcherTestBase {
 
 	/**
 	 * @dataProvider provideGenerateMatches

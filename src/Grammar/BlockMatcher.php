@@ -42,6 +42,7 @@ class BlockMatcher extends Matcher {
 		$this->matcher = $matcher;
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$cv = isset( $values[$start] ) ? $values[$start] : null;
 		if ( $cv instanceof SimpleBlock && $cv->getStartTokenType() === $this->blockType ) {

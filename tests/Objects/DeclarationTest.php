@@ -29,7 +29,7 @@ class DeclarationTest extends \PHPUnit_Framework_TestCase {
 		$declaration = new Declaration( $identToken );
 		$declaration->getValue()->add( $ws );
 
-		$declaration2 = clone( $declaration );
+		$declaration2 = clone $declaration;
 		$this->assertNotSame( $declaration, $declaration2 );
 		$this->assertNotSame( $declaration->getValue(), $declaration2->getValue() );
 		$this->assertEquals( $declaration, $declaration2 );

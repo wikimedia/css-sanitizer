@@ -22,6 +22,7 @@ abstract class ComponentValue implements CSSObject {
 		return [ $this->line, $this->pos ];
 	}
 
+	/** @inheritDoc */
 	public function toComponentValueArray() {
 		return [ $this ];
 	}

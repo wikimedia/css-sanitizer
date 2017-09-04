@@ -27,7 +27,7 @@ class SimpleBlockTest extends \PHPUnit_Framework_TestCase {
 		$block = new SimpleBlock( new Token( Token::T_LEFT_BRACE ) );
 		$block->getValue()->add( $ws );
 
-		$block2 = clone( $block );
+		$block2 = clone $block;
 		$this->assertNotSame( $block, $block2 );
 		$this->assertNotSame( $block->getValue(), $block2->getValue() );
 		$this->assertEquals( $block, $block2 );

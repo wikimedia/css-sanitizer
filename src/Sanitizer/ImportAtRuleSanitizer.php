@@ -38,14 +38,17 @@ class ImportAtRuleSanitizer extends RuleSanitizer {
 		] );
 	}
 
+	/** @inheritDoc */
 	public function getIndex() {
 		return -1000;
 	}
 
+	/** @inheritDoc */
 	public function handlesRule( Rule $rule ) {
 		return $rule instanceof AtRule && !strcasecmp( $rule->getName(), 'import' );
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof Rule || !$this->handlesRule( $object ) ) {
 			$this->sanitizationError( 'expected-at-rule', $object, [ 'import' ] );

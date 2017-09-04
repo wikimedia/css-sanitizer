@@ -32,6 +32,7 @@ class Juxtaposition extends Matcher {
 		$this->commas = (bool)$commas;
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$used = [];
 
@@ -72,13 +73,13 @@ class Juxtaposition extends Matcher {
 			$thisEnd = $nextFrom = $match->getNext();
 
 			// Dealing with commas is a bit tricky. There are three cases:
-			//  1. If the current match is empty, don't look for a following
-			//     comma now and reset $thisEnd to $lastEnd.
-			//  2. If there is a comma following, update $nextFrom to be after
-			//     the comma.
-			//  3. If there's no comma following, every subsequent Matcher must
-			//     be empty in order for the group as a whole to match, so set
-			//     the flag.
+			// 1. If the current match is empty, don't look for a following
+			// comma now and reset $thisEnd to $lastEnd.
+			// 2. If there is a comma following, update $nextFrom to be after
+			// the comma.
+			// 3. If there's no comma following, every subsequent Matcher must
+			// be empty in order for the group as a whole to match, so set
+			// the flag.
 			// Unlike '#', this doesn't specify skipping whitespace around the
 			// commas if the production isn't already skipping whitespace.
 			if ( $this->commas ) {

@@ -35,7 +35,7 @@ class CSSFunction extends ComponentValue {
 	}
 
 	public function __clone() {
-		$this->value = clone( $this->value );
+		$this->value = clone $this->value;
 	}
 
 	/**

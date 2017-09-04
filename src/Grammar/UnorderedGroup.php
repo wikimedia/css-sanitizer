@@ -48,6 +48,7 @@ class UnorderedGroup extends Matcher {
 		return new static( $matchers, false );
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$used = [];
 

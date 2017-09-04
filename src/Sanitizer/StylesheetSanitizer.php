@@ -94,6 +94,7 @@ class StylesheetSanitizer extends Sanitizer {
 		$this->ruleSanitizers = $ruleSanitizers;
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		$isSheet = $object instanceof Stylesheet;
 		if ( $isSheet ) {

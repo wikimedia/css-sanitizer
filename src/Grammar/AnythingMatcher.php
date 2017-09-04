@@ -55,6 +55,7 @@ class AnythingMatcher extends Matcher {
 		}
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$origStart = $start;
 		$lastMatch = $this->quantifier === '*' ? $this->makeMatch( $values, $start, $start ) : null;

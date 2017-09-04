@@ -41,7 +41,7 @@ class Declaration implements DeclarationOrAtRule {
 	}
 
 	public function __clone() {
-		$this->value = clone( $this->value );
+		$this->value = clone $this->value;
 	}
 
 	/**
@@ -109,10 +109,12 @@ class Declaration implements DeclarationOrAtRule {
 		return $ret;
 	}
 
+	/** @inheritDoc */
 	public function toTokenArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}
 
+	/** @inheritDoc */
 	public function toComponentValueArray() {
 		return $this->toTokenOrCVArray( __FUNCTION__ );
 	}

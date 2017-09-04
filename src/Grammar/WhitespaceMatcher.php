@@ -26,6 +26,7 @@ class WhitespaceMatcher extends Matcher {
 		$this->significant = !empty( $options['significant'] );
 	}
 
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$end = $start;
 		while ( isset( $values[$end] ) &&

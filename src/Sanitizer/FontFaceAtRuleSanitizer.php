@@ -140,10 +140,12 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 		return $ret;
 	}
 
+	/** @inheritDoc */
 	public function handlesRule( Rule $rule ) {
 		return $rule instanceof AtRule && !strcasecmp( $rule->getName(), 'font-face' );
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof Rule || !$this->handlesRule( $object ) ) {
 			$this->sanitizationError( 'expected-at-rule', $object, [ 'font-face' ] );
@@ -161,7 +163,7 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 			return null;
 		}
 
-		$ret = clone( $object );
+		$ret = clone $object;
 		$this->fixPreludeWhitespace( $ret, false );
 		$this->sanitizeDeclarationBlock( $ret->getBlock(), $this->propertySanitizer );
 

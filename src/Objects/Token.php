@@ -309,15 +309,17 @@ class Token extends ComponentValue {
 		if ( $significant === $this->significant ) {
 			return $this;
 		}
-		$ret = clone( $this );
+		$ret = clone $this;
 		$ret->significant = $significant;
 		return $ret;
 	}
 
+	/** @inheritDoc */
 	public function toTokenArray() {
 		return [ $this ];
 	}
 
+	/** @inheritDoc */
 	public function toComponentValueArray() {
 		switch ( $this->type ) {
 			case self::T_FUNCTION:
@@ -591,8 +593,8 @@ class Token extends ComponentValue {
 			'/' => [ '*' ],
 		];
 
-		$t1 = $firstToken->type === Token::T_DELIM ? $firstToken->value : $firstToken->type;
-		$t2 = $secondToken->type === Token::T_DELIM ? $secondToken->value : $secondToken->type;
+		$t1 = $firstToken->type === self::T_DELIM ? $firstToken->value : $firstToken->type;
+		$t2 = $secondToken->type === self::T_DELIM ? $secondToken->value : $secondToken->type;
 
 		return isset( $sepTable[$t1] ) && in_array( $t2, $sepTable[$t1], true );
 	}

@@ -40,7 +40,7 @@ class Match {
 	public function __construct(
 		ComponentValueList $list, $start, $length, $name = null, array $capturedMatches = []
 	) {
-		Util::assertAllInstanceOf( $capturedMatches, Match::class, '$capturedMatches' );
+		Util::assertAllInstanceOf( $capturedMatches, self::class, '$capturedMatches' );
 
 		$this->values = $list->slice( $start, $length );
 		$this->start = $start;

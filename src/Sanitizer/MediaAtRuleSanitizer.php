@@ -50,10 +50,12 @@ class MediaAtRuleSanitizer extends RuleSanitizer {
 		$this->ruleSanitizers = $ruleSanitizers;
 	}
 
+	/** @inheritDoc */
 	public function handlesRule( Rule $rule ) {
 		return $rule instanceof AtRule && !strcasecmp( $rule->getName(), 'media' );
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof Rule || !$this->handlesRule( $object ) ) {
 			$this->sanitizationError( 'expected-at-rule', $object, [ 'media' ] );
@@ -75,7 +77,7 @@ class MediaAtRuleSanitizer extends RuleSanitizer {
 			return null;
 		}
 
-		$ret = clone( $object );
+		$ret = clone $object;
 		$this->fixPreludeWhitespace( $ret, false );
 		$this->sanitizeRuleBlock( $ret->getBlock(), $this->ruleSanitizers );
 

@@ -66,10 +66,12 @@ class StyleRuleSanitizer extends RuleSanitizer {
 		$this->prependSelectors = $options['prependSelectors'];
 	}
 
+	/** @inheritDoc */
 	public function handlesRule( Rule $rule ) {
 		return $rule instanceof QualifiedRule;
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof QualifiedRule ) {
 			$this->sanitizationError( 'expected-qualified-rule', $object );
@@ -88,7 +90,7 @@ class StyleRuleSanitizer extends RuleSanitizer {
 			return null;
 		}
 
-		$ret = clone( $object );
+		$ret = clone $object;
 
 		// If necessary, munge the selector list
 		if ( $this->prependSelectors ) {

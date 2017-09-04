@@ -47,7 +47,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 			$rm = new \ReflectionMethod( $san, $method );
 			$rm->setAccessible( true );
 			$san->method( 'doSanitize' )->willReturnCallback( function ( $rule ) use ( $rm, $san, $arg ) {
-				$ret = clone( $rule );
+				$ret = clone $rule;
 				$rm->invoke( $san, $ret->getBlock(), $arg );
 				return $ret;
 			} );

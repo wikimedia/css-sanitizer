@@ -12,6 +12,7 @@ namespace Wikimedia\CSS\Objects;
 class DeclarationList extends CSSObjectList {
 	protected static $objectType = Declaration::class;
 
+	/** @inheritDoc */
 	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
 		if ( $right ) {
 			return [

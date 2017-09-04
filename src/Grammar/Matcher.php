@@ -43,14 +43,14 @@ abstract class Matcher {
 
 	/**
 	 * Create an instance.
-	 * @param mixed ... See static::__construct()
+	 * @param mixed $args,... See static::__construct()
 	 * @return static
 	 */
 	public static function create() {
 		// @todo Once we drop support for PHP 5.5, just do this:
-		//  public static function create( ...$args ) {
-		//      return new static( ...$args );
-		//  }
+		// public static function create( ...$args ) {
+		// return new static( ...$args );
+		// }
 
 		$args = func_get_args();
 		switch ( count( $args ) ) {
@@ -85,7 +85,7 @@ abstract class Matcher {
 	 * @return static
 	 */
 	public function capture( $captureName ) {
-		$ret = clone( $this );
+		$ret = clone $this;
 		$ret->captureName = $captureName;
 		return $ret;
 	}

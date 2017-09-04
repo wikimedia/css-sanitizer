@@ -97,7 +97,7 @@ class Util {
 			for ( $i = 1; $i < $e; $i++ ) {
 				$t = $tokens[$i];
 				if ( $t->type() === Token::T_WHITESPACE && !$t->significant() &&
-					Token::separate( $tokens[$i-1], $tokens[$i+1] )
+					Token::separate( $tokens[$i - 1], $tokens[$i + 1] )
 				) {
 					$tokens[$i] = $t->copyWithSignificance( true );
 				}

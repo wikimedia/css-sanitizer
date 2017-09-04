@@ -29,7 +29,7 @@ class QualifiedRuleTest extends \PHPUnit_Framework_TestCase {
 		$ws = new Token( Token::T_WHITESPACE );
 		$rule = new QualifiedRule( $identToken );
 
-		$rule2 = clone( $rule );
+		$rule2 = clone $rule;
 		$this->assertNotSame( $rule, $rule2 );
 		$this->assertNotSame( $rule->getPrelude(), $rule2->getPrelude() );
 		$this->assertNotSame( $rule->getBlock(), $rule2->getBlock() );

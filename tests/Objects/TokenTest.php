@@ -364,7 +364,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ self::nt( Token::T_NUMBER, 12.3, '12.30', 'number' ), '12.30' ],
 			[ self::nt( Token::T_NUMBER, 12.3, null, 'number' ), '12.3' ],
 			[ self::nt( Token::T_NUMBER, 12.3456789, null, 'number' ), '12.3456789' ],
-			[ self::nt( Token::T_NUMBER, 100/3, null, 'number' ), '33.3333333333333' ],
+			[ self::nt( Token::T_NUMBER, 100 / 3, null, 'number' ), '33.3333333333333' ],
 			[ self::nt( Token::T_NUMBER, 1e100, null, 'number' ), '1.0e+100' ],
 			[ self::nt( Token::T_NUMBER, -123, null, 'integer' ), '-123' ],
 
@@ -374,7 +374,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ self::nt( Token::T_PERCENTAGE, 12.3, '12.30', 'number' ), '12.30%' ],
 			[ self::nt( Token::T_PERCENTAGE, 12.3, null, 'number' ), '12.3%' ],
 			[ self::nt( Token::T_PERCENTAGE, 12.3456789, null, 'number' ), '12.3456789%' ],
-			[ self::nt( Token::T_PERCENTAGE, 100/3, null, 'number' ), '33.3333333333333%' ],
+			[ self::nt( Token::T_PERCENTAGE, 100 / 3, null, 'number' ), '33.3333333333333%' ],
 			[ self::nt( Token::T_PERCENTAGE, 1e100, null, 'number' ), '1.0e+100%' ],
 			[ self::nt( Token::T_PERCENTAGE, -123, null, 'integer' ), '-123%' ],
 
@@ -384,7 +384,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
 			[ self::nt( Token::T_DIMENSION, 12.3, '12.30', 'number', 'px' ), '12.30px' ],
 			[ self::nt( Token::T_DIMENSION, 12.3, null, 'number', 'px' ), '12.3px' ],
 			[ self::nt( Token::T_DIMENSION, 12.3456789, null, 'number', 'px' ), '12.3456789px' ],
-			[ self::nt( Token::T_DIMENSION, 100/3, null, 'number', 'px' ), '33.3333333333333px' ],
+			[ self::nt( Token::T_DIMENSION, 100 / 3, null, 'number', 'px' ), '33.3333333333333px' ],
 			[ self::nt( Token::T_DIMENSION, 1e100, null, 'number', 'px' ), '1.0e+100px' ],
 			[ self::nt( Token::T_DIMENSION, -123, null, 'integer', 'px' ), '-123px' ],
 

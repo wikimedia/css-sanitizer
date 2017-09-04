@@ -834,9 +834,8 @@ class MatcherFactory {
 		return $this->cache[$key];
 	}
 
-	/************************************************************************//**
+	/*
 	 * @name   CSS Selectors Level 3
-	 * @{
 	 *
 	 * https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#w3cselgrammar
 	 */
@@ -1175,9 +1174,9 @@ class MatcherFactory {
 	public function cssANplusB() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			// Quoth the spec:
-			//  > The An+B notation was originally defined using a slightly
-			//  > different tokenizer than the rest of CSS, resulting in a
-			//  > somewhat odd definition when expressed in terms of CSS tokens.
+			// > The An+B notation was originally defined using a slightly
+			// > different tokenizer than the rest of CSS, resulting in a
+			// > somewhat odd definition when expressed in terms of CSS tokens.
 			// That's a bit of an understatement
 
 			$plus = new DelimMatcher( [ '+' ] );
@@ -1272,11 +1271,4 @@ class MatcherFactory {
 		return $this->cache[__METHOD__];
 	}
 
-	/**@}*/
-
 }
-
-/**
- * For really cool vim folding this needs to be at the end:
- * vim: foldmarker=@{,@} foldmethod=marker
- */

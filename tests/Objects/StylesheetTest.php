@@ -16,7 +16,7 @@ class StylesheetTest extends \PHPUnit_Framework_TestCase {
 	public function testClone() {
 		$stylesheet = new Stylesheet( new RuleList() );
 
-		$stylesheet2 = clone( $stylesheet );
+		$stylesheet2 = clone $stylesheet;
 		$this->assertNotSame( $stylesheet, $stylesheet2 );
 		$this->assertNotSame( $stylesheet->getRuleList(), $stylesheet2->getRuleList() );
 		$this->assertEquals( $stylesheet, $stylesheet2 );

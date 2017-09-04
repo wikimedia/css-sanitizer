@@ -301,7 +301,6 @@ class Parser {
 			$this->parseError( 'expected-eof', $this->currentToken ); // "return a syntax error"?
 			return null;
 		}
-
 	}
 
 	/**
@@ -326,7 +325,7 @@ class Parser {
 	/**
 	 * Consume a list of rules
 	 * @see https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#consume-a-list-of-rules
-	 * @param boolean $topLevel Determines the behavior when CDO and CDC tokens are encountered
+	 * @param bool $topLevel Determines the behavior when CDO and CDC tokens are encountered
 	 * @return RuleList
 	 */
 	protected function consumeRuleList( $topLevel ) {

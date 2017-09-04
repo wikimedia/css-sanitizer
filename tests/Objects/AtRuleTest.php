@@ -40,14 +40,14 @@ class AtRuleTest extends \PHPUnit_Framework_TestCase {
 		$rule->getPrelude()->add( $ws );
 		$rule->setBlock( new SimpleBlock( $leftBraceToken ) );
 
-		$rule2 = clone( $rule );
+		$rule2 = clone $rule;
 		$this->assertNotSame( $rule, $rule2 );
 		$this->assertNotSame( $rule->getPrelude(), $rule2->getPrelude() );
 		$this->assertNotSame( $rule->getBlock(), $rule2->getBlock() );
 		$this->assertEquals( $rule, $rule2 );
 
 		$rule = new AtRule( $atToken );
-		$rule2 = clone( $rule );
+		$rule2 = clone $rule;
 		$this->assertNull( $rule2->getBlock() );
 	}
 

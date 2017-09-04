@@ -95,7 +95,7 @@ abstract class RuleSanitizer extends Sanitizer {
 			$prelude[0] = $prelude[0]->copyWithSignificance( $significant );
 		} elseif ( $significant ) {
 			if ( $cloneIfNecessary ) {
-				$rule = clone( $rule );
+				$rule = clone $rule;
 				$prelude = $rule->getPrelude();
 			}
 			$prelude->add( new Token( Token::T_WHITESPACE ), 0 );

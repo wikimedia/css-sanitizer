@@ -15,6 +15,10 @@ class TestMatcherFactory extends MatcherFactory {
 	/** @var MatcherFactory|null */
 	private static $instance = null;
 
+	/**
+	 * Create an instance for test
+	 * @return TestMatcherFactory
+	 */
 	public static function singleton() {
 		if ( !self::$instance ) {
 			self::$instance = new self();
@@ -22,6 +26,7 @@ class TestMatcherFactory extends MatcherFactory {
 		return self::$instance;
 	}
 
+	/** @inheritDoc */
 	public function urlstring( $type ) {
 		$key = __METHOD__ . ':' . $type;
 		if ( !isset( $this->cache[$key] ) ) {
@@ -32,6 +37,7 @@ class TestMatcherFactory extends MatcherFactory {
 		return $this->cache[$key];
 	}
 
+	/** @inheritDoc */
 	public function url( $type ) {
 		$key = __METHOD__ . ':' . $type;
 		if ( !isset( $this->cache[$key] ) ) {

@@ -405,39 +405,3 @@ class CSSObjectListTest extends \PHPUnit_Framework_TestCase {
 		$this->assertSame( Util::stringify( $list ), (string)$list );
 	}
 }
-
-class TestCSSObjectListItem implements CSSObject {
-	private $id;
-
-	public $position = [ -1, -1 ];
-
-	public function __construct( $id ) {
-		$this->id = $id;
-	}
-
-	public function __toString() {
-		return "[$this->id]";
-	}
-
-	public function getPosition() {
-		return $this->position;
-	}
-
-	public function toTokenArray() {
-		return [ new Token( Token::T_STRING, 'T' . $this->id ) ];
-	}
-
-	public function toComponentValueArray() {
-		return [ new Token( Token::T_STRING, 'CV' . $this->id ) ];
-	}
-}
-
-class TestCSSObjectList extends CSSObjectList {
-	protected static $objectType = TestCSSObjectListItem::class;
-
-	public $separator = null;
-
-	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
-		return $this->separator ?: parent::getSeparator( $left, $right );
-	}
-}

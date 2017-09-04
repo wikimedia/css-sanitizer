@@ -13,6 +13,7 @@ use Wikimedia\CSS\Objects\ComponentValueList;
  * Matcher that matches nothing
  */
 class NothingMatcher extends Matcher {
+	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		return new \EmptyIterator;
 	}

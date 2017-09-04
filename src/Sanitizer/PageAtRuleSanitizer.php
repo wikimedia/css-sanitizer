@@ -64,7 +64,7 @@ class PageAtRuleSanitizer extends RuleSanitizer {
 		$this->pageSelectorMatcher->setDefaultOptions( [ 'skip-whitespace' => false ] );
 
 		// Clone the $propertySanitizer and inject the special "size" property
-		$this->propertySanitizer = clone( $propertySanitizer );
+		$this->propertySanitizer = clone $propertySanitizer;
 		$this->propertySanitizer->addKnownProperties( [ 'size' => new Alternative( [
 			Quantifier::count( $matcherFactory->length(), 1, 2 ),
 			new KeywordMatcher( 'auto' ),
@@ -77,10 +77,12 @@ class PageAtRuleSanitizer extends RuleSanitizer {
 		$this->ruleSanitizer = new MarginAtRuleSanitizer( $propertySanitizer );
 	}
 
+	/** @inheritDoc */
 	public function handlesRule( Rule $rule ) {
 		return $rule instanceof AtRule && !strcasecmp( $rule->getName(), 'page' );
 	}
 
+	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
 		if ( !$object instanceof Rule || !$this->handlesRule( $object ) ) {
 			$this->sanitizationError( 'expected-at-rule', $object, [ 'page' ] );
@@ -102,7 +104,7 @@ class PageAtRuleSanitizer extends RuleSanitizer {
 			return null;
 		}
 
-		$ret = clone( $object );
+		$ret = clone $object;
 		$this->fixPreludeWhitespace( $ret, false );
 
 		// Parse the block's contents into a list of declarations and at-rules,

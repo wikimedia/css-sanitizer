@@ -128,10 +128,12 @@ class DataSourceTokenizer implements Tokenizer {
 		return $ret;
 	}
 
+	/** @inheritDoc */
 	public function getParseErrors() {
 		return $this->parseErrors;
 	}
 
+	/** @inheritDoc */
 	public function clearParseErrors() {
 		$this->parseErrors = [];
 	}
@@ -429,7 +431,7 @@ class DataSourceTokenizer implements Tokenizer {
 					$this->consumeCharacter();
 				}
 				if ( $next !== '"' && $next !== '\'' &&
-					!( self::isWhitespace( $next ) && ( $next2 === '"' || $next2=== '\'' ) )
+					!( self::isWhitespace( $next ) && ( $next2 === '"' || $next2 === '\'' ) )
 				) {
 					return $this->consumeUrlToken( $data );
 				}

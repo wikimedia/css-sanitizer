@@ -6,14 +6,13 @@
 
 namespace Wikimedia\CSS\Objects;
 
-/**
- * Represent a list of CSS rules
- */
-class RuleList extends CSSObjectList {
-	protected static $objectType = Rule::class;
+class TestCSSObjectList extends CSSObjectList {
+	protected static $objectType = TestCSSObjectListItem::class;
+
+	public $separator = null;
 
 	/** @inheritDoc */
 	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
-		return $right ? [ new Token( Token::T_WHITESPACE, [ 'significant' => false ] ) ] : [];
+		return $this->separator ?: parent::getSeparator( $left, $right );
 	}
 }
