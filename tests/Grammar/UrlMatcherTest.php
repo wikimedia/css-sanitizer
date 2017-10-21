@@ -6,7 +6,6 @@
 
 namespace Wikimedia\CSS\Grammar;
 
-use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\Token;

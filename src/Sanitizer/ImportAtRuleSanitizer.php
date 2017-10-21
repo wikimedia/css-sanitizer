@@ -10,7 +10,6 @@ use Wikimedia\CSS\Grammar\Alternative;
 use Wikimedia\CSS\Grammar\Juxtaposition;
 use Wikimedia\CSS\Grammar\Matcher;
 use Wikimedia\CSS\Grammar\MatcherFactory;
-use Wikimedia\CSS\Grammar\Quantifier;
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\CSSObject;
 use Wikimedia\CSS\Objects\Rule;

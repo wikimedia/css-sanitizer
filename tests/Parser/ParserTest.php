@@ -8,7 +8,6 @@ namespace Wikimedia\CSS\Parser;
 
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\ComponentValueList;
-use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\DeclarationList;
 use Wikimedia\CSS\Objects\DeclarationOrAtRuleList;

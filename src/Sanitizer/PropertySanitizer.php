@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use Wikimedia\CSS\Grammar\Matcher;
 use Wikimedia\CSS\Grammar\NothingMatcher;
 use Wikimedia\CSS\Objects\CSSObject;
-use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Declaration;
 use Wikimedia\CSS\Util;
 

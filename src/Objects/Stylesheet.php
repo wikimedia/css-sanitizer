@@ -7,7 +7,6 @@
 namespace Wikimedia\CSS\Objects;
 
 use Wikimedia\CSS\Util;
-use Wikimedia\CSS\Sanitizer\Sanitizer;
 
 /**
  * Represent a stylesheet

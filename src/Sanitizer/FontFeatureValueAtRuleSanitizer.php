@@ -9,7 +9,6 @@ namespace Wikimedia\CSS\Sanitizer;
 use Wikimedia\CSS\Grammar\Matcher;
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\CSSObject;
-use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\DeclarationList;
 use Wikimedia\CSS\Objects\Rule;
 use Wikimedia\CSS\Parser\Parser;

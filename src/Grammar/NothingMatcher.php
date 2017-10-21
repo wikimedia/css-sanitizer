@@ -6,7 +6,6 @@
 
 namespace Wikimedia\CSS\Grammar;
 
-use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
 
 /**

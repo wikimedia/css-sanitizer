@@ -6,7 +6,6 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
-use Wikimedia\CSS\Grammar\MatcherFactory;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Util;

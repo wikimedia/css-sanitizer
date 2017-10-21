@@ -7,8 +7,6 @@
 namespace Wikimedia\CSS\Sanitizer;
 
 use Wikimedia\CSS\Grammar\TestMatcherFactory;
-use Wikimedia\CSS\Grammar\TokenMatcher;
-use Wikimedia\CSS\Grammar\UrlMatcher;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Util;
 use Wikimedia\TestingAccessWrapper;

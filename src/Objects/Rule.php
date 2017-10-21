@@ -6,8 +6,6 @@
 
 namespace Wikimedia\CSS\Objects;
 
-use Wikimedia\CSS\Util;
-
 /**
  * Represent an abstract CSS rule
  */

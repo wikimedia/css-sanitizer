@@ -8,7 +8,6 @@ namespace Wikimedia\CSS\Sanitizer;
 
 use Wikimedia\CSS\Grammar\AnythingMatcher;
 use Wikimedia\CSS\Grammar\KeywordMatcher;
-use Wikimedia\CSS\Grammar\MatcherFactory;
 use Wikimedia\CSS\Grammar\NothingMatcher;
 use Wikimedia\CSS\Objects\Declaration;
 use Wikimedia\CSS\Objects\Token;

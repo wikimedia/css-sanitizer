@@ -19,7 +19,6 @@ use Wikimedia\CSS\Objects\RuleList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Stylesheet;
 use Wikimedia\CSS\Objects\Token;
-use Wikimedia\CSS\Sanitizer\Sanitizer;
 
 // Note: While reading the code below, you might find that my calls to
 // consumeToken() don't match what the spec says and I don't ever "reconsume" a

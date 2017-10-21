@@ -7,7 +7,6 @@
 namespace Wikimedia\CSS\Grammar;
 
 use Wikimedia\CSS\Objects\ComponentValueList;
-use Wikimedia\CSS\Objects\Token;
 use Wikimedia\TestingAccessWrapper;
 
 /**
