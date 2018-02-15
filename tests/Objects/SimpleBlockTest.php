@@ -12,7 +12,7 @@ use Wikimedia\CSS\Util;
 /**
  * @covers \Wikimedia\CSS\Objects\SimpleBlock
  */
-class SimpleBlockTest extends \PHPUnit_Framework_TestCase {
+class SimpleBlockTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @expectedException InvalidArgumentException

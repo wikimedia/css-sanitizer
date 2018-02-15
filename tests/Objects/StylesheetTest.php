@@ -11,7 +11,7 @@ use Wikimedia\CSS\Util;
 /**
  * @covers \Wikimedia\CSS\Objects\Stylesheet
  */
-class StylesheetTest extends \PHPUnit_Framework_TestCase {
+class StylesheetTest extends \PHPUnit\Framework\TestCase {
 
 	public function testClone() {
 		$stylesheet = new Stylesheet( new RuleList() );

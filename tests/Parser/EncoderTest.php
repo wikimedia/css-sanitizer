@@ -9,7 +9,7 @@ namespace Wikimedia\CSS\Parser;
 /**
  * @covers \Wikimedia\CSS\Parser\Encoder
  */
-class EncoderTest extends \PHPUnit_Framework_TestCase {
+class EncoderTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideConversion

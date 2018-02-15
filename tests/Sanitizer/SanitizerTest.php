@@ -16,7 +16,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\Sanitizer
  */
-class SanitizerTest extends \PHPUnit_Framework_TestCase {
+class SanitizerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testErrors() {
 		$sanitizer = TestingAccessWrapper::newFromObject(

@@ -10,7 +10,7 @@ use \Iterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\TestingAccessWrapper;
 
-class MatcherTestBase extends \PHPUnit_Framework_TestCase {
+class MatcherTestBase extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * Strip the tokens from a Match

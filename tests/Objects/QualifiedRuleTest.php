@@ -13,7 +13,7 @@ use Wikimedia\CSS\Util;
  * @covers \Wikimedia\CSS\Objects\QualifiedRule
  * @covers \Wikimedia\CSS\Objects\Rule
  */
-class QualifiedRuleTest extends \PHPUnit_Framework_TestCase {
+class QualifiedRuleTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @expectedException InvalidArgumentException

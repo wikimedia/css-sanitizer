@@ -13,7 +13,7 @@ use Wikimedia\CSS\Util;
  * @covers \Wikimedia\CSS\Objects\Declaration
  * @covers \Wikimedia\CSS\Objects\ComponentValue
  */
-class DeclarationTest extends \PHPUnit_Framework_TestCase {
+class DeclarationTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @expectedException InvalidArgumentException

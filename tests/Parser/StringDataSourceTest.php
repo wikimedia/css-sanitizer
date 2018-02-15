@@ -11,7 +11,7 @@ use InvalidArgumentException;
 /**
  * @covers \Wikimedia\CSS\Parser\StringDataSource
  */
-class StringDataSourceTest extends \PHPUnit_Framework_TestCase {
+class StringDataSourceTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideUtf8Detection

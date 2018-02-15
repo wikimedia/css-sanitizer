@@ -12,7 +12,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Parser\DataSourceTokenizer
  */
-class DataSourceTokenizerTest extends \PHPUnit_Framework_TestCase {
+class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testCharacterNormalization() {
 		$t = TestingAccessWrapper::newFromObject(

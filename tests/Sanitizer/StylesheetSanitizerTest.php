@@ -13,7 +13,7 @@ use Wikimedia\CSS\Parser\Parser;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\StylesheetSanitizer
  */
-class StylesheetSanitizerTest extends \PHPUnit_Framework_TestCase {
+class StylesheetSanitizerTest extends \PHPUnit\Framework\TestCase {
 
 	protected function getSanitizer() {
 		$matcherFactory = MatcherFactory::singleton();

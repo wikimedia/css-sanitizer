@@ -9,7 +9,7 @@ namespace Wikimedia\CSS\Objects;
 /**
  * @covers \Wikimedia\CSS\Objects\ComponentValueList
  */
-class ComponentValueListTest extends \PHPUnit_Framework_TestCase {
+class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideBadTokens

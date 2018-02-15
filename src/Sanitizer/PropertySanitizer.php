@@ -75,7 +75,7 @@ class PropertySanitizer extends Sanitizer {
 		}
 		if ( $dups ) {
 			throw new InvalidArgumentException(
-				'Duplicate definitions for properties: ' . join( ' ', $dups )
+				'Duplicate definitions for properties: ' . implode( ' ', $dups )
 			);
 		}
 		$this->setKnownProperties( $this->knownProperties + $props );

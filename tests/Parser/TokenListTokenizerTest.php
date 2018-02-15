@@ -14,7 +14,7 @@ use Wikimedia\CSS\Objects\TokenList;
 /**
  * @covers \Wikimedia\CSS\Parser\TokenListTokenizer
  */
-class TokenListTokenizerTest extends \PHPUnit_Framework_TestCase {
+class TokenListTokenizerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testTokenizer() {
 		$T = Token::T_WHITESPACE;

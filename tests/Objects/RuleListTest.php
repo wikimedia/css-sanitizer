@@ -9,7 +9,7 @@ namespace Wikimedia\CSS\Objects;
 /**
  * @covers \Wikimedia\CSS\Objects\RuleList
  */
-class RuleListTest extends \PHPUnit_Framework_TestCase {
+class RuleListTest extends \PHPUnit\Framework\TestCase {
 
 	public function testToTokenArray() {
 		$tok1 = new Token( Token::T_AT_KEYWORD, 'a' );

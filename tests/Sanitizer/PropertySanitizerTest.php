@@ -16,7 +16,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\PropertySanitizer
  */
-class PropertySanitizerTest extends \PHPUnit_Framework_TestCase {
+class PropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testGettersSetters() {
 		$m1 = new AnythingMatcher;

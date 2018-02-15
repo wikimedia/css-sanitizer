@@ -9,7 +9,7 @@ namespace Wikimedia\CSS\Objects;
 /**
  * @covers \Wikimedia\CSS\Objects\DeclarationOrAtRuleList
  */
-class DeclarationOrAtRuleListTest extends \PHPUnit_Framework_TestCase {
+class DeclarationOrAtRuleListTest extends \PHPUnit\Framework\TestCase {
 
 	public function testToTokenArray() {
 		$token1 = new Token( Token::T_IDENT, 'a' );

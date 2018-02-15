@@ -9,7 +9,7 @@ namespace Wikimedia\CSS\Objects;
 /**
  * @covers \Wikimedia\CSS\Objects\TokenList
  */
-class TokenListTest extends \PHPUnit_Framework_TestCase {
+class TokenListTest extends \PHPUnit\Framework\TestCase {
 
 	public function testToTokenArray() {
 		$token1 = new Token( Token::T_IDENT, 'a' );

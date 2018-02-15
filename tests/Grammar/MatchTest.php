@@ -13,7 +13,7 @@ use Wikimedia\CSS\Objects\Token;
 /**
  * @covers \Wikimedia\CSS\Grammar\Match
  */
-class MatchTest extends \PHPUnit_Framework_TestCase {
+class MatchTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @expectedException InvalidArgumentException

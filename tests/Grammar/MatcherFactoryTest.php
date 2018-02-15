@@ -14,7 +14,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Grammar\MatcherFactory
  */
-class MatcherFactoryTest extends \PHPUnit_Framework_TestCase {
+class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 
 	public function testSingleton() {
 		TestingAccessWrapper::newFromClass( MatcherFactory::class )->instance = null;

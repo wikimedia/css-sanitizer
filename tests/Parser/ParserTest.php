@@ -22,7 +22,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Parser\Parser
  */
-class ParserTest extends \PHPUnit_Framework_TestCase {
+class ParserTest extends \PHPUnit\Framework\TestCase {
 
 	public function testConstructors() {
 		$parser = Parser::newFromString( 'foobar', [ 'options' ] );

@@ -14,7 +14,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\StylePropertySanitizer
  */
-class StylePropertySanitizerTest extends \PHPUnit_Framework_TestCase {
+class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 
 	private static $sanitizer;
 

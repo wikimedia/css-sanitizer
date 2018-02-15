@@ -13,7 +13,7 @@ use Wikimedia\CSS\Parser\Parser;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\StyleAttributeSanitizer
  */
-class StyleAttributeSanitizerTest extends \PHPUnit_Framework_TestCase {
+class StyleAttributeSanitizerTest extends \PHPUnit\Framework\TestCase {
 
 	protected function getSanitizer() {
 		return new StyleAttributeSanitizer(

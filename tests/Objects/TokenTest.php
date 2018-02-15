@@ -13,7 +13,7 @@ use Wikimedia\TestingAccessWrapper;
  * @covers \Wikimedia\CSS\Objects\Token
  * @covers \Wikimedia\CSS\Objects\ComponentValue
  */
-class TokenTest extends \PHPUnit_Framework_TestCase {
+class TokenTest extends \PHPUnit\Framework\TestCase {
 
 	protected static function nt( $type, $value, $repr, $typeFlag, $unit = '' ) {
 		$hackRepr = $repr !== null && (float)$value !== (float)$repr;

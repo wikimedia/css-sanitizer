@@ -387,7 +387,7 @@ class MatcherFactory {
 	 */
 	protected function rawLength() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$unitsRe = '/^(' . join( '|', self::$lengthUnits ) . ')$/i';
+			$unitsRe = '/^(' . implode( '|', self::$lengthUnits ) . ')$/i';
 
 			$this->cache[__METHOD__] = new Alternative( [
 				$this->zero(),
@@ -418,7 +418,7 @@ class MatcherFactory {
 	 */
 	protected function rawAngle() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$unitsRe = '/^(' . join( '|', self::$angleUnits ) . ')$/i';
+			$unitsRe = '/^(' . implode( '|', self::$angleUnits ) . ')$/i';
 
 			$this->cache[__METHOD__] = new Alternative( [
 				$this->zero(),
@@ -449,7 +449,7 @@ class MatcherFactory {
 	 */
 	protected function rawTime() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$unitsRe = '/^(' . join( '|', self::$timeUnits ) . ')$/i';
+			$unitsRe = '/^(' . implode( '|', self::$timeUnits ) . ')$/i';
 
 			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION,
 				function ( Token $t ) use ( $unitsRe ) {
@@ -479,7 +479,7 @@ class MatcherFactory {
 	 */
 	protected function rawFrequency() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$unitsRe = '/^(' . join( '|', self::$frequencyUnits ) . ')$/i';
+			$unitsRe = '/^(' . implode( '|', self::$frequencyUnits ) . ')$/i';
 
 			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION,
 				function ( Token $t ) use ( $unitsRe ) {

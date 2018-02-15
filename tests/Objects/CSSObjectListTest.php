@@ -12,7 +12,7 @@ use Wikimedia\CSS\Util;
 /**
  * @covers \Wikimedia\CSS\Objects\CSSObjectList
  */
-class CSSObjectListTest extends \PHPUnit_Framework_TestCase {
+class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @expectedException InvalidArgumentException

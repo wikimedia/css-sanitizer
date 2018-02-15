@@ -10,7 +10,7 @@ use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Util;
 
-abstract class RuleSanitizerTestBase extends \PHPUnit_Framework_TestCase {
+abstract class RuleSanitizerTestBase extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * Fetch the sanitizer to be tested

@@ -122,7 +122,7 @@ class Match {
 		foreach ( $this->capturedMatches as $m ) {
 			$data[] = $m->getUniqueId();
 		}
-		return md5( join( "\n", $data ) );
+		return md5( implode( "\n", $data ) );
 	}
 
 	/**
