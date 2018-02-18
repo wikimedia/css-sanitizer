@@ -30,20 +30,23 @@
 		"jakub-onderka/php-parallel-lint": "0.9.2",
 		"mediawiki/mediawiki-codesniffer": "16.0.0",
 		"phpunit/phpunit": "4.8.36",
-		"wikimedia/testing-access-wrapper": "1.0.0"
+		"wikimedia/testing-access-wrapper": "1.0.0",
+		"mediawiki/minus-x": "0.3.1"
 	},
 	"scripts": {
 		"lint": "parallel-lint . --exclude vendor",
 		"phpcs": "phpcs -p -s",
 		"fix": [
-			"phpcbf"
+			"phpcbf",
+			"minus-x fix ."
 		],
 		"phpunit": "phpunit $PHPUNIT_ARGS",
 		"coverage": "phpunit --coverage-html coverage $PHPUNIT_ARGS",
 		"test": [
 			"composer lint",
 			"composer phpcs",
-			"composer phpunit"
+			"composer phpunit",
+			"minus-x check ."
 		]
 	}
 }
