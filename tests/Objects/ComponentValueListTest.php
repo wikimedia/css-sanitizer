@@ -16,10 +16,19 @@ class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
 	 * @param Token $token
 	 */
 	public function testConstructorBadTokens( $token ) {
-		$this->setExpectedException(
-			\InvalidArgumentException::class,
-			ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
-		);
+		if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
+			// PHPUnit 4.8
+			$this->setExpectedException(
+				\InvalidArgumentException::class,
+				ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
+			);
+		} else {
+			// PHPUnit 6+
+			$this->expectException( \InvalidArgumentException::class );
+			$this->expectExceptionMessage(
+				ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
+			);
+		}
 		new ComponentValueList( [ $token ] );
 	}
 
@@ -28,10 +37,19 @@ class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
 	 * @param Token $token
 	 */
 	public function testAddBadToken( $token ) {
-		$this->setExpectedException(
-			\InvalidArgumentException::class,
-			ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
-		);
+		if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
+			// PHPUnit 4.8
+			$this->setExpectedException(
+				\InvalidArgumentException::class,
+				ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
+			);
+		} else {
+			// PHPUnit 6+
+			$this->expectException( \InvalidArgumentException::class );
+			$this->expectExceptionMessage(
+				ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
+			);
+		}
 		$list = new ComponentValueList();
 		$list->add( $token );
 	}
@@ -41,10 +59,19 @@ class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
 	 * @param Token $token
 	 */
 	public function testSetBadToken( $token ) {
-		$this->setExpectedException(
-			\InvalidArgumentException::class,
-			ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
-		);
+		if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
+			// PHPUnit 4.8
+			$this->setExpectedException(
+				\InvalidArgumentException::class,
+				ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
+			);
+		} else {
+			// PHPUnit 6+
+			$this->expectException( \InvalidArgumentException::class );
+			$this->expectExceptionMessage(
+				ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
+			);
+		}
 		$list = new ComponentValueList();
 		$list[0] = $token;
 	}
