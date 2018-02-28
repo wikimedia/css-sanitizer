@@ -56,7 +56,14 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testConstructor( $type, $value, $expect = [] ) {
 		if ( $expect instanceof \Exception ) {
-			$this->setExpectedException( get_class( $expect ), $expect->getMessage() );
+			if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
+				// PHPUnit 4.8
+				$this->setExpectedException( get_class( $expect ), $expect->getMessage() );
+			} else {
+				// PHPUnit 6+
+				$this->expectException( get_class( $expect ) );
+				$this->expectExceptionMessage( $expect->getMessage() );
+			}
 		} else {
 			// We generally expect $type and $value to be reflected in the output
 			if ( $type !== null ) {
@@ -445,10 +452,19 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testToComponentValueArray( $token, $ok ) {
 		if ( !$ok ) {
-			$this->setExpectedException(
-				\UnexpectedValueException::class,
-				"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
-			);
+			if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
+				// PHPUnit 4.8
+				$this->setExpectedException(
+					\UnexpectedValueException::class,
+					"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
+				);
+			} else {
+				// PHPUnit 6+
+				$this->expectException( \UnexpectedValueException::class );
+				$this->expectExceptionMessage(
+					"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
+				);
+			}
 		}
 		$this->assertSame( [ $token ], $token->toComponentValueArray() );
 	}
