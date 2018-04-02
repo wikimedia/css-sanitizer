@@ -549,7 +549,9 @@ class Token extends ComponentValue {
 		static $sepTable = [
 			self::T_IDENT => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC, self::T_LEFT_PAREN
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC, self::T_LEFT_PAREN,
+				// Internet Explorer is buggy in some contexts
+				self::T_HASH,
 			],
 			self::T_AT_KEYWORD => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
@@ -557,11 +559,15 @@ class Token extends ComponentValue {
 			],
 			self::T_HASH => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC,
+				// Internet Explorer is buggy in some contexts
+				self::T_HASH,
 			],
 			self::T_DIMENSION => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC,
+				// Internet Explorer is buggy in some contexts
+				self::T_HASH,
 			],
 			'#' => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
@@ -575,7 +581,9 @@ class Token extends ComponentValue {
 			],
 			self::T_NUMBER => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE,
+				// Internet Explorer is buggy in some contexts
+				self::T_HASH,
 			],
 			'@' => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_UNICODE_RANGE

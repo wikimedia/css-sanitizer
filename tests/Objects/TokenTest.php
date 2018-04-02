@@ -717,6 +717,12 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 
 			// Something not in either table, for good measure
 			[ new Token( Token::T_EOF ), new Token( Token::T_EOF ), false ],
+
+			// Hacks for IE bugs
+			[ $identToken, $hashToken, true ],
+			[ $hashToken, $hashToken, true ],
+			[ $dimensionToken, $hashToken, true ],
+			[ $numberToken, $hashToken, true ],
 		];
 	}
 }
