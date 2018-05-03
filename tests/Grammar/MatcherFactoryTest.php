@@ -24,7 +24,7 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideMatchers
-	 * @param string $what Matcher factory method to call
+	 * @param string|array $what Matcher factory method to call
 	 * @param string $string String to parse into a ComponentValueList
 	 * @param Matcher|null|bool $expect Whether/what the matcher should match
 	 */
@@ -35,6 +35,9 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			$matcher = MatcherFactory::singleton()->$what( 'dummy' );
 		} elseif ( $what === 'cssMediaQuery unstrict' ) {
 			$matcher = MatcherFactory::singleton()->cssMediaQuery( false );
+		} elseif ( is_array( $what ) ) {
+			$func = array_shift( $what );
+			$matcher = call_user_func_array( [ MatcherFactory::singleton(), $func ], $what );
 		} else {
 			$matcher = MatcherFactory::singleton()->$what();
 			if ( $what === 'significantWhitespace' || $what === 'optionalWhitespace' ) {
@@ -73,6 +76,12 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			[ 'ident', 'x' ],
 			[ 'ident', '', null ],
 			[ 'ident', '!', null ],
+
+			[ 'customIdent', 'x' ],
+			[ 'customIdent', 'default', null ],
+			[ 'customIdent', 'DeFaUlT', null ],
+			[ [ 'customIdent', [ 'x' ] ], 'x', null ],
+			[ [ 'customIdent', [ 'x' ] ], 'X', null ],
 
 			[ 'string', '""' ],
 			[ 'string', '', null ],
@@ -469,6 +478,12 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 
 			[ 'cssMediaQueryList', 'screen and (color), projection and (color)' ],
 			[ 'cssMediaQueryList', '' ],
+
+			[ 'cssSingleTimingFunction', 'ease' ],
+			[ 'cssSingleTimingFunction', 'steps(5)' ],
+			[ 'cssSingleTimingFunction', 'steps( 77, end )' ],
+			[ 'cssSingleTimingFunction', 'cubic-bezier( 1, 3.4, +5, -1e2 )' ],
+			[ 'cssSingleTimingFunction', 'frames( 42 )' ],
 
 			[ 'cssSelector', '', null ],
 

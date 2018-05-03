@@ -556,7 +556,7 @@ class DataSourceTokenizer implements Tokenizer {
 						$this->consumeBadUrlRemnants();
 						return new Token( Token::T_BAD_URL, [ 'value' => '' ] + $data );
 					}
-					break;
+					break; // @codeCoverageIgnore
 
 				case '"':
 				case '\'':

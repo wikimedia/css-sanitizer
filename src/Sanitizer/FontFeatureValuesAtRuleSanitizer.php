@@ -17,7 +17,7 @@ use Wikimedia\CSS\Util;
 
 /**
  * Sanitizes a CSS \@font-feature-values rule
- * @see https://www.w3.org/TR/2013/CR-css-fonts-3-20131003/#at-font-feature-values-rule
+ * @see https://www.w3.org/TR/2018/CR-css-fonts-3-20180315/#at-font-feature-values-rule
  */
 class FontFeatureValuesAtRuleSanitizer extends RuleSanitizer {
 

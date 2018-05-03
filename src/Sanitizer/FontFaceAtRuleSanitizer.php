@@ -22,7 +22,7 @@ use Wikimedia\CSS\Util;
 
 /**
  * Sanitizes a CSS \@font-face rule
- * @see https://www.w3.org/TR/2013/CR-css-fonts-3-20131003/#font-resources
+ * @see https://www.w3.org/TR/2018/CR-css-fonts-3-20180315/#font-resources
  */
 class FontFaceAtRuleSanitizer extends RuleSanitizer {
 
@@ -125,7 +125,10 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 				new KeywordMatcher( [ 'jis78', 'jis83', 'jis90', 'jis04', 'simplified', 'traditional' ] ),
 				new KeywordMatcher( [ 'full-width', 'proportional-width' ] ),
 				new KeywordMatcher( 'ruby' ),
-			]
+			],
+			'positionKeywords' => [
+				'sub', 'super',
+			],
 		];
 		$ret['font-variant'] = new Alternative( [
 			new KeywordMatcher( [ 'normal', 'none' ] ),
@@ -134,7 +137,8 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 				$ret['alt'],
 				[ new KeywordMatcher( $ret['capsKeywords'] ) ],
 				$ret['numeric'],
-				$ret['eastAsian']
+				$ret['eastAsian'],
+				[ new KeywordMatcher( $ret['positionKeywords'] ) ]
 			) )
 		] );
 		return $ret;

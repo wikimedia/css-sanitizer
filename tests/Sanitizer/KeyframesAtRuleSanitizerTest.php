@@ -60,11 +60,24 @@ class KeyframesAtRuleSanitizerTest extends RuleSanitizerTestBase {
 				null,
 				[ [ 'invalid-keyframe-name', 1, 12 ] ],
 			],
+			'bad prelude (reserved ident)' => [
+				'@keyframes nOnE {}',
+				true,
+				null,
+				null,
+				[ [ 'invalid-keyframe-name', 1, 12 ] ],
+			],
 			'ok' => [
 				'@keyframes x {}',
 				true,
 				'@keyframes x {}',
 				'@keyframes x{}',
+			],
+			'ok (string)' => [
+				'@keyframes "none" {}',
+				true,
+				'@keyframes "none" {}',
+				'@keyframes"none"{}',
 			],
 			'declarations' => [
 				'@keyframes x {

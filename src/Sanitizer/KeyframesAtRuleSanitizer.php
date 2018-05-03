@@ -18,12 +18,12 @@ use Wikimedia\CSS\Util;
 
 /**
  * Sanitizes a CSS \@keyframes rule
- * @see https://www.w3.org/TR/2013/WD-css3-animations-20130219/#keyframes
+ * @see https://www.w3.org/TR/2017/WD-css-animations-1-20171130/#keyframes
  */
 class KeyframesAtRuleSanitizer extends RuleSanitizer {
 
 	/** @var Matcher */
-	protected $identMatcher;
+	protected $nameMatcher;
 
 	/** @var Sanitizer */
 	protected $ruleSanitizer;
@@ -35,7 +35,10 @@ class KeyframesAtRuleSanitizer extends RuleSanitizer {
 	public function __construct(
 		MatcherFactory $matcherFactory, PropertySanitizer $propertySanitizer
 	) {
-		$this->identMatcher = $matcherFactory->ident();
+		$this->nameMatcher = new Alternative( [
+			$matcherFactory->customIdent( [ 'none' ] ),
+			$matcherFactory->string(),
+		] );
 		$this->ruleSanitizer = new StyleRuleSanitizer(
 			Quantifier::hash( new Alternative( [
 				new KeywordMatcher( [ 'from', 'to' ] ), $matcherFactory->rawPercentage()
@@ -62,7 +65,7 @@ class KeyframesAtRuleSanitizer extends RuleSanitizer {
 		}
 
 		// Test the keyframe name
-		if ( !$this->identMatcher->match( $object->getPrelude(), [ 'mark-significance' => true ] ) ) {
+		if ( !$this->nameMatcher->match( $object->getPrelude(), [ 'mark-significance' => true ] ) ) {
 			$cv = Util::findFirstNonWhitespace( $object->getPrelude() );
 			if ( $cv ) {
 				$this->sanitizationError( 'invalid-keyframe-name', $cv );
