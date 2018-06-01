@@ -27,7 +27,7 @@ class PropertySanitizer extends Sanitizer {
 	/**
 	 * @param Matcher[] $properties Array mapping declaration names (lowercase)
 	 *  to Matchers for the values
-	 * @param Matcher $cssWideKeywordsMatcher Matcher for keywords that should
+	 * @param Matcher|null $cssWideKeywordsMatcher Matcher for keywords that should
 	 *  be recognized for all known properties.
 	 */
 	public function __construct( array $properties = [], Matcher $cssWideKeywordsMatcher = null ) {

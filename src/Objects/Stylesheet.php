@@ -22,7 +22,7 @@ class Stylesheet implements CSSObject {
 	protected $ruleList;
 
 	/**
-	 * @param RuleList $rules
+	 * @param RuleList|null $rules
 	 */
 	public function __construct( RuleList $rules = null ) {
 		$this->ruleList = $rules ?: new RuleList();

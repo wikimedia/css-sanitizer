@@ -49,7 +49,7 @@ class QualifiedRule extends Rule {
 
 	/**
 	 * Set the block
-	 * @param SimpleBlock $block
+	 * @param SimpleBlock|null $block
 	 */
 	public function setBlock( SimpleBlock $block = null ) {
 		if ( $block->getStartTokenType() !== Token::T_LEFT_BRACE ) {

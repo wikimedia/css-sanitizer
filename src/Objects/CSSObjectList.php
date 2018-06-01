@@ -41,7 +41,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	/**
 	 * Insert one or more objects into the list
 	 * @param CSSObject|CSSObject[]|CSSObjectList $objects An object to add, or an array of objects.
-	 * @param int $index Insert the objects at this index. If omitted, the
+	 * @param int|null $index Insert the objects at this index. If omitted, the
 	 *  objects are added at the end.
 	 */
 	public function add( $objects, $index = null ) {
