@@ -80,13 +80,19 @@ class Util {
 
 	/**
 	 * Turn a CSSObject into a string
-	 * @param CSSObject $object
+	 * @param CSSObject|CSSObject[] $object
 	 * @param array $options Serialziation options:
 	 *  - minify: (bool) Skip comments and insignificant tokens
 	 * @return string
 	 */
-	public static function stringify( CSSObject $object, $options = [] ) {
-		$tokens = $object->toTokenArray();
+	public static function stringify( $object, $options = [] ) {
+		if ( is_array( $object ) ) {
+			$tokens = array_reduce( $object, function ( array $carry, CSSObject $item ) {
+				return array_merge( $carry, $item->toTokenArray() );
+			}, [] );
+		} else {
+			$tokens = $object->toTokenArray();
+		}
 		if ( !$tokens ) {
 			return '';
 		}

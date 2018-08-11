@@ -25,7 +25,7 @@ class MediaAtRuleSanitizerTest extends RuleSanitizerTestBase {
 				$matcherFactory->cssSelectorList(),
 				new StylePropertySanitizer( $matcherFactory ),
 				[
-					'prependSelectors' => [ new Token( Token::T_IDENT, 'div' ), new Token( Token::T_WHITESPACE ) ]
+					'prependSelectors' => [ new Token( Token::T_IDENT, 'div' ) ]
 				]
 			),
 			$san,

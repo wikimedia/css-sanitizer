@@ -30,7 +30,7 @@ class SupportsAtRuleSanitizerTest extends RuleSanitizerTestBase {
 				$matcherFactory->cssSelectorList(),
 				$propSan,
 				[
-					'prependSelectors' => [ new Token( Token::T_IDENT, 'div' ), new Token( Token::T_WHITESPACE ) ]
+					'prependSelectors' => [ new Token( Token::T_IDENT, 'div' ) ]
 				]
 			),
 		];

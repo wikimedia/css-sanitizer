@@ -141,4 +141,8 @@ class Match {
 			$m->fixWhitespace( $old, $new );
 		}
 	}
+
+	public function __toString() {
+		return Util::stringify( $this->getValues() );
+	}
 }

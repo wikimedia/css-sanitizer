@@ -6,7 +6,10 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use Wikimedia\CSS\Grammar\CheckedMatcher;
+use Wikimedia\CSS\Grammar\Match;
 use Wikimedia\CSS\Grammar\MatcherFactory;
+use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 
 /**
@@ -25,7 +28,41 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 		);
 	}
 
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testConstruct_prependSelectors() {
+		// only test the error case, success is tested below
+		$this->getSanitizer( [
+			'prependSelectors' => [ '#content' ],
+		] );
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testConstruct_hoistableComponentMatcher() {
+		// only test the error case, success is tested below
+		$this->getSanitizer( [
+			'hoistableComponentMatcher' => 'foo',
+		] );
+	}
+
 	public static function provideRules() {
+		$htmlOrBodySimpleSelectorSeqMatcher = new CheckedMatcher(
+			MatcherFactory::singleton()->cssSimpleSelectorSeq(),
+			function ( ComponentValueList $values, Match $match, array $options ) {
+				foreach ( $match->getCapturedMatches() as $m ) {
+					if ( $m->getName() !== 'element' ) {
+						continue;
+					}
+					$str = (string)$m;
+					return $str === 'html' || $str === 'body';
+				}
+				return false;
+			}
+		);
+
 		return [
 			'ok' => [
 				'#foo {}',
@@ -72,8 +109,46 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 						new Token( Token::T_HASH, [ 'value' => 'x', 'typeFlag' => 'id' ] ),
 						new Token( Token::T_DELIM, '.' ),
 						new Token( Token::T_IDENT, 'y' ),
-						new Token( Token::T_WHITESPACE ),
 					],
+				]
+			],
+			'hoisting selectors 1' => [
+				'html.no-js #a, body.ltr .bar .baz, html body .foo, .bar {}',
+				true,
+				'html.no-js #x #a, body.ltr #x .bar .baz, html body #x .foo, #x .bar {}',
+				'html.no-js #x #a,body.ltr #x .bar .baz,html body #x .foo,#x .bar{}',
+				[],
+				[
+					'prependSelectors' => [
+						new Token( Token::T_HASH, [ 'value' => 'x', 'typeFlag' => 'id' ] ),
+					],
+					'hoistableComponentMatcher' => $htmlOrBodySimpleSelectorSeqMatcher,
+				]
+			],
+			'hoisting selectors 2' => [
+				'html.y:lang(en) body.foo ~ div > * {}',
+				true,
+				'html.y:lang(en) #x body.foo ~ div > * {}',
+				'html.y:lang(en) #x body.foo~div>*{}',
+				[],
+				[
+					'prependSelectors' => [
+						new Token( Token::T_HASH, [ 'value' => 'x', 'typeFlag' => 'id' ] ),
+					],
+					'hoistableComponentMatcher' => $htmlOrBodySimpleSelectorSeqMatcher,
+				]
+			],
+			'hoistable components only' => [
+				'html.no-js, html.no-js body.ltr {}',
+				true,
+				'#x html.no-js, html.no-js #x body.ltr {}',
+				'#x html.no-js,html.no-js #x body.ltr{}',
+				[],
+				[
+					'prependSelectors' => [
+						new Token( Token::T_HASH, [ 'value' => 'x', 'typeFlag' => 'id' ] ),
+					],
+					'hoistableComponentMatcher' => $htmlOrBodySimpleSelectorSeqMatcher,
 				]
 			],
 			'invalid selector with prepending' => [
@@ -85,7 +160,6 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 				[
 					'prependSelectors' => [
 						new Token( Token::T_HASH, [ 'value' => 'x', 'typeFlag' => 'id' ] ),
-						new Token( Token::T_WHITESPACE ),
 					],
 				]
 			],
@@ -98,7 +172,6 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 				[
 					'prependSelectors' => [
 						new Token( Token::T_HASH, [ 'value' => 'x', 'typeFlag' => 'id' ] ),
-						new Token( Token::T_WHITESPACE ),
 					],
 				]
 			],

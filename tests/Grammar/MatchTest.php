@@ -69,4 +69,18 @@ class MatchTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( [ $tok1, $tok4, $tok3 ], $match->getValues() );
 		$this->assertSame( [ $tok1, $tok4, $tok3 ], $match2->getValues() );
 	}
+
+	public function testToString() {
+		$tok1 = new Token( Token::T_IDENT, 'a' );
+		$tok2 = new Token( Token::T_DELIM, '.' );
+		$tok3 = new Token( Token::T_IDENT, 'b' );
+		$tok4 = new Token( Token::T_DELIM, '.' );
+		$tok5 = new Token( Token::T_IDENT, 'c' );
+		$match = new Match( new ComponentValueList( [ $tok1, $tok2, $tok3, $tok4, $tok5 ] ), 0, 5 );
+		$match2 = new Match( new ComponentValueList( [ $tok1, $tok2, $tok3, $tok4, $tok5 ] ), 1, 2 );
+
+		$this->assertSame( 'a.b.c', (string)$match );
+		$this->assertSame( '.b', (string)$match2 );
+	}
+
 }

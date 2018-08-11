@@ -154,5 +154,10 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( '{ Hello wor/**/ld!!}', Util::stringify( $tokenList, [ 'minify' => true ] ) );
 
 		$this->assertSame( '', Util::stringify( new TokenList() ) );
+
+		$this->assertSame( '{}', Util::stringify( [
+			new Token( Token::T_LEFT_BRACE ),
+			new Token( Token::T_RIGHT_BRACE ),
+		] ) );
 	}
 }
