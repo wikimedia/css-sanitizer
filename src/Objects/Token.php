@@ -424,7 +424,7 @@ class Token extends ComponentValue {
 			case self::T_URL:
 				// We could try to decide whether single or double quote is
 				// better, but it doesn't seem worth the effort.
-				return 'url("' . self::escapeString( $this->value )  . '")';
+				return 'url("' . self::escapeString( $this->value ) . '")';
 
 			case self::T_BAD_STRING:
 				// It's supposed to round trip, so...
