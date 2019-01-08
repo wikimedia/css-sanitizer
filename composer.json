@@ -10,14 +10,14 @@
 		}
 	],
 	"autoload": {
-		"classmap": [
-			"src/"
-		]
+		"psr-4": {
+			"Wikimedia\\CSS\\": "src/"
+		}
 	},
 	"autoload-dev": {
-		"classmap": [
-			"tests/"
-		]
+		"psr-4": {
+			"Wikimedia\\CSS\\": "tests/"
+		}
 	},
 	"require": {
 		"php": ">=5.5.9",
