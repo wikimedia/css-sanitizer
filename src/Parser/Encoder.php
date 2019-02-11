@@ -321,7 +321,7 @@ class Encoder {
 			return $text;
 		}
 
-		$ret = \Wikimedia\quietCall( 'iconv', $encoding, 'UTF-8', $text );
+		$ret = \Wikimedia\AtEase\AtEase::quietCall( 'iconv', $encoding, 'UTF-8', $text );
 		if ( $ret === false ) {
 			throw new \RuntimeException( "Cannot convert '$text' from $encoding" );
 		}
