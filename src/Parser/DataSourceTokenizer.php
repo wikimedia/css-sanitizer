@@ -871,6 +871,7 @@ class DataSourceTokenizer implements Tokenizer {
 		}
 		// @codeCoverageIgnoreStart
 	}
+
 	// @codeCoverageIgnoreEnd
 
 	/**

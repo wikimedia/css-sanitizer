@@ -519,6 +519,7 @@ class Parser {
 		}
 		// @codeCoverageIgnoreStart
 	}
+
 	// @codeCoverageIgnoreEnd
 
 	/**
@@ -548,6 +549,7 @@ class Parser {
 		}
 		// @codeCoverageIgnoreStart
 	}
+
 	// @codeCoverageIgnoreEnd
 
 	/**
@@ -621,6 +623,7 @@ class Parser {
 		}
 		// @codeCoverageIgnoreStart
 	}
+
 	// @codeCoverageIgnoreEnd
 
 	/**
