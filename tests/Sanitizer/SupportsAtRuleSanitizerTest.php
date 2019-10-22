@@ -39,13 +39,12 @@ class SupportsAtRuleSanitizerTest extends RuleSanitizerTestBase {
 		return $san;
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 * @expectedExceptionMessage declarationSanitizer must be an instance of
-	 *  Wikimedia\CSS\PropertySanitizer
-	 */
 	public function testException() {
 		$matcherFactory = MatcherFactory::singleton();
+		$this->expectException( \InvalidArgumentException::class );
+		$this->expectExceptionMessage(
+			'declarationSanitizer must be an instance of Wikimedia\CSS\Sanitizer\PropertySanitizer'
+		);
 		new SupportsAtRuleSanitizer( $matcherFactory, [
 			'declarationSanitizer' => new NamespaceAtRuleSanitizer( $matcherFactory ),
 		] );

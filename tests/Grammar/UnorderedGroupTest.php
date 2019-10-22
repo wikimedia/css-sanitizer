@@ -17,12 +17,12 @@ use Wikimedia\TestingAccessWrapper;
  */
 class UnorderedGroupTest extends MatcherTestBase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage $matchers may only contain instances of Wikimedia\CSS\Grammar\Matcher
-	 *  (found Wikimedia\CSS\ComponentValueList at index 0)
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage(
+			'$matchers may only contain instances of Wikimedia\CSS\Grammar\Matcher '
+			. '(found Wikimedia\CSS\Objects\ComponentValueList at index 0)'
+		);
 		new UnorderedGroup( [ new ComponentValueList ], true );
 	}
 

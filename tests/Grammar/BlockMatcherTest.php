@@ -16,11 +16,9 @@ use Wikimedia\TestingAccessWrapper;
  */
 class BlockMatcherTest extends MatcherTestBase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage A block is delimited by either {}, [], or ().
-	 */
 	public function testException() {
+		$this->expectException( \InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'A block is delimited by either {}, [], or ().' );
 		new BlockMatcher( Token::T_RIGHT_BRACE, new TokenMatcher( Token::T_COMMA ) );
 	}
 

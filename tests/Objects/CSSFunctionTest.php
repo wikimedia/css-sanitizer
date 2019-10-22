@@ -15,11 +15,9 @@ use Wikimedia\CSS\Util;
  */
 class CSSFunctionTest extends \PHPUnit\Framework\TestCase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage CSS function must begin with a function token, got ident
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'CSS function must begin with a function token, got ident' );
 		new CSSFunction( new Token( Token::T_IDENT, 'value' ) );
 	}
 

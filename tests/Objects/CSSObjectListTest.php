@@ -14,13 +14,13 @@ use Wikimedia\CSS\Util;
  */
 class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage Wikimedia\CSS\Objects\TestCSSObjectList may only contain instances of
-	 *  Wikimedia\CSS\Objects\TestCSSObjectListItem (found string at index X)
-	 */
 	public function testException() {
 		$item = new TestCSSObjectListItem( 1 );
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage(
+			'Wikimedia\CSS\Objects\TestCSSObjectList may only contain instances of '
+			. 'Wikimedia\CSS\Objects\TestCSSObjectListItem (found string at index X)'
+		);
 		new TestCSSObjectList( [ $item, 'X' => 'bad' ] );
 	}
 

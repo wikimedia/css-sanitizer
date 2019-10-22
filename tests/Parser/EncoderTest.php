@@ -19,14 +19,8 @@ class EncoderTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testConversion( $text, $expect, $encodings = [] ) {
 		if ( $expect instanceof \Exception ) {
-			if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
-				// PHPUnit 4.8
-				$this->setExpectedException( get_class( $expect ), $expect->getMessage() );
-			} else {
-				// PHPUnit 6+
-				$this->expectException( get_class( $expect ) );
-				$this->expectExceptionMessage( $expect->getMessage() );
-			}
+			$this->expectException( get_class( $expect ) );
+			$this->expectExceptionMessage( $expect->getMessage() );
 		}
 		$output = Encoder::convert( $text, $encodings );
 		if ( !$expect instanceof \Exception ) {

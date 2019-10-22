@@ -56,14 +56,8 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testConstructor( $type, $value, $expect = [] ) {
 		if ( $expect instanceof \Exception ) {
-			if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
-				// PHPUnit 4.8
-				$this->setExpectedException( get_class( $expect ), $expect->getMessage() );
-			} else {
-				// PHPUnit 6+
-				$this->expectException( get_class( $expect ) );
-				$this->expectExceptionMessage( $expect->getMessage() );
-			}
+			$this->expectException( get_class( $expect ) );
+			$this->expectExceptionMessage( $expect->getMessage() );
 		} else {
 			// We generally expect $type and $value to be reflected in the output
 			if ( $type !== null ) {
@@ -435,13 +429,11 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 		];
 	}
 
-	/**
-	 * @expectedException UnexpectedValueException
-	 * @expectedExceptionMessage Unknown token type "bogus".
-	 */
 	public function testStringificationError() {
 		$t = new Token( Token::T_WHITESPACE );
 		TestingAccessWrapper::newFromObject( $t )->type = 'bogus';
+		$this->expectException( \UnexpectedValueException::class );
+		$this->expectExceptionMessage( 'Unknown token type "bogus".' );
 		$t->__toString();
 	}
 
@@ -452,19 +444,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testToComponentValueArray( $token, $ok ) {
 		if ( !$ok ) {
-			if ( is_callable( [ $this, 'setExpectedException' ] ) ) {
-				// PHPUnit 4.8
-				$this->setExpectedException(
-					\UnexpectedValueException::class,
-					"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
-				);
-			} else {
-				// PHPUnit 6+
-				$this->expectException( \UnexpectedValueException::class );
-				$this->expectExceptionMessage(
-					"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
-				);
-			}
+			$this->expectException( \UnexpectedValueException::class );
+			$this->expectExceptionMessage(
+				"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
+			);
 		}
 		$this->assertSame( [ $token ], $token->toComponentValueArray() );
 	}

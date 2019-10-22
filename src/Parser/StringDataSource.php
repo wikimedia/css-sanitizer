@@ -24,24 +24,10 @@ class StringDataSource implements DataSource {
 	 * @param string $string Input string. Must be valid UTF-8 with no BOM.
 	 */
 	public function __construct( $string ) {
-		static $newPHP;
-
 		$this->string = (string)$string;
 		$this->len = strlen( $this->string );
 
-		// HHVM 3.4 and older come with an outdated version of libmbfl that
-		// incorrectly allows values above U+10FFFF, so we have to check
-		// for them separately. (This issue also exists in PHP 5.3 and
-		// older, which are no longer supported.)
-		// @codeCoverageIgnoreStart
-		if ( $newPHP === null ) {
-			$newPHP = !mb_check_encoding( "\xf4\x90\x80\x80", 'UTF-8' );
-		}
-		// @codeCoverageIgnoreEnd
-
-		if ( !mb_check_encoding( $this->string, 'UTF-8' ) ||
-			!$newPHP && preg_match( "/\xf4[\x90-\xbf]|[\xf5-\xff]/S", $this->string ) !== 0
-		) {
+		if ( !mb_check_encoding( $this->string, 'UTF-8' ) ) {
 			throw new \InvalidArgumentException( '$string is not valid UTF-8' );
 		}
 	}

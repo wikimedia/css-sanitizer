@@ -15,12 +15,12 @@ use Wikimedia\CSS\Objects\Token;
  */
 class MatchTest extends \PHPUnit\Framework\TestCase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage $capturedMatches may only contain instances of
-	 *  Wikimedia\CSS\Grammar\Match (found stdClass at index 0)
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage(
+			'$capturedMatches may only contain instances of Wikimedia\CSS\Grammar\Match '
+			. '(found stdClass at index 0)'
+		);
 		new Match( new ComponentValueList(), 1, 2, null, [ new \stdClass ] );
 	}
 

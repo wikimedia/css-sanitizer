@@ -64,12 +64,11 @@ class TokenListTokenizerTest extends \PHPUnit\Framework\TestCase {
 		$t->clearParseErrors();
 	}
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage $tokens may only contain instances of Wikimedia\CSS\Objects\Token
-	 *  (found string at index 0)
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage(
+			'$tokens may only contain instances of Wikimedia\CSS\Objects\Token (found string at index 0)'
+		);
 		new TokenListTokenizer( [ 'bad' ] );
 	}
 }

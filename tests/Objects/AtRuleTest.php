@@ -15,20 +15,16 @@ use Wikimedia\CSS\Util;
  */
 class AtRuleTest extends \PHPUnit\Framework\TestCase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage At rule must begin with an at-keyword token, got ident
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'At rule must begin with an at-keyword token, got ident' );
 		new AtRule( new Token( Token::T_IDENT, 'value' ) );
 	}
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage At-rule block must be delimited by {}
-	 */
 	public function testBadBlock() {
 		$rule = new AtRule( new Token( Token::T_AT_KEYWORD, 'value' ) );
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'At-rule block must be delimited by {}' );
 		$rule->setBlock( SimpleBlock::newFromDelimiter( Token::T_LEFT_BRACKET ) );
 	}
 

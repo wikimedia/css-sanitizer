@@ -165,10 +165,6 @@ class QuantifierTest extends MatcherTestBase {
 		];
 	}
 
-	/**
-	 * @expectedException UnexpectedValueException
-	 * @expectedExceptionMessage Empty match in quantifier!
-	 */
 	public function testEmptyMatch() {
 		$list = new ComponentValueList();
 		$matcher = $this->getMockBuilder( Matcher::class )
@@ -178,6 +174,9 @@ class QuantifierTest extends MatcherTestBase {
 			->willReturn( new \ArrayIterator( [ new Match( $list, 1, 0 ) ] ) );
 
 		$quantifier = TestingAccessWrapper::newFromObject( Quantifier::optional( $matcher ) );
+
+		$this->expectException( UnexpectedValueException::class );
+		$this->expectExceptionMessage( 'Empty match in quantifier!' );
 
 		// Need to actually process the returned generator to call the method.
 		$quantifier->generateMatches( $list, 1, [] )->current();

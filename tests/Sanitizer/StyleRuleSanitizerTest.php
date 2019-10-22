@@ -28,20 +28,16 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 		);
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
 	public function testConstruct_prependSelectors() {
+		$this->expectException( \InvalidArgumentException::class );
 		// only test the error case, success is tested below
 		$this->getSanitizer( [
 			'prependSelectors' => [ '#content' ],
 		] );
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
 	public function testConstruct_hoistableComponentMatcher() {
+		$this->expectException( \InvalidArgumentException::class );
 		// only test the error case, success is tested below
 		$this->getSanitizer( [
 			'hoistableComponentMatcher' => 'foo',

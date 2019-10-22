@@ -14,11 +14,9 @@ use Wikimedia\CSS\Util;
  */
 class SimpleBlockTest extends \PHPUnit\Framework\TestCase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage A SimpleBlock is delimited by either {}, [], or ().
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'A SimpleBlock is delimited by either {}, [], or ().' );
 		new SimpleBlock( new Token( Token::T_IDENT, 'value' ) );
 	}
 

@@ -17,11 +17,9 @@ use Wikimedia\TestingAccessWrapper;
  */
 class FunctionMatcherTest extends MatcherTestBase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage $name must be a string, callable, or null
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( '$name must be a string, callable, or null' );
 		new FunctionMatcher( [], new TokenMatcher( Token::T_COMMA ) );
 	}
 

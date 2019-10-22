@@ -15,12 +15,10 @@ use Wikimedia\CSS\Util;
  */
 class QualifiedRuleTest extends \PHPUnit\Framework\TestCase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage Qualified rule block must be delimited by {}
-	 */
 	public function testBadBlock() {
 		$rule = new QualifiedRule( new Token( Token::T_IDENT, 'value' ) );
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Qualified rule block must be delimited by {}' );
 		$rule->setBlock( SimpleBlock::newFromDelimiter( Token::T_LEFT_BRACKET ) );
 	}
 

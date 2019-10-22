@@ -15,10 +15,10 @@ class StringDataSourceTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideUtf8Detection
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage $string is not valid UTF-8
 	 */
 	public function testUtf8Detection( $string ) {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( '$string is not valid UTF-8' );
 		new StringDataSource( $string );
 	}
 

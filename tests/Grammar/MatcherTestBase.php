@@ -6,7 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
-use \Iterator;
+use Iterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\TestingAccessWrapper;
 

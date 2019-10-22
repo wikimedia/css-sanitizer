@@ -43,32 +43,11 @@ abstract class Matcher {
 
 	/**
 	 * Create an instance.
-	 * @param mixed $args,... See static::__construct()
+	 * @param mixed ...$args See static::__construct()
 	 * @return static
 	 */
-	public static function create() {
-		// @todo Once we drop support for PHP 5.5, just do this:
-		// public static function create( ...$args ) {
-		// return new static( ...$args );
-		// }
-
-		$args = func_get_args();
-		switch ( count( $args ) ) {
-			case 0:
-				return new static();
-			case 1:
-				return new static( $args[0] );
-			case 2:
-				return new static( $args[0], $args[1] );
-			case 3:
-				return new static( $args[0], $args[1], $args[2] );
-			case 4:
-				return new static( $args[0], $args[1], $args[2], $args[3] );
-			default:
-				// Slow, but all the existing Matchers have a max of 4 args.
-				$rc = new \ReflectionClass( static::class );
-				return $rc->newInstanceArgs( $args );
-		}
+	public static function create( ...$args ) {
+		return new static( ...$args );
 	}
 
 	/**

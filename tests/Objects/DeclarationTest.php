@@ -15,11 +15,9 @@ use Wikimedia\CSS\Util;
  */
 class DeclarationTest extends \PHPUnit\Framework\TestCase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage Declaration must begin with an ident token, got at-keyword
-	 */
 	public function testException() {
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Declaration must begin with an ident token, got at-keyword' );
 		new Declaration( new Token( Token::T_AT_KEYWORD, 'value' ) );
 	}
 

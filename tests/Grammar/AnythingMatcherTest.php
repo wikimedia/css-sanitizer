@@ -17,11 +17,9 @@ use Wikimedia\TestingAccessWrapper;
  */
 class AnythingMatcherTest extends MatcherTestBase {
 
-	/**
-	 * @expectedException InvalidArgumentException
-	 * @expectedExceptionMessage Invalid quantifier
-	 */
 	public function testException() {
+		$this->expectException( \InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Invalid quantifier' );
 		new AnythingMatcher( [ 'quantifier' => '#' ] );
 	}
 
