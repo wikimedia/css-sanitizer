@@ -27,7 +27,7 @@ use Wikimedia\CSS\Objects\Token;
  */
 class StylePropertySanitizer extends PropertySanitizer {
 
-	/** @var Matcher[][] */
+	/** @var mixed[] */
 	protected $cache = [];
 
 	/**
@@ -1866,6 +1866,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$lengthPct = $matcherFactory->lengthPercentage();
 		$sizingValues = array_merge( [ $lengthPct ], $this->getSizingAdditions( $matcherFactory ) );
 
+		$props = [];
 		$props['width'] = new Alternative( array_merge( [ $auto ], $sizingValues ) );
 		$props['min-width'] = $props['width'];
 		$props['max-width'] = new Alternative( array_merge( [ $none ], $sizingValues ) );

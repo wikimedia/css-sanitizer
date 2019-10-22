@@ -44,6 +44,7 @@ class MatcherTest extends MatcherTestBase {
 
 	public function testDefaultOptions() {
 		$matcher = $this->getMockForAbstractClass( Matcher::class );
+		'@phan-var Matcher $matcher';
 
 		$this->assertSame(
 			[
@@ -128,6 +129,7 @@ class MatcherTest extends MatcherTestBase {
 					}
 				}
 			);
+		'@phan-var Matcher $matcher';
 
 		$this->assertSame( $expect, (bool)$matcher->match( $list, $options ) );
 
@@ -207,6 +209,7 @@ class MatcherTest extends MatcherTestBase {
 				new Match( $testList, 5, 1, 'significantWhitespace' ),
 			] )
 		] ) );
+		'@phan-var Matcher $matcher';
 
 		$options = [ 'mark-significance' => true, 'nonterminal' => false ];
 		$this->assertFalse( (bool)$matcher->match( $testList, $options ) );

@@ -32,6 +32,7 @@ class NonEmptyTest extends MatcherTestBase {
 					yield new Match( $values, $i, $v - $i );
 				}
 			} );
+		'@phan-var Matcher $matcher';
 
 		$list = new ComponentValueList( [] );
 		$nonempty = TestingAccessWrapper::newFromObject( new NonEmpty( $matcher ) );

@@ -329,6 +329,7 @@ class Parser {
 	 */
 	protected function consumeRuleList( $topLevel ) {
 		$list = new RuleList();
+		// @phan-suppress-next-line PhanInfiniteLoop
 		while ( true ) {
 			$rule = false;
 			switch ( $this->currentToken->type() ) {
@@ -374,6 +375,7 @@ class Parser {
 	 */
 	protected function consumeDeclarationOrAtRuleList( $allowAtRules = true ) {
 		$list = $allowAtRules ? new DeclarationOrAtRuleList() : new DeclarationList();
+		// @phan-suppress-next-line PhanInfiniteLoop
 		while ( true ) {
 			$declaration = false;
 			switch ( $this->currentToken->type() ) {
@@ -508,7 +510,7 @@ class Parser {
 					return $rule;
 
 				case Token::T_LEFT_BRACE:
-					$rule->setBlock( $this->consumeSimpleBlock( true ) );
+					$rule->setBlock( $this->consumeSimpleBlock() );
 					return $rule;
 
 				default:
@@ -538,7 +540,7 @@ class Parser {
 					return null;
 
 				case Token::T_LEFT_BRACE:
-					$rule->setBlock( $this->consumeSimpleBlock( true ) );
+					$rule->setBlock( $this->consumeSimpleBlock() );
 					return $rule;
 
 				default:

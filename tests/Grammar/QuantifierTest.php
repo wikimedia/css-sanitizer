@@ -7,6 +7,7 @@
 namespace Wikimedia\CSS\Grammar;
 
 use UnexpectedValueException;
+use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
@@ -172,6 +173,7 @@ class QuantifierTest extends MatcherTestBase {
 			->getMockForAbstractClass();
 		$matcher->expects( $this->once() )->method( 'generateMatches' )
 			->willReturn( new \ArrayIterator( [ new Match( $list, 1, 0 ) ] ) );
+		'@phan-var Matcher $matcher';
 
 		$quantifier = TestingAccessWrapper::newFromObject( Quantifier::optional( $matcher ) );
 

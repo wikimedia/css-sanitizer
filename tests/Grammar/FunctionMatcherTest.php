@@ -20,6 +20,7 @@ class FunctionMatcherTest extends MatcherTestBase {
 	public function testException() {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( '$name must be a string, callable, or null' );
+		// @phan-suppress-next-line PhanTypeMismatchArgument
 		new FunctionMatcher( [], new TokenMatcher( Token::T_COMMA ) );
 	}
 

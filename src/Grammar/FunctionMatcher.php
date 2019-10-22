@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use Closure;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 
@@ -28,7 +29,7 @@ class FunctionMatcher extends Matcher {
 	protected $matcher;
 
 	/**
-	 * @param string|callable|null $name Function name, case-insensitive, or a
+	 * @param string|Closure|null $name Function name, case-insensitive, or a
 	 *  function to check the name.
 	 * @param Matcher $matcher Matcher for the contents of the function
 	 */
@@ -47,7 +48,7 @@ class FunctionMatcher extends Matcher {
 
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
-		$cv = isset( $values[$start] ) ? $values[$start] : null;
+		$cv = $values[$start] ?? null;
 		if ( $cv instanceof CSSFunction &&
 			( !$this->nameCheck || call_user_func( $this->nameCheck, $cv->getName() ) )
 		) {

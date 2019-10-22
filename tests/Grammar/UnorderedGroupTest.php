@@ -7,6 +7,7 @@
 namespace Wikimedia\CSS\Grammar;
 
 use InvalidArgumentException;
+use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Objects\SimpleBlock;
@@ -23,6 +24,7 @@ class UnorderedGroupTest extends MatcherTestBase {
 			'$matchers may only contain instances of Wikimedia\CSS\Grammar\Matcher '
 			. '(found Wikimedia\CSS\Objects\ComponentValueList at index 0)'
 		);
+		// @phan-suppress-next-line PhanTypeMismatchArgument
 		new UnorderedGroup( [ new ComponentValueList ], true );
 	}
 

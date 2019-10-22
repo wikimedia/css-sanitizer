@@ -42,7 +42,7 @@ class AnythingMatcher extends Matcher {
 	 */
 	public function __construct( array $options = [] ) {
 		$this->toplevel = !empty( $options['toplevel'] );
-		$this->quantifier = isset( $options['quantifier'] ) ? $options['quantifier'] : '';
+		$this->quantifier = $options['quantifier'] ?? '';
 		if ( !in_array( $this->quantifier, [ '', '+', '*' ], true ) ) {
 			throw new \InvalidArgumentException( 'Invalid quantifier' );
 		}
@@ -61,7 +61,7 @@ class AnythingMatcher extends Matcher {
 		$lastMatch = $this->quantifier === '*' ? $this->makeMatch( $values, $start, $start ) : null;
 		do {
 			$newMatch = null;
-			$cv = isset( $values[$start] ) ? $values[$start] : null;
+			$cv = $values[$start] ?? null;
 			if ( $cv instanceof Token ) {
 				switch ( $cv->type() ) {
 					case Token::T_BAD_STRING:

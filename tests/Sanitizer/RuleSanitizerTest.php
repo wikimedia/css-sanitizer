@@ -8,6 +8,7 @@ namespace Wikimedia\CSS\Sanitizer;
 
 use Wikimedia\CSS\Grammar\AnythingMatcher;
 use Wikimedia\CSS\Objects\AtRule;
+use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
@@ -24,7 +25,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 		$san = $mb->getMockForAbstractClass();
 		$san->method( 'handlesRule' )->willReturn( true );
 
-		switch ( isset( $options[0] ) ? $options[0] : '' ) {
+		switch ( $options[0] ?? '' ) {
 			case 'declarations':
 				$method = 'sanitizeDeclarationBlock';
 				$arg = new PropertySanitizer( [ 'foo' => new AnythingMatcher ] );

@@ -57,7 +57,7 @@ class UrlMatcher extends FunctionMatcher {
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		// First, is it a URL token?
-		$cv = isset( $values[$start] ) ? $values[$start] : null;
+		$cv = $values[$start] ?? null;
 		if ( $cv instanceof Token && $cv->type() === Token::T_URL ) {
 			$url = $cv->value();
 			if ( !$this->urlCheck || call_user_func( $this->urlCheck, $url, [] ) ) {
@@ -74,12 +74,12 @@ class UrlMatcher extends FunctionMatcher {
 			$modifiers = [];
 			foreach ( $match->getCapturedMatches() as $submatch ) {
 				$cvs = $submatch->getValues();
-				if ( $submatch->getName() === 'url' ) {
+				if ( $submatch->getName() === 'url' && $cvs[0] instanceof Token ) {
 					$url = $cvs[0]->value();
 				} elseif ( $submatch->getName() === 'modifier' ) {
 					if ( $cvs[0] instanceof CSSFunction ) {
 						$modifiers[] = $cvs[0];
-					} elseif ( $cvs[0]->type() === Token::T_IDENT ) {
+					} elseif ( $cvs[0] instanceof Token && $cvs[0]->type() === Token::T_IDENT ) {
 						$modifiers[] = $cvs[0];
 					}
 				}

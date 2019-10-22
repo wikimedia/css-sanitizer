@@ -18,7 +18,7 @@ use Wikimedia\TestingAccessWrapper;
 class NothingMatcherTest extends MatcherTestBase {
 
 	public function testStandard() {
-		$matcher = TestingAccessWrapper::newFromObject( new NothingMatcher( Token::T_IDENT ) );
+		$matcher = TestingAccessWrapper::newFromObject( new NothingMatcher() );
 
 		$ws = new Token( Token::T_WHITESPACE );
 		$tok = new Token( Token::T_IDENT, 'foo' );

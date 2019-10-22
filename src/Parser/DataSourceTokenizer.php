@@ -152,7 +152,7 @@ class DataSourceTokenizer implements Tokenizer {
 			}
 			if ( count( $position ) !== 2 || !is_int( $position[0] ) || !is_int( $position[1] ) ) {
 				// @codeCoverageIgnoreStart
-				throw new InvalidArgumentException( 'Invalid position' );
+				throw new \InvalidArgumentException( 'Invalid position' );
 				// @codeCoverageIgnoreEnd
 			}
 			$err = [ $tag, $position[0], $position[1] ];
@@ -259,6 +259,7 @@ class DataSourceTokenizer implements Tokenizer {
 					$this->consumeCharacter();
 					$this->consumeCharacter();
 					while ( $this->currentCharacter !== DataSource::EOF &&
+						// @phan-suppress-next-line PhanImpossibleTypeComparisonInLoop
 						!( $this->currentCharacter === '*' && $this->nextCharacter === '/' )
 					) {
 						$this->consumeCharacter();
@@ -268,6 +269,7 @@ class DataSourceTokenizer implements Tokenizer {
 						$this->parseError( 'unclosed-comment', $pos );
 					}
 					$this->consumeCharacter();
+					// @phan-suppress-next-line PhanPossiblyInfiniteRecursionSameParams
 					return $this->consumeToken();
 				}
 
@@ -920,6 +922,7 @@ class DataSourceTokenizer implements Tokenizer {
 		}
 
 		// 5.
+		// @phan-suppress-next-line PhanImpossibleTypeComparison
 		if ( $this->nextCharacter === 'e' || $this->nextCharacter === 'E' ) {
 			list( $next, $next2, $next3 ) = $this->lookAhead();
 			$ok = false;

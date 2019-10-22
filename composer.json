@@ -30,6 +30,8 @@
 		"jakub-onderka/php-parallel-lint": "1.0.0",
 		"jakub-onderka/php-console-highlighter": "0.3.2",
 		"mediawiki/mediawiki-codesniffer": "28.0.0",
+		"mediawiki/mediawiki-phan-config": "0.8.0",
+		"phan/phan": "2.2.13",
 		"phpunit/phpunit": "^6.5.14",
 		"wikimedia/testing-access-wrapper": "1.0.0",
 		"mediawiki/minus-x": "0.3.1"
@@ -37,6 +39,7 @@
 	"scripts": {
 		"lint": "parallel-lint . --exclude vendor",
 		"phpcs": "phpcs -p -s",
+		"phan": "phan",
 		"fix": [
 			"phpcbf",
 			"minus-x fix ."
@@ -47,7 +50,8 @@
 			"composer lint",
 			"composer phpcs",
 			"composer phpunit",
-			"minus-x check ."
+			"minus-x check .",
+			"composer phan"
 		]
 	}
 }

@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Parser;
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
+use Wikimedia\CSS\Objects\CSSObject;
 use Wikimedia\CSS\Objects\DeclarationList;
 use Wikimedia\CSS\Objects\DeclarationOrAtRuleList;
 use Wikimedia\CSS\Objects\Declaration;
@@ -29,6 +30,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 		$this->assertInstanceOf( Parser::class, $parser );
 
 		$ds = $this->getMockBuilder( DataSource::class )->getMock();
+		'@phan-var DataSource $ds';
 		$parser = Parser::newFromDataSource( $ds, [ 'options' ] );
 		$this->assertInstanceOf( Parser::class, $parser );
 

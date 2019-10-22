@@ -79,6 +79,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 
 		try {
 			Util::assertAllTokensOfType(
+				// @phan-suppress-next-line PhanTypeMismatchArgument
 				[ new Token( Token::T_WHITESPACE ), SimpleBlock::newFromDelimiter( Token::T_LEFT_PAREN ) ],
 				Token::T_WHITESPACE,
 				'Test'
@@ -125,6 +126,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 		);
 
 		try {
+			// @phan-suppress-next-line PhanTypeMismatchArgument
 			Util::findFirstNonWhitespace( new RuleList( [] ) );
 			$this->fail( 'Expected exception not thrown' );
 		} catch ( \InvalidArgumentException $ex ) {

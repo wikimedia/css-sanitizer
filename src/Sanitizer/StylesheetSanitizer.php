@@ -98,6 +98,7 @@ class StylesheetSanitizer extends Sanitizer {
 	protected function doSanitize( CSSObject $object ) {
 		$isSheet = $object instanceof Stylesheet;
 		if ( $isSheet ) {
+			'@phan-var Stylesheet $object';
 			$object = $object->getRuleList();
 		}
 		if ( !$object instanceof RuleList ) {

@@ -90,6 +90,7 @@ class SupportsAtRuleSanitizer extends RuleSanitizer {
 						return true;
 					}
 					$oldErrors = $declarationSanitizer->sanitizationErrors;
+					// @phan-suppress-next-line PhanAccessMethodProtected
 					$ret = $declarationSanitizer->doSanitize( $declaration );
 					$errors = $declarationSanitizer->getSanitizationErrors();
 					$declarationSanitizer->sanitizationErrors = $oldErrors;
@@ -137,7 +138,7 @@ class SupportsAtRuleSanitizer extends RuleSanitizer {
 
 	/** @inheritDoc */
 	protected function doSanitize( CSSObject $object ) {
-		if ( !$object instanceof Rule || !$this->handlesRule( $object ) ) {
+		if ( !$object instanceof AtRule || !$this->handlesRule( $object ) ) {
 			$this->sanitizationError( 'expected-at-rule', $object, [ 'supports' ] );
 			return null;
 		}

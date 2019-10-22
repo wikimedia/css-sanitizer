@@ -130,7 +130,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 
 	/** @inheritDoc */
 	public function current() {
-		return isset( $this->objects[$this->offset] ) ? $this->objects[$this->offset] : null;
+		return $this->objects[$this->offset] ?? null;
 	}
 
 	/** @inheritDoc */

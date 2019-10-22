@@ -24,6 +24,7 @@ class CheckedMatcherTest extends MatcherTestBase {
 					yield new Match( $values, 0, $i );
 				}
 			} );
+		'@phan-var Matcher $matcher';
 
 		$list = new ComponentValueList( [] );
 		$checked = TestingAccessWrapper::newFromObject(

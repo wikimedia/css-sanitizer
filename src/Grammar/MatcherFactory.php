@@ -16,7 +16,7 @@ class MatcherFactory {
 	/** @var MatcherFactory|null */
 	private static $instance = null;
 
-	/** @var Matcher[] Cache of constructed matchers */
+	/** @var (Matcher|Matcher[])[] Cache of constructed matchers */
 	protected $cache = [];
 
 	/** @var string[] length units */

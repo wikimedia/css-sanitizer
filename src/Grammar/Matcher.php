@@ -47,6 +47,7 @@ abstract class Matcher {
 	 * @return static
 	 */
 	public static function create( ...$args ) {
+		// @phan-suppress-next-line PhanParamTooManyUnpack,PhanTypeInstantiateAbstractStatic
 		return new static( ...$args );
 	}
 

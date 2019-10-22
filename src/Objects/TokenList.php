@@ -14,6 +14,9 @@ use Wikimedia\CSS\Parser\Parser;
 class TokenList extends CSSObjectList {
 	protected static $objectType = Token::class;
 
+	/** @var Token[] The objects contained */
+	protected $objects;
+
 	/** @inheritDoc */
 	public function toTokenArray() {
 		// We can greatly simplify this, assuming no separator
@@ -27,6 +30,7 @@ class TokenList extends CSSObjectList {
 		$ret = $parser->parseComponentValueList();
 		if ( $parser->getParseErrors() ) {
 			$ex = new \UnexpectedValueException( 'TokenList cannot be converted to a ComponentValueList' );
+			// @phan-suppress-next-line PhanUndeclaredProperty
 			$ex->parseErrors = $parser->getParseErrors();
 			throw $ex;
 		}

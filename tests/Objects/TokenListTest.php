@@ -55,6 +55,7 @@ class TokenListTest extends \PHPUnit\Framework\TestCase {
 				$this->fail( "Expected exception not thrown for token type {$token->type()}" );
 			} catch ( \UnexpectedValueException $ex ) {
 				$this->assertSame( 'TokenList cannot be converted to a ComponentValueList', $ex->getMessage() );
+				// @phan-suppress-next-line PhanUndeclaredProperty
 				$this->assertEquals( $errors, $ex->parseErrors );
 			}
 		}

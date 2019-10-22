@@ -24,5 +24,6 @@ class MatcherTestMock extends Matcher {
 
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
+		return [];
 	}
 }
