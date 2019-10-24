@@ -725,12 +725,12 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testDepthLimit() {
-		$l = Parser::CV_DEPTH_LIMIT;
+		$l = ( new \ReflectionClass( Parser::class ) )->getConstant( 'CV_DEPTH_LIMIT' );
 
 		// Make sure it's not exceeded by non-nested CVs.
 		$parser = Parser::newFromString( str_repeat( 'x ', $l ) );
 		$list = $parser->parseComponentValueList();
-		$this->assertEquals( Parser::CV_DEPTH_LIMIT * 2, $list->count() );
+		$this->assertEquals( $l * 2, $list->count() );
 		$this->assertEquals( [], $parser->getParseErrors() );
 
 		// Just at the limit, not over.

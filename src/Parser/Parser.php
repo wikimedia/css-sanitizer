@@ -45,7 +45,7 @@ use Wikimedia\CSS\Objects\Token;
  */
 class Parser {
 	/** Maximum depth of nested ComponentValues */
-	public const CV_DEPTH_LIMIT = 100; // Arbitrary number that seems like it should be enough
+	private const CV_DEPTH_LIMIT = 100; // Arbitrary number that seems like it should be enough
 
 	/** @var Tokenizer */
 	protected $tokenizer;
