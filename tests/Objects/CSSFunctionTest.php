@@ -18,6 +18,7 @@ class CSSFunctionTest extends \PHPUnit\Framework\TestCase {
 	public function testException() {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'CSS function must begin with a function token, got ident' );
+		// @phan-suppress-next-line PhanNoopNew
 		new CSSFunction( new Token( Token::T_IDENT, 'value' ) );
 	}
 

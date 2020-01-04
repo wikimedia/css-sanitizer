@@ -95,7 +95,7 @@ abstract class Matcher {
 	/**
 	 * Collect any 'significantWhitespace' matches
 	 * @param Match $match
-	 * @param Token[]|null &$ret
+	 * @param Token[] &$ret
 	 * @return Token[]
 	 */
 	private static function collectSignificantWhitespace( Match $match, &$ret = [] ) {

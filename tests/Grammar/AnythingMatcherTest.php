@@ -21,6 +21,7 @@ class AnythingMatcherTest extends MatcherTestBase {
 	public function testException() {
 		$this->expectException( \InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Invalid quantifier' );
+		// @phan-suppress-next-line PhanNoopNew
 		new AnythingMatcher( [ 'quantifier' => '#' ] );
 	}
 

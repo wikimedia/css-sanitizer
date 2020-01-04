@@ -593,6 +593,7 @@ class Parser {
 		}
 
 		$this->cvDepth--;
+		// @phan-suppress-next-line PhanTypeMismatchReturnNullable $ret always set
 		return $ret;
 	}
 

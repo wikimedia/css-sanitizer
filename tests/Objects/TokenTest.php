@@ -60,10 +60,8 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			$this->expectExceptionMessage( $expect->getMessage() );
 		} else {
 			// We generally expect $type and $value to be reflected in the output
-			if ( $type !== null ) {
-				$expect['type'] = $type;
-				$expect += is_string( $value ) ? [ 'value' => $value ] : (array)$value;
-			}
+			$expect['type'] = $type;
+			$expect += is_string( $value ) ? [ 'value' => $value ] : (array)$value;
 
 			// Defaults for all other fields
 			$expect += [

@@ -259,7 +259,7 @@ class DataSourceTokenizer implements Tokenizer {
 					$this->consumeCharacter();
 					$this->consumeCharacter();
 					while ( $this->currentCharacter !== DataSource::EOF &&
-						// @phan-suppress-next-line PhanImpossibleTypeComparisonInLoop
+						// @phan-suppress-next-line PhanSuspiciousValueComparisonInLoop
 						!( $this->currentCharacter === '*' && $this->nextCharacter === '/' )
 					) {
 						$this->consumeCharacter();
@@ -922,7 +922,7 @@ class DataSourceTokenizer implements Tokenizer {
 		}
 
 		// 5.
-		// @phan-suppress-next-line PhanImpossibleTypeComparison
+		// @phan-suppress-next-line PhanSuspiciousValueComparison
 		if ( $this->nextCharacter === 'e' || $this->nextCharacter === 'E' ) {
 			list( $next, $next2, $next3 ) = $this->lookAhead();
 			$ok = false;

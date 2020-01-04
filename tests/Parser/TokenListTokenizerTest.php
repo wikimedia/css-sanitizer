@@ -37,7 +37,7 @@ class TokenListTokenizerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $eofToken, $t->consumeToken() );
 
 		try {
-			// @phan-suppress-next-line PhanTypeMismatchArgument
+			// @phan-suppress-next-line PhanTypeMismatchArgument,PhanNoopNew
 			new TokenListTokenizer( new ComponentValueList() );
 			$this->fail( 'Expected exception not thrown' );
 		} catch ( InvalidArgumentException $ex ) {
@@ -70,7 +70,7 @@ class TokenListTokenizerTest extends \PHPUnit\Framework\TestCase {
 		$this->expectExceptionMessage(
 			'$tokens may only contain instances of Wikimedia\CSS\Objects\Token (found string at index 0)'
 		);
-		// @phan-suppress-next-line PhanTypeMismatchArgument
+		// @phan-suppress-next-line PhanTypeMismatchArgument,PhanNoopNew
 		new TokenListTokenizer( [ 'bad' ] );
 	}
 }

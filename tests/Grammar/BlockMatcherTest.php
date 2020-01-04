@@ -19,6 +19,7 @@ class BlockMatcherTest extends MatcherTestBase {
 	public function testException() {
 		$this->expectException( \InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'A block is delimited by either {}, [], or ().' );
+		// @phan-suppress-next-line PhanNoopNew
 		new BlockMatcher( Token::T_RIGHT_BRACE, new TokenMatcher( Token::T_COMMA ) );
 	}
 

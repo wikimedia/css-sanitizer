@@ -24,7 +24,7 @@ class UnorderedGroupTest extends MatcherTestBase {
 			'$matchers may only contain instances of Wikimedia\CSS\Grammar\Matcher '
 			. '(found Wikimedia\CSS\Objects\ComponentValueList at index 0)'
 		);
-		// @phan-suppress-next-line PhanTypeMismatchArgument
+		// @phan-suppress-next-line PhanTypeMismatchArgument,PhanNoopNew
 		new UnorderedGroup( [ new ComponentValueList ], true );
 	}
 

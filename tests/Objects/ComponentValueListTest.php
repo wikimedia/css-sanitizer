@@ -20,6 +20,7 @@ class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
 		$this->expectExceptionMessage(
 			ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
 		);
+		// @phan-suppress-next-line PhanNoopNew
 		new ComponentValueList( [ $token ] );
 	}
 

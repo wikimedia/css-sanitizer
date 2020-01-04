@@ -42,6 +42,7 @@ class PropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 		}
 
 		try {
+			// @phan-suppress-next-line PhanTypeMismatchArgument The mismatch is tested here
 			$san->setKnownProperties( [ 'bar' => null ] );
 			$this->fail( 'Expected exception not thrown' );
 		} catch ( \InvalidArgumentException $ex ) {

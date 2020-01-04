@@ -21,7 +21,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase {
 			'$capturedMatches may only contain instances of Wikimedia\CSS\Grammar\Match '
 			. '(found stdClass at index 0)'
 		);
-		// @phan-suppress-next-line PhanTypeMismatchArgument
+		// @phan-suppress-next-line PhanTypeMismatchArgument,PhanNoopNew
 		new Match( new ComponentValueList(), 1, 2, null, [ new \stdClass ] );
 	}
 

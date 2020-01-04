@@ -21,7 +21,7 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 			'Wikimedia\CSS\Objects\TestCSSObjectList may only contain instances of '
 			. 'Wikimedia\CSS\Objects\TestCSSObjectListItem (found string at index X)'
 		);
-		// @phan-suppress-next-line PhanTypeMismatchArgument
+		// @phan-suppress-next-line PhanTypeMismatchArgument,PhanNoopNew
 		new TestCSSObjectList( [ $item, 'X' => 'bad' ] );
 	}
 

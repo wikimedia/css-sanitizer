@@ -17,6 +17,7 @@ class SimpleBlockTest extends \PHPUnit\Framework\TestCase {
 	public function testException() {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'A SimpleBlock is delimited by either {}, [], or ().' );
+		// @phan-suppress-next-line PhanNoopNew
 		new SimpleBlock( new Token( Token::T_IDENT, 'value' ) );
 	}
 

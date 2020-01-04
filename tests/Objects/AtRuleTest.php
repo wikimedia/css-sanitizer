@@ -18,6 +18,7 @@ class AtRuleTest extends \PHPUnit\Framework\TestCase {
 	public function testException() {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'At rule must begin with an at-keyword token, got ident' );
+		// @phan-suppress-next-line PhanNoopNew
 		new AtRule( new Token( Token::T_IDENT, 'value' ) );
 	}
 

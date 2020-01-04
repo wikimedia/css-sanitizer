@@ -18,6 +18,7 @@ class DeclarationTest extends \PHPUnit\Framework\TestCase {
 	public function testException() {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Declaration must begin with an ident token, got at-keyword' );
+		// @phan-suppress-next-line PhanNoopNew
 		new Declaration( new Token( Token::T_AT_KEYWORD, 'value' ) );
 	}
 

@@ -19,6 +19,7 @@ class StringDataSourceTest extends \PHPUnit\Framework\TestCase {
 	public function testUtf8Detection( $string ) {
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( '$string is not valid UTF-8' );
+		// @phan-suppress-next-line PhanNoopNew
 		new StringDataSource( $string );
 	}
 

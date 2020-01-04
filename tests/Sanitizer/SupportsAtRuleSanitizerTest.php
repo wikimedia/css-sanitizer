@@ -45,6 +45,7 @@ class SupportsAtRuleSanitizerTest extends RuleSanitizerTestBase {
 		$this->expectExceptionMessage(
 			'declarationSanitizer must be an instance of Wikimedia\CSS\Sanitizer\PropertySanitizer'
 		);
+		// @phan-suppress-next-line PhanNoopNew
 		new SupportsAtRuleSanitizer( $matcherFactory, [
 			'declarationSanitizer' => new NamespaceAtRuleSanitizer( $matcherFactory ),
 		] );

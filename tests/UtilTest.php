@@ -65,6 +65,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 
 		try {
 			Util::assertAllTokensOfType(
+				// @phan-suppress-next-line PhanTypeMismatchArgument The mismatch is tested here
 				[ new Token( Token::T_WHITESPACE ), null ],
 				Token::T_WHITESPACE,
 				'Test'
