@@ -73,7 +73,7 @@ class FontFaceAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					unicode-range: U+0-7F, U+1000;
 					unicode-range: U+110000;
 					unicode-range: U+200-100;
-					font-variant: super slashed-zero common-ligatures unicase tabular-nums proportional-width;
+					/*font-variant: super slashed-zero common-ligatures unicase tabular-nums proportional-width;*/
 					font-feature-settings: "abcd", "defg" off, "qq ~" 99;
 					display: none;
 					@font-face {}
@@ -81,8 +81,8 @@ class FontFaceAtRuleSanitizerTest extends RuleSanitizerTestBase {
 				}',
 				true,
 				// phpcs:disable Generic.Files.LineLength
-				'@font-face { font-family: "foo bar"; font-family: foo bar; src: local("foo bar"); src: local(foo bar), url("font.fnt") format("a","b"), url("font2.fnt"); font-style: italic; font-weight: bold; font-weight: 600; font-stretch: normal; unicode-range: U+0-7f, U+1000; font-variant: super slashed-zero common-ligatures unicase tabular-nums proportional-width; font-feature-settings: "abcd", "defg" off, "qq ~" 99; font-weight: bold ; }',
-				'@font-face{font-family:"foo bar";font-family:foo bar;src:local("foo bar");src:local(foo bar),url("font.fnt")format("a","b"),url("font2.fnt");font-style:italic;font-weight:bold;font-weight:600;font-stretch:normal;unicode-range:U+0-7f,U+1000;font-variant:super slashed-zero common-ligatures unicase tabular-nums proportional-width;font-feature-settings:"abcd","defg"off,"qq ~"99;font-weight:bold}',
+				'@font-face { font-family:"foo bar"; font-family:foo bar; src:local("foo bar"); src:local(foo bar), url("font.fnt") format("a","b"), url("font2.fnt"); font-style:italic; font-weight:bold; font-weight:600; font-stretch:normal; unicode-range:U+0-7F, U+1000; font-feature-settings:"abcd", "defg" off, "qq ~" 99; font-weight:bold; }',
+				'@font-face{font-family:"foo bar";font-family:foo bar;src:local("foo bar");src:local(foo bar),url("font.fnt")format("a","b"),url("font2.fnt");font-style:italic;font-weight:bold;font-weight:600;font-stretch:normal;unicode-range:U+0-7F,U+1000;font-feature-settings:"abcd","defg"off,"qq ~"99;font-weight:bold}',
 				// phpcs:enable
 				[
 					[ 'unexpected-token-in-declaration-list', 20, 6 ],

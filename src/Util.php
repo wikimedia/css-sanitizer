@@ -117,9 +117,15 @@ class Util {
 
 		$prev = reset( $tokens );
 		$ret = (string)$prev;
+		$urangeHack = 0;
 		while ( ( $token = next( $tokens ) ) !== false ) {
-			if ( Token::separate( $prev, $token ) ) {
-				// Per https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#serialization
+			// Avoid serializing tokens that are part of a <urange> with extraneous comments
+			// by checking for a hack-flag in the type.
+			// @see Wikimedia\CSS\Matcher\UrangeMatcher
+			$urangeHack = max( $urangeHack, $prev->urangeHack() );
+
+			if ( --$urangeHack <= 0 && Token::separate( $prev, $token ) ) {
+				// Per https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#serialization
 				$ret .= '/**/';
 			}
 			$ret .= (string)$token;

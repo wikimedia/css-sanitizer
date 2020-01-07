@@ -11,7 +11,7 @@ use Wikimedia\CSS\Objects\Token;
 
 /**
  * Matcher that matches a token of a particular type
- * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#component-types
+ * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#component-types
  */
 class TokenMatcher extends Matcher {
 	/** @var string One of the Token::T_* constants */

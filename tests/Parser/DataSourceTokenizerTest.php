@@ -31,6 +31,22 @@ class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$this->assertSame( "\n", $t->nextChar() );
 		$this->assertSame( '-', $t->nextChar() );
+		$this->assertSame( DataSource::EOF, $t->nextChar() );
+
+		$mock = $this->getMockForAbstractClass( DataSource::class );
+		$mock->method( 'readCharacter' )->will( $this->onConsecutiveCalls(
+			"\u{D7FF}", "\u{D800}", "\u{DFFF}", "\u{E000}", DataSource::EOF
+		) );
+		$mock->expects( $this->never() )->method( 'putBackCharacter' );
+		'@phan-var DataSource $mock';
+
+		$t = TestingAccessWrapper::newFromObject( new DataSourceTokenizer( $mock ) );
+
+		$this->assertSame( "\u{D7FF}", $t->nextChar() );
+		$this->assertSame( '�', $t->nextChar() );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
+		$this->assertSame( '�', $t->nextChar() );
+		$this->assertSame( "\u{E000}", $t->nextChar() );
 	}
 
 	/**
@@ -127,7 +143,7 @@ class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 				"'foo \\",
 				[
 					self::t( Token::T_STRING, 1, 1, 'foo ' ),
-					[ [ 'bad-escape', 1, 6 ], [ 'unclosed-string', 1, 1 ] ],
+					[ [ 'unclosed-string', 1, 1 ] ],
 					self::t( Token::T_EOF, 1, 7 ),
 				]
 			],
@@ -158,7 +174,8 @@ class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 			'punctuation' => [
 				'$=$()[]{},:;^=^|=|||~=~%`**=',
 				[
-					self::t( Token::T_SUFFIX_MATCH, 1, 1 ),
+					self::t( Token::T_DELIM, 1, 1, '$' ),
+					self::t( Token::T_DELIM, 1, 2, '=' ),
 					self::t( Token::T_DELIM, 1, 3, '$' ),
 					self::t( Token::T_LEFT_PAREN, 1, 4 ),
 					self::t( Token::T_RIGHT_PAREN, 1, 5 ),
@@ -169,17 +186,22 @@ class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 					self::t( Token::T_COMMA, 1, 10 ),
 					self::t( Token::T_COLON, 1, 11 ),
 					self::t( Token::T_SEMICOLON, 1, 12 ),
-					self::t( Token::T_PREFIX_MATCH, 1, 13 ),
+					self::t( Token::T_DELIM, 1, 13, '^' ),
+					self::t( Token::T_DELIM, 1, 14, '=' ),
 					self::t( Token::T_DELIM, 1, 15, '^' ),
-					self::t( Token::T_DASH_MATCH, 1, 16 ),
-					self::t( Token::T_COLUMN, 1, 18 ),
+					self::t( Token::T_DELIM, 1, 16, '|' ),
+					self::t( Token::T_DELIM, 1, 17, '=' ),
+					self::t( Token::T_DELIM, 1, 18, '|' ),
+					self::t( Token::T_DELIM, 1, 19, '|' ),
 					self::t( Token::T_DELIM, 1, 20, '|' ),
-					self::t( Token::T_INCLUDE_MATCH, 1, 21 ),
+					self::t( Token::T_DELIM, 1, 21, '~' ),
+					self::t( Token::T_DELIM, 1, 22, '=' ),
 					self::t( Token::T_DELIM, 1, 23, '~' ),
 					self::t( Token::T_DELIM, 1, 24, '%' ),
 					self::t( Token::T_DELIM, 1, 25, '`' ),
 					self::t( Token::T_DELIM, 1, 26, '*' ),
-					self::t( Token::T_SUBSTRING_MATCH, 1, 27 ),
+					self::t( Token::T_DELIM, 1, 27, '*' ),
+					self::t( Token::T_DELIM, 1, 28, '=' ),
 					self::t( Token::T_EOF, 1, 29 ),
 				]
 			],
@@ -298,37 +320,6 @@ class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 					self::t( Token::T_WHITESPACE, 1, 16 ),
 					self::t( Token::T_IDENT, 2, 1, 'ok' ),
 					self::t( Token::T_EOF, 2, 3 ),
-				]
-			],
-
-			'unicode range' => [
-				'U+12-FdDd U+10????? u+0-f u+98- 120 U+???-abcd U-123 U+x U+200-100 U+FFFFFF',
-				[
-					self::t( Token::T_UNICODE_RANGE, 1, 1, '', [ 'start' => 0x12, 'end' => 0xfddd ] ),
-					self::t( Token::T_WHITESPACE, 1, 10 ),
-					self::t( Token::T_UNICODE_RANGE, 1, 11, '', [ 'start' => 0x100000, 'end' => 0x10ffff ] ),
-					self::t( Token::T_DELIM, 1, 19, '?' ),
-					self::t( Token::T_WHITESPACE, 1, 20 ),
-					self::t( Token::T_UNICODE_RANGE, 1, 21, '', [ 'start' => 0, 'end' => 0xf ] ),
-					self::t( Token::T_WHITESPACE, 1, 26 ),
-					self::t( Token::T_UNICODE_RANGE, 1, 27, '', [ 'start' => 0x98, 'end' => 0x98 ] ),
-					self::t( Token::T_DELIM, 1, 31, '-' ),
-					self::t( Token::T_WHITESPACE, 1, 32 ),
-					self::nt( Token::T_NUMBER, 1, 33, 120, '120', 'integer' ),
-					self::t( Token::T_WHITESPACE, 1, 36 ),
-					self::t( Token::T_UNICODE_RANGE, 1, 37, '', [ 'start' => 0x000, 'end' => 0xfff ] ),
-					self::t( Token::T_IDENT, 1, 42, '-abcd' ),
-					self::t( Token::T_WHITESPACE, 1, 47 ),
-					self::t( Token::T_IDENT, 1, 48, 'U-123' ),
-					self::t( Token::T_WHITESPACE, 1, 53 ),
-					self::t( Token::T_IDENT, 1, 54, 'U' ),
-					self::t( Token::T_DELIM, 1, 55, '+' ),
-					self::t( Token::T_IDENT, 1, 56, 'x' ),
-					self::t( Token::T_WHITESPACE, 1, 57 ),
-					self::t( Token::T_UNICODE_RANGE, 1, 58, '', [ 'start' => 0x200, 'end' => 0x100 ] ),
-					self::t( Token::T_WHITESPACE, 1, 67 ),
-					self::t( Token::T_UNICODE_RANGE, 1, 68, '', [ 'start' => 0xffffff, 'end' => 0xffffff ] ),
-					self::t( Token::T_EOF, 1, 76 ),
 				]
 			],
 

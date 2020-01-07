@@ -8,7 +8,7 @@ namespace Wikimedia\CSS\Parser;
 
 /**
  * Character set conversion for CSS
- * @see https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#input-byte-stream
+ * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#input-byte-stream
  */
 class Encoder {
 
@@ -231,6 +231,7 @@ class Encoder {
 		'iso-2022-cn'           => 'replacement',
 		'iso-2022-cn-ext'       => 'replacement',
 		'iso-2022-kr'           => 'replacement',
+		'replacement'           => 'replacement',
 		'utf-16be'              => 'UTF-16BE',
 		'utf-16'                => 'UTF-16LE',
 		'utf-16le'              => 'UTF-16LE',

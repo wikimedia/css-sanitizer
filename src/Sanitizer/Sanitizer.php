@@ -9,6 +9,7 @@ namespace Wikimedia\CSS\Sanitizer;
 use Wikimedia\CSS\Objects\CSSObject;
 use Wikimedia\CSS\Objects\CSSObjectList;
 use Wikimedia\CSS\Objects\RuleList;
+use Wikimedia\ScopedCallback;
 
 /**
  * Base class for CSS sanitizers
@@ -24,6 +25,22 @@ abstract class Sanitizer {
 	 */
 	public function getSanitizationErrors() {
 		return $this->sanitizationErrors;
+	}
+
+	/**
+	 * Temporarily clear sanitization errors
+	 *
+	 * Errors will be cleared, then restored when the returned ScopedCallback
+	 * goes out of scope or is consumed.
+	 *
+	 * @return ScopedCallback
+	 */
+	public function stashSanitizationErrors() {
+		$reset = new ScopedCallback( function ( $e ) {
+			$this->sanitizationErrors = $e;
+		}, [ $this->sanitizationErrors ] );
+		$this->sanitizationErrors = [];
+		return $reset;
 	}
 
 	/**

@@ -90,7 +90,7 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 			'invalid declarations in list' => [
 				'#foo { display:none;ident; foo: bar; all: inherit !important }',
 				true,
-				'#foo { display:none; all: inherit !important; }',
+				'#foo { display:none; all:inherit !important; }',
 				'#foo{display:none;all:inherit!important}',
 				[ [ 'expected-colon', 1, 26 ], [ 'unrecognized-property', 1, 28 ] ],
 			],

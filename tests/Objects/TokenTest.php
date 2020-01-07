@@ -88,7 +88,6 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 		if ( !$expect instanceof \Exception ) {
 			// Convert some properties to their accessors
 			$expect['getPosition'] = $expect['position'];
-			$expect['range'] = [ $expect['start'], $expect['end'] ];
 			unset( $expect['position'], $expect['start'], $expect['end'] );
 
 			foreach ( $expect as $k => $v ) {
@@ -102,16 +101,12 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			$value2 = ( is_string( $value ) ? [ 'value' => $value ] : (array)$value ) + [
 				'value' => 'XXX',
 				'unit' => 'XXX',
-				'start' => 'XXX',
 			];
 			if ( $type !== Token::T_EOF ) {
 				$value2 += [ 'typeFlag' => 'XXX' ];
 			}
 			if ( !in_array( $type, [ Token::T_NUMBER, Token::T_PERCENTAGE, Token::T_DIMENSION ], true ) ) {
 				$value2 += [ 'representation' => 'XXX' ];
-			}
-			if ( $type !== Token::T_UNICODE_RANGE ) {
-				$value2 += [ 'end' => 'XXX' ];
 			}
 
 			$token = new Token( $type, $value2 );
@@ -228,25 +223,8 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 				[ 'value' => 42, 'representation' => 'foo', 'typeFlag' => 'number', 'unit' => 'x' ],
 				$iae( 'Representation must be numeric' ) ],
 
-			[ Token::T_UNICODE_RANGE, null,
-				$iae( 'Token type unicode-range requires a starting code point as an integer' ) ],
-			[ Token::T_UNICODE_RANGE, 12,
-				$iae( 'Token type unicode-range requires a starting code point as an integer' ) ],
-			[ Token::T_UNICODE_RANGE, [ 'start' => 42.0 ],
-				$iae( 'Token type unicode-range requires a starting code point as an integer' ) ],
-			[ Token::T_UNICODE_RANGE, [ 'start' => 42 ], [ 'end' => 42 ] ],
-			[ Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 500.0 ],
-				$iae( 'Ending code point must be an integer' ) ],
-			[ Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 500 ] ],
-
 			[ Token::T_BAD_STRING, null ],
 			[ Token::T_BAD_URL, null ],
-			[ Token::T_INCLUDE_MATCH, null ],
-			[ Token::T_DASH_MATCH, null ],
-			[ Token::T_PREFIX_MATCH, null ],
-			[ Token::T_SUFFIX_MATCH, null ],
-			[ Token::T_SUBSTRING_MATCH, null ],
-			[ Token::T_COLUMN, null ],
 			[ Token::T_WHITESPACE, null ],
 			[ Token::T_CDO, null ],
 			[ Token::T_CDC, null ],
@@ -396,21 +374,6 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ self::nt( Token::T_DIMENSION, 123, '123', 'integer', 'e-9' ), '123\65 -9' ],
 			[ self::nt( Token::T_DIMENSION, 123, '1.23e2', 'integer', 'e-9' ), '1.23e2e-9' ],
 
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 42 ] ), 'U+2a' ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 0x10, 'end' => 0x1f ] ), 'U+1?' ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 0x200, 'end' => 0x2ff ] ), 'U+2??' ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 0x3000, 'end' => 0x3fff ] ), 'U+3???' ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 0x40000, 'end' => 0x4ffff ] ), 'U+4????' ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 0, 'end' => 0xfffff ] ), 'U+0?????' ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 0, 'end' => 0xffffff ] ), 'U+??????' ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 0x100, 'end' => 0x2ff ] ), 'U+100-2ff' ],
-
-			[ new Token( Token::T_INCLUDE_MATCH ), '~=' ],
-			[ new Token( Token::T_DASH_MATCH ), '|=' ],
-			[ new Token( Token::T_PREFIX_MATCH ), '^=' ],
-			[ new Token( Token::T_SUFFIX_MATCH ), '$=' ],
-			[ new Token( Token::T_SUBSTRING_MATCH ), '*=' ],
-			[ new Token( Token::T_COLUMN ), '||' ],
 			[ new Token( Token::T_WHITESPACE ), ' ' ],
 			[ new Token( Token::T_CDO ), '<!--' ],
 			[ new Token( Token::T_CDC ), '-->' ],
@@ -464,13 +427,6 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ self::nt( Token::T_NUMBER, 123, '123', 'integer' ), true ],
 			[ self::nt( Token::T_PERCENTAGE, 123, '123', 'integer' ), true ],
 			[ self::nt( Token::T_DIMENSION, 123, '123', 'integer', 'px' ), true ],
-			[ new Token( Token::T_UNICODE_RANGE, [ 'start' => 42, 'end' => 42 ] ), true ],
-			[ new Token( Token::T_INCLUDE_MATCH ), true ],
-			[ new Token( Token::T_DASH_MATCH ), true ],
-			[ new Token( Token::T_PREFIX_MATCH ), true ],
-			[ new Token( Token::T_SUFFIX_MATCH ), true ],
-			[ new Token( Token::T_SUBSTRING_MATCH ), true ],
-			[ new Token( Token::T_COLUMN ), true ],
 			[ new Token( Token::T_WHITESPACE ), true ],
 			[ new Token( Token::T_CDO ), true ],
 			[ new Token( Token::T_CDC ), true ],
@@ -508,26 +464,20 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 		$percentageToken = new Token( Token::T_PERCENTAGE, [ 'value' => 42, 'typeFlag' => 'integer' ] );
 		$dimensionToken = new Token( Token::T_DIMENSION,
 			[ 'value' => 42, 'typeFlag' => 'integer', 'unit' => 'foo' ] );
-		$unicodeRangeToken = new Token( Token::T_UNICODE_RANGE, [ 'start' => 42 ] );
 		$cdcToken = new Token( Token::T_CDC );
 		$parenToken = new Token( Token::T_LEFT_PAREN );
 
 		$minusToken = new Token( Token::T_DELIM, '-' );
-		$questionToken = new Token( Token::T_DELIM, '?' );
 		$octothorpeToken = new Token( Token::T_DELIM, '#' );
 		$atToken = new Token( Token::T_DELIM, '@' );
 		$periodToken = new Token( Token::T_DELIM, '.' );
 		$plusToken = new Token( Token::T_DELIM, '+' );
-		$dollarToken = new Token( Token::T_DELIM, '$' );
 		$equalToken = new Token( Token::T_DELIM, '=' );
-		$pipeToken = new Token( Token::T_DELIM, '|' );
 		$starToken = new Token( Token::T_DELIM, '*' );
-		$caretToken = new Token( Token::T_DELIM, '^' );
-		$tildeToken = new Token( Token::T_DELIM, '~' );
 		$slashToken = new Token( Token::T_DELIM, '/' );
+		$percentToken = new Token( Token::T_DELIM, '%' );
 
 		return [
-			// First table at https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#serialization
 			[ $identToken, $identToken, true ],
 			[ $identToken, $functionToken, true ],
 			[ $identToken, $urlToken, true ],
@@ -536,10 +486,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $identToken, $numberToken, true ],
 			[ $identToken, $percentageToken, true ],
 			[ $identToken, $dimensionToken, true ],
-			[ $identToken, $unicodeRangeToken, true ],
 			[ $identToken, $cdcToken, true ],
 			[ $identToken, $parenToken, true ],
-			[ $identToken, $questionToken, false ],
+			[ $identToken, $starToken, false ],
+			[ $identToken, $percentToken, false ],
 
 			[ $atKeywordToken, $identToken, true ],
 			[ $atKeywordToken, $functionToken, true ],
@@ -549,10 +499,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $atKeywordToken, $numberToken, true ],
 			[ $atKeywordToken, $percentageToken, true ],
 			[ $atKeywordToken, $dimensionToken, true ],
-			[ $atKeywordToken, $unicodeRangeToken, true ],
 			[ $atKeywordToken, $cdcToken, true ],
 			[ $atKeywordToken, $parenToken, false ],
-			[ $atKeywordToken, $questionToken, false ],
+			[ $atKeywordToken, $starToken, false ],
+			[ $atKeywordToken, $percentToken, false ],
 
 			[ $hashToken, $identToken, true ],
 			[ $hashToken, $functionToken, true ],
@@ -562,10 +512,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $hashToken, $numberToken, true ],
 			[ $hashToken, $percentageToken, true ],
 			[ $hashToken, $dimensionToken, true ],
-			[ $hashToken, $unicodeRangeToken, true ],
 			[ $hashToken, $cdcToken, true ],
 			[ $hashToken, $parenToken, false ],
-			[ $hashToken, $questionToken, false ],
+			[ $hashToken, $starToken, false ],
+			[ $hashToken, $percentToken, false ],
 
 			[ $dimensionToken, $identToken, true ],
 			[ $dimensionToken, $functionToken, true ],
@@ -575,10 +525,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $dimensionToken, $numberToken, true ],
 			[ $dimensionToken, $percentageToken, true ],
 			[ $dimensionToken, $dimensionToken, true ],
-			[ $dimensionToken, $unicodeRangeToken, true ],
 			[ $dimensionToken, $cdcToken, true ],
 			[ $dimensionToken, $parenToken, false ],
-			[ $dimensionToken, $questionToken, false ],
+			[ $dimensionToken, $starToken, false ],
+			[ $dimensionToken, $percentToken, false ],
 
 			[ $octothorpeToken, $identToken, true ],
 			[ $octothorpeToken, $functionToken, true ],
@@ -588,10 +538,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $octothorpeToken, $numberToken, true ],
 			[ $octothorpeToken, $percentageToken, true ],
 			[ $octothorpeToken, $dimensionToken, true ],
-			[ $octothorpeToken, $unicodeRangeToken, true ],
 			[ $octothorpeToken, $cdcToken, false ],
 			[ $octothorpeToken, $parenToken, false ],
-			[ $octothorpeToken, $questionToken, false ],
+			[ $octothorpeToken, $starToken, false ],
+			[ $octothorpeToken, $percentToken, false ],
 
 			[ $minusToken, $identToken, true ],
 			[ $minusToken, $functionToken, true ],
@@ -601,10 +551,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $minusToken, $numberToken, true ],
 			[ $minusToken, $percentageToken, true ],
 			[ $minusToken, $dimensionToken, true ],
-			[ $minusToken, $unicodeRangeToken, true ],
 			[ $minusToken, $cdcToken, false ],
 			[ $minusToken, $parenToken, false ],
-			[ $minusToken, $questionToken, false ],
+			[ $minusToken, $starToken, false ],
+			[ $minusToken, $percentToken, false ],
 
 			[ $numberToken, $identToken, true ],
 			[ $numberToken, $functionToken, true ],
@@ -614,10 +564,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $numberToken, $numberToken, true ],
 			[ $numberToken, $percentageToken, true ],
 			[ $numberToken, $dimensionToken, true ],
-			[ $numberToken, $unicodeRangeToken, true ],
 			[ $numberToken, $cdcToken, false ],
 			[ $numberToken, $parenToken, false ],
-			[ $numberToken, $questionToken, false ],
+			[ $numberToken, $starToken, false ],
+			[ $numberToken, $percentToken, true ],
 
 			[ $atToken, $identToken, true ],
 			[ $atToken, $functionToken, true ],
@@ -627,23 +577,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $atToken, $numberToken, false ],
 			[ $atToken, $percentageToken, false ],
 			[ $atToken, $dimensionToken, false ],
-			[ $atToken, $unicodeRangeToken, true ],
 			[ $atToken, $cdcToken, false ],
 			[ $atToken, $parenToken, false ],
-			[ $atToken, $questionToken, false ],
-
-			[ $unicodeRangeToken, $identToken, true ],
-			[ $unicodeRangeToken, $functionToken, true ],
-			[ $unicodeRangeToken, $urlToken, false ],
-			[ $unicodeRangeToken, $badurlToken, false ],
-			[ $unicodeRangeToken, $minusToken, false ],
-			[ $unicodeRangeToken, $numberToken, true ],
-			[ $unicodeRangeToken, $percentageToken, true ],
-			[ $unicodeRangeToken, $dimensionToken, true ],
-			[ $unicodeRangeToken, $unicodeRangeToken, false ],
-			[ $unicodeRangeToken, $cdcToken, false ],
-			[ $unicodeRangeToken, $parenToken, false ],
-			[ $unicodeRangeToken, $questionToken, true ],
+			[ $atToken, $starToken, false ],
+			[ $atToken, $percentToken, false ],
 
 			[ $periodToken, $identToken, false ],
 			[ $periodToken, $functionToken, false ],
@@ -653,10 +590,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $periodToken, $numberToken, true ],
 			[ $periodToken, $percentageToken, true ],
 			[ $periodToken, $dimensionToken, true ],
-			[ $periodToken, $unicodeRangeToken, false ],
 			[ $periodToken, $cdcToken, false ],
 			[ $periodToken, $parenToken, false ],
-			[ $periodToken, $questionToken, false ],
+			[ $periodToken, $starToken, false ],
+			[ $periodToken, $percentToken, false ],
 
 			[ $plusToken, $identToken, false ],
 			[ $plusToken, $functionToken, false ],
@@ -666,35 +603,23 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			[ $plusToken, $numberToken, true ],
 			[ $plusToken, $percentageToken, true ],
 			[ $plusToken, $dimensionToken, true ],
-			[ $plusToken, $unicodeRangeToken, false ],
 			[ $plusToken, $cdcToken, false ],
 			[ $plusToken, $parenToken, false ],
-			[ $plusToken, $questionToken, false ],
+			[ $plusToken, $starToken, false ],
+			[ $plusToken, $percentToken, false ],
 
-			// Second table at https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#serialization
-			[ $dollarToken, $equalToken, true ],
-			[ $dollarToken, $pipeToken, false ],
-			[ $dollarToken, $starToken, false ],
-
-			[ $starToken, $equalToken, true ],
-			[ $starToken, $pipeToken, false ],
-			[ $starToken, $starToken, false ],
-
-			[ $caretToken, $equalToken, true ],
-			[ $caretToken, $pipeToken, false ],
-			[ $caretToken, $starToken, false ],
-
-			[ $tildeToken, $equalToken, true ],
-			[ $tildeToken, $pipeToken, false ],
-			[ $tildeToken, $starToken, false ],
-
-			[ $pipeToken, $equalToken, true ],
-			[ $pipeToken, $pipeToken, true ],
-			[ $pipeToken, $starToken, false ],
-
-			[ $slashToken, $equalToken, false ],
-			[ $slashToken, $pipeToken, false ],
+			[ $slashToken, $identToken, false ],
+			[ $slashToken, $functionToken, false ],
+			[ $slashToken, $urlToken, false ],
+			[ $slashToken, $badurlToken, false ],
+			[ $slashToken, $minusToken, false ],
+			[ $slashToken, $numberToken, false ],
+			[ $slashToken, $percentageToken, false ],
+			[ $slashToken, $dimensionToken, false ],
+			[ $slashToken, $cdcToken, false ],
+			[ $slashToken, $parenToken, false ],
 			[ $slashToken, $starToken, true ],
+			[ $slashToken, $percentToken, false ],
 
 			// Something not in either table, for good measure
 			[ new Token( Token::T_EOF ), new Token( Token::T_EOF ), false ],

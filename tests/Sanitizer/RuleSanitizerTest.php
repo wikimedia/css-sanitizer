@@ -116,7 +116,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 			'declaration block' => [
 				'{ foo: bar; bar: baz; }',
 				true,
-				'{ foo: bar; }',
+				'{ foo:bar; }',
 				'{foo:bar}',
 				[ [ 'unrecognized-property', 1, 13 ] ],
 				[ 'declarations' ]

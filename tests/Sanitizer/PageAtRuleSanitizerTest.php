@@ -78,6 +78,8 @@ class PageAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					size: 10in;
 					size: 8.5in 11in;
 					size: a4 landscape;
+					marks: cross crop;
+					bleed: 10px;
 
 					@top-left {
 						color: red;
@@ -88,19 +90,20 @@ class PageAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					@foo {}
 
 					color: blue;
+					bleed: auto;
 
 					@top-right {}
 				}',
 				true,
 				// phpcs:disable Generic.Files.LineLength
-				'@page x { color: red; size: 10in; size: 8.5in 11in; size: a4 landscape; @top-left { color: red; } color: blue; @top-right {} }',
-				'@page x{color:red;size:10in;size:8.5in 11in;size:a4 landscape;@top-left{color:red}color:blue;@top-right{}}',
+				'@page x { color:red; size:10in; size:8.5in 11in; size:a4 landscape; marks:cross crop; bleed:10px; @top-left { color:red; } color:blue; bleed:auto; @top-right {} }',
+				'@page x{color:red;size:10in;size:8.5in 11in;size:a4 landscape;marks:cross crop;bleed:10px;@top-left{color:red}color:blue;bleed:auto;@top-right{}}',
 				// phpcs:enable
 				[
 					[ 'unrecognized-property', 3, 6 ],
-					[ 'unrecognized-property', 10, 7 ],
-					[ 'unrecognized-property', 11, 7 ],
-					[ 'invalid-page-rule-content', 14, 6 ],
+					[ 'unrecognized-property', 12, 7 ],
+					[ 'unrecognized-property', 13, 7 ],
+					[ 'invalid-page-rule-content', 16, 6 ],
 				]
 			],
 		];

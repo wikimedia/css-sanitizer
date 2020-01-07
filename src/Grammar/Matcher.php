@@ -20,8 +20,8 @@ use Wikimedia\CSS\Objects\Token;
  * object that will determine whether a ComponentValueList actually matches
  * this grammar.
  *
- * [SYN3]: https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/
- * [VAL3]: https://www.w3.org/TR/2016/CR-css-values-3-20160929/
+ * [SYN3]: https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/
+ * [VAL3]: https://www.w3.org/TR/2019/CR-css-values-3-20190606/
  */
 abstract class Matcher {
 

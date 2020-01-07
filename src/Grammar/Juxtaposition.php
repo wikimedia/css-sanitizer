@@ -12,8 +12,8 @@ use Wikimedia\CSS\Util;
 
 /**
  * Matcher that groups other matchers (juxtaposition)
- * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#component-combinators
- * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#comb-comma
+ * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#component-combinators
+ * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#comb-comma
  */
 class Juxtaposition extends Matcher {
 	/** @var Matcher[] */

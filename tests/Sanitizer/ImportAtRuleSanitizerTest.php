@@ -17,7 +17,24 @@ class ImportAtRuleSanitizerTest extends RuleSanitizerTestBase {
 	 * @param array $options
 	 */
 	protected function getSanitizer( $options = [] ) {
-		return new ImportAtRuleSanitizer( TestMatcherFactory::singleton() );
+		$matcherFactory = TestMatcherFactory::singleton();
+		$propSan = new StylePropertySanitizer( $matcherFactory );
+		if ( !empty( $options['declarationSanitizer'] ) ) {
+			$options['declarationSanitizer'] = $propSan;
+		}
+		$san = new ImportAtRuleSanitizer( $matcherFactory, $options );
+		return $san;
+	}
+
+	public function testException() {
+		$matcherFactory = TestMatcherFactory::singleton();
+		$this->expectException( \TypeError::class );
+		// The exact TypeError message differs between php7 and php8 (nullables)
+		$this->expectExceptionMessage( 'Wikimedia\CSS\Sanitizer\PropertySanitizer' );
+		// @phan-suppress-next-line PhanNoopNew
+		new ImportAtRuleSanitizer( $matcherFactory, [
+			'declarationSanitizer' => new NamespaceAtRuleSanitizer( $matcherFactory ),
+		] );
 	}
 
 	public static function provideRules() {
@@ -82,6 +99,30 @@ class ImportAtRuleSanitizerTest extends RuleSanitizerTestBase {
 				null,
 				null,
 				[ [ 'at-rule-block-not-allowed', 1, 19, 'import' ] ],
+			],
+			'ok with media query list' => [
+				'@import "foo.css" handheld and (max-width: 400px);',
+				true,
+				'@import "foo.css" handheld and (max-width: 400px);',
+				'@import"foo.css"handheld and (max-width:400px);',
+			],
+			'ok with supports condition' => [
+				'@import "foo.css" supports( ( ( color : red ) or (color:blue)));',
+				true,
+				'@import "foo.css" supports( ( ( color : red ) or (color:blue)));',
+				'@import"foo.css"supports(((color:red) or (color:blue)));',
+			],
+			'ok with supports declaration' => [
+				'@import "foo.css" supports( color : red );',
+				true,
+				'@import "foo.css" supports( color : red );',
+				'@import"foo.css"supports(color:red);',
+			],
+			'ok with supports declaration and media query list' => [
+				'@import url(foo.css) supports(color:red) handheld and (max-width: 400px);',
+				true,
+				'@import url("foo.css") supports(color:red) handheld and (max-width: 400px);',
+				'@import url("foo.css")supports(color:red)handheld and (max-width:400px);',
 			],
 		];
 	}

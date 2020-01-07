@@ -83,7 +83,7 @@ class MarginAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					bogus: bogus;
 				}',
 				true,
-				'@top-left { color: red; }',
+				'@top-left { color:red; }',
 				'@top-left{color:red}',
 				[
 					[ 'bad-value-for-property', 3, 13, 'color' ],

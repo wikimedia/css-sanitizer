@@ -156,10 +156,18 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 					)
 				] ) )
 			],
-			'Parse a stylesheet, drops @charset' => [
+			'Parse a stylesheet, doesn\'t drop @charset' => [
 				'parseStylesheet',
 				'@charset "foo"; @bogus;',
 				new Stylesheet( new RuleList( [
+					self::mk(
+						new AtRule( new Token( 'at-keyword', [ 'position' => [ 1, 1 ], 'value' => 'charset' ] ) ), [
+							'prelude' => new ComponentValueList( [
+								new Token( 'whitespace', [ 'position' => [ 1, 9 ] ] ),
+								new Token( 'string', [ 'position' => [ 1, 10 ], 'value' => 'foo' ] ),
+							] ),
+						]
+					),
 					new AtRule( new Token( 'at-keyword', [ 'position' => [ 1, 17 ], 'value' => 'bogus' ] ) ),
 				] ) )
 			],
@@ -385,7 +393,6 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 					new Declaration( new Token( 'ident', [ 'position' => [ 1, 1 ], 'value' => 'foo' ] ) ),
 					[
 						'value' => new ComponentValueList( [
-							new Token( 'whitespace', [ 'position' => [ 1, 5 ] ] ),
 							new Token( 'dimension', [
 								'position' => [ 1, 6 ], 'value' => 32, 'typeFlag' => 'integer',
 								'representation' => '32', 'unit' => 'px'
@@ -401,9 +408,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 					new Declaration( new Token( 'ident', [ 'position' => [ 1, 1 ], 'value' => 'foo' ] ) ),
 					[
 						'value' => new ComponentValueList( [
-							new Token( 'whitespace', [ 'position' => [ 1, 5 ] ] ),
 							new Token( 'ident', [ 'position' => [ 1, 6 ], 'value' => 'x' ] ),
-							new Token( 'whitespace', [ 'position' => [ 1, 7 ] ] ),
 						] ),
 						'important' => true
 					]
@@ -416,9 +421,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 					new Declaration( new Token( 'ident', [ 'position' => [ 1, 1 ], 'value' => 'foo' ] ) ),
 					[
 						'value' => new ComponentValueList( [
-							new Token( 'whitespace', [ 'position' => [ 1, 5 ] ] ),
 							new Token( 'ident', [ 'position' => [ 1, 6 ], 'value' => 'x' ] ),
-							new Token( 'whitespace', [ 'position' => [ 1, 7 ] ] ),
 						] ),
 						'important' => true
 					]
@@ -437,7 +440,6 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 					new Declaration( new Token( 'ident', [ 'position' => [ 1, 1 ], 'value' => 'foo' ] ) ),
 					[
 						'value' => new ComponentValueList( [
-							new Token( 'whitespace', [ 'position' => [ 1, 5 ] ] ),
 							new Token( 'ident', [ 'position' => [ 1, 6 ], 'value' => 'bar' ] ),
 							new Token( 'whitespace', [ 'position' => [ 1, 9 ] ] ),
 							self::mk( new SimpleBlock( new Token( '(', [ 'position' => [ 1, 10 ] ] ) ), [
@@ -684,6 +686,35 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 					new Token( 'ident', [ 'position' => [ 1, 6 ], 'value' => 'foo' ] ),
 					new Token( 'ident', [ 'position' => [ 1, 16 ], 'value' => 'bar' ] )
 				] )
+			],
+
+			'Parse a list of comma separated component values' => [
+				'parseCommaSeparatedComponentValueList',
+				',.?{}foo,/*@pp*/bar',
+				[
+					new ComponentValueList( [] ),
+					new ComponentValueList( [
+						new Token( 'delim', [ 'position' => [ 1, 2 ], 'value' => '.' ] ),
+						new Token( 'delim', [ 'position' => [ 1, 3 ], 'value' => '?' ] ),
+						new SimpleBlock( new Token( '{', [ 'position' => [ 1, 4 ] ] ) ),
+						new Token( 'ident', [ 'position' => [ 1, 6 ], 'value' => 'foo' ] ),
+					] ),
+					new ComponentValueList( [
+						new Token( 'ident', [ 'position' => [ 1, 17 ], 'value' => 'bar' ] )
+					] ),
+				]
+			],
+
+			'Parse a list of comma separated component values (2)' => [
+				'parseCommaSeparatedComponentValueList',
+				',,,,',
+				[
+					new ComponentValueList( [] ),
+					new ComponentValueList( [] ),
+					new ComponentValueList( [] ),
+					new ComponentValueList( [] ),
+					new ComponentValueList( [] ),
+				]
 			],
 
 			'Tokenizer errors are returned' => [

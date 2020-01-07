@@ -25,7 +25,7 @@ use Wikimedia\CSS\Util;
 
 /**
  * Sanitizes a CSS \@page rule
- * @see https://www.w3.org/TR/2013/WD-css3-page-20130314/
+ * @see https://www.w3.org/TR/2018/WD-css-page-3-20181018/
  */
 class PageAtRuleSanitizer extends RuleSanitizer {
 
@@ -63,16 +63,31 @@ class PageAtRuleSanitizer extends RuleSanitizer {
 		] );
 		$this->pageSelectorMatcher->setDefaultOptions( [ 'skip-whitespace' => false ] );
 
-		// Clone the $propertySanitizer and inject the special "size" property
+		// Clone the $propertySanitizer and inject the special properties
 		$this->propertySanitizer = clone $propertySanitizer;
-		$this->propertySanitizer->addKnownProperties( [ 'size' => new Alternative( [
-			Quantifier::count( $matcherFactory->length(), 1, 2 ),
-			new KeywordMatcher( 'auto' ),
-			UnorderedGroup::someOf( [
-				new KeywordMatcher( [ 'A5', 'A4', 'A3', 'B5', 'B4', 'letter', 'legal', 'ledger' ] ),
-				new KeywordMatcher( [ 'portrait', 'landscape' ] ),
+		$this->propertySanitizer->addKnownProperties( [
+			'size' => new Alternative( [
+				Quantifier::count( $matcherFactory->length(), 1, 2 ),
+				new KeywordMatcher( 'auto' ),
+				UnorderedGroup::someOf( [
+					new KeywordMatcher( [
+						'A5', 'A4', 'A3', 'B5', 'B4', 'JIS-B5', 'JIS-B4', 'letter', 'legal', 'ledger',
+					] ),
+					new KeywordMatcher( [ 'portrait', 'landscape' ] ),
+				] ),
 			] ),
-		] ) ] );
+			'marks' => new Alternative( [
+				new KeywordMatcher( 'none' ),
+				UnorderedGroup::someOf( [
+					new KeywordMatcher( 'crop' ),
+					new KeywordMatcher( 'cross' ),
+				] ),
+			] ),
+			'bleed' => new Alternative( [
+				new KeywordMatcher( 'auto' ),
+				$matcherFactory->length(),
+			] ),
+		] );
 
 		$this->ruleSanitizer = new MarginAtRuleSanitizer( $propertySanitizer );
 	}

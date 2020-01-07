@@ -11,7 +11,7 @@ use Wikimedia\CSS\Util;
 
 /**
  * Matcher that groups other matchers without ordering ("&&" and "||" combiners)
- * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#component-combinators
+ * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#component-combinators
  */
 class UnorderedGroup extends Matcher {
 	/** @var Matcher[] */

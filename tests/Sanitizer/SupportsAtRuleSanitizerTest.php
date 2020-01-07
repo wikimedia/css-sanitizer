@@ -41,10 +41,9 @@ class SupportsAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	public function testException() {
 		$matcherFactory = MatcherFactory::singleton();
-		$this->expectException( \InvalidArgumentException::class );
-		$this->expectExceptionMessage(
-			'declarationSanitizer must be an instance of Wikimedia\CSS\Sanitizer\PropertySanitizer'
-		);
+		$this->expectException( \TypeError::class );
+		// The exact TypeError message differs between php7 and php8 (nullables)
+		$this->expectExceptionMessage( 'Wikimedia\CSS\Sanitizer\PropertySanitizer' );
 		// @phan-suppress-next-line PhanNoopNew
 		new SupportsAtRuleSanitizer( $matcherFactory, [
 			'declarationSanitizer' => new NamespaceAtRuleSanitizer( $matcherFactory ),
@@ -186,7 +185,7 @@ class SupportsAtRuleSanitizerTest extends RuleSanitizerTestBase {
 				}',
 				true,
 				// phpcs:disable Generic.Files.LineLength
-				'@supports (a:b) { div .foo bar, div #baz { color: red; } @supports (c:d) { @supports (e:f) { div #yeah { display:none; } } @supports not (e:f) { div #nope { display:none; } } } }',
+				'@supports (a:b) { div .foo bar, div #baz { color:red; } @supports (c:d) { @supports (e:f) { div #yeah { display:none; } } @supports not (e:f) { div #nope { display:none; } } } }',
 				'@supports(a:b){div .foo bar,div #baz{color:red}@supports(c:d){@supports(e:f){div #yeah{display:none}}@supports not (e:f){div #nope{display:none}}}}',
 				// phpcs:enable
 				[

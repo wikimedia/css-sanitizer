@@ -104,7 +104,7 @@ class KeyframesAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					}
 				}',
 				true,
-				'@keyframes x { from { color: black; } 10%, 20% { color: red; } 90%, to { color: white; } }',
+				'@keyframes x { from { color:black; } 10%, 20% { color:red; } 90%, to { color:white; } }',
 				'@keyframes x{from{color:black}10%,20%{color:red}90%,to{color:white}}',
 				[
 					[ 'bad-value-for-property', 4, 14, 'color' ],

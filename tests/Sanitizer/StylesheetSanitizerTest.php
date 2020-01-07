@@ -21,7 +21,6 @@ class StylesheetSanitizerTest extends \PHPUnit\Framework\TestCase {
 		$ruleSanitizers = [
 			new StyleRuleSanitizer( $matcherFactory->cssSelectorList(), $propertySanitizer ),
 			new FontFaceAtRuleSanitizer( $matcherFactory ),
-			new FontFeatureValuesAtRuleSanitizer( $matcherFactory ),
 			new KeyframesAtRuleSanitizer( $matcherFactory, $propertySanitizer ),
 			new PageAtRuleSanitizer( $matcherFactory, $propertySanitizer ),
 			'media' => new MediaAtRuleSanitizer( $matcherFactory->cssMediaQueryList() ),
@@ -32,7 +31,9 @@ class StylesheetSanitizerTest extends \PHPUnit\Framework\TestCase {
 		$ruleSanitizers['media']->setRuleSanitizers( $ruleSanitizers );
 		$ruleSanitizers['supports']->setRuleSanitizers( $ruleSanitizers );
 		$allRuleSanitizers = array_merge( $ruleSanitizers, [
-			new ImportAtRuleSanitizer( $matcherFactory ),
+			new ImportAtRuleSanitizer( $matcherFactory, [
+				'declarationSanitizer' => $propertySanitizer,
+			] ),
 			new NamespaceAtRuleSanitizer( $matcherFactory ),
 		] );
 		$san = new StylesheetSanitizer( $allRuleSanitizers );
@@ -118,7 +119,7 @@ class StylesheetSanitizerTest extends \PHPUnit\Framework\TestCase {
 					.noprint { display: none; }
 				}',
 				// phpcs:ignore Generic.Files.LineLength
-				'@import "foo"; @import url( "bar" ); @namespace "foo"; @namespace "bar"; .foo { display: none; } @media print { @page { size: portrait; } .noprint { display: none; } }',
+				'@import "foo"; @import url( "bar" ); @namespace "foo"; @namespace "bar"; .foo { display:none; } @media print { @page { size:portrait; } .noprint { display:none; } }',
 				[
 					[ 'misordered-rule', 5, 5 ],
 					[ 'bad-value-for-property', 9, 13, 'color' ],

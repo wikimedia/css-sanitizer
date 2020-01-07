@@ -38,6 +38,40 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( [], $sanitizer->getSanitizationErrors() );
 	}
 
+	public function testStashErrors() {
+		$sanitizer = TestingAccessWrapper::newFromObject(
+			$this->getMockForAbstractClass( Sanitizer::class )
+		);
+
+		$this->assertSame( [], $sanitizer->getSanitizationErrors() );
+		$sanitizer->sanitizationError(
+			'foobar', new Token( Token::T_WHITESPACE, [ 'position' => [ 42, 23 ] ] )
+		);
+		$sanitizer->sanitizationError(
+			'baz', new Token( Token::T_WHITESPACE, [ 'position' => [ 1, 2 ] ] )
+		);
+		$this->assertSame(
+			[ [ 'foobar', 42, 23 ], [ 'baz', 1, 2 ] ],
+			$sanitizer->getSanitizationErrors()
+		);
+
+		$reset = $sanitizer->stashSanitizationErrors();
+		$this->assertSame( [], $sanitizer->getSanitizationErrors() );
+		$sanitizer->sanitizationError(
+			'xyz', new Token( Token::T_WHITESPACE, [ 'position' => [ 1, 2 ] ] )
+		);
+		$this->assertSame(
+			[ [ 'xyz', 1, 2 ] ],
+			$sanitizer->getSanitizationErrors()
+		);
+
+		unset( $reset );
+		$this->assertSame(
+			[ [ 'foobar', 42, 23 ], [ 'baz', 1, 2 ] ],
+			$sanitizer->getSanitizationErrors()
+		);
+	}
+
 	public function testSanitize() {
 		$ws = new Token( Token::T_WHITESPACE );
 		$block = SimpleBlock::newFromDelimiter( Token::T_LEFT_BRACE );

@@ -22,13 +22,6 @@ class Token extends ComponentValue {
 	public const T_NUMBER = "number";
 	public const T_PERCENTAGE = "percentage";
 	public const T_DIMENSION = "dimension";
-	public const T_UNICODE_RANGE = "unicode-range";
-	public const T_INCLUDE_MATCH = "include-match";
-	public const T_DASH_MATCH = "dash-match";
-	public const T_PREFIX_MATCH = "prefix-match";
-	public const T_SUFFIX_MATCH = "suffix-match";
-	public const T_SUBSTRING_MATCH = "substring-match";
-	public const T_COLUMN = "column";
 	public const T_WHITESPACE = "whitespace";
 	public const T_CDO = "CDO";
 	public const T_CDC = "CDC";
@@ -58,11 +51,11 @@ class Token extends ComponentValue {
 	/** @var string Unit for dimension tokens */
 	protected $unit = '';
 
-	/** @var int Start and end for unicode-range tokens */
-	protected $start = 0, $end = 0;
-
 	/** @var bool Whether this token is considered "significant" */
 	protected $significant = true;
+
+	/** @var int See ::urangeHack() */
+	private $urangeHack = 0;
 
 	/**
 	 * @param string $type One of the T_* constants
@@ -78,8 +71,6 @@ class Token extends ComponentValue {
 	 *  - representation: (string) String representation of the value for
 	 *    T_NUMBER, T_PERCENTAGE, and T_DIMENSION.
 	 *  - unit: (string) Unit for T_DIMENSION.
-	 *  - start: (int) Start code point for T_UNICODE_RANGE.
-	 *  - end: (int) End code point for T_UNICODE_RANGE.
 	 *  - significant: (bool) Whether the token is considered "significant"
 	 */
 	public function __construct( $type, $value = [] ) {
@@ -184,30 +175,8 @@ class Token extends ComponentValue {
 				}
 				break;
 
-			case self::T_UNICODE_RANGE:
-				if ( !isset( $value['start'] ) || !is_int( $value['start'] ) ) {
-					throw new \InvalidArgumentException(
-						"Token type $this->type requires a starting code point as an integer"
-					);
-				}
-				$this->start = $value['start'];
-				if ( !isset( $value['end'] ) ) {
-					$this->end = $this->start;
-				} elseif ( !is_int( $value['end'] ) ) {
-					throw new \InvalidArgumentException( 'Ending code point must be an integer' );
-				} else {
-					$this->end = $value['end'];
-				}
-				break;
-
 			case self::T_BAD_STRING:
 			case self::T_BAD_URL:
-			case self::T_INCLUDE_MATCH:
-			case self::T_DASH_MATCH:
-			case self::T_PREFIX_MATCH:
-			case self::T_SUFFIX_MATCH:
-			case self::T_SUBSTRING_MATCH:
-			case self::T_COLUMN:
 			case self::T_WHITESPACE:
 			case self::T_CDO:
 			case self::T_CDC:
@@ -276,14 +245,6 @@ class Token extends ComponentValue {
 	 */
 	public function unit() {
 		return $this->unit;
-	}
-
-	/**
-	 * Get the unicode range for this T_UNICODE_RANGE token
-	 * @return array [ int $start, int $end ]
-	 */
-	public function range() {
-		return [ $this->start, $this->end ];
 	}
 
 	/**
@@ -468,41 +429,6 @@ class Token extends ComponentValue {
 
 				return $number . $unit;
 
-			case self::T_UNICODE_RANGE:
-				if ( $this->start === 0 && $this->end === 0xffffff ) {
-					return 'U+??????';
-				}
-				$fmt = 'U+%x';
-				for ( $b = 0; $b < 24; $b += 4, $fmt .= '?' ) {
-					$mask = ( 1 << $b ) - 1;
-					if (
-						( $this->start & $mask ) === 0 &&
-						( $this->end & $mask ) === $mask &&
-						( $this->start & ~$mask ) === ( $this->end & ~$mask )
-					) {
-						return sprintf( $fmt, $this->start >> $b );
-					}
-				}
-				return sprintf( 'U+%x-%x', $this->start, $this->end );
-
-			case self::T_INCLUDE_MATCH:
-				return '~=';
-
-			case self::T_DASH_MATCH:
-				return '|=';
-
-			case self::T_PREFIX_MATCH:
-				return '^=';
-
-			case self::T_SUFFIX_MATCH:
-				return '$=';
-
-			case self::T_SUBSTRING_MATCH:
-				return '*=';
-
-			case self::T_COLUMN:
-				return '||';
-
 			case self::T_WHITESPACE:
 				return ' ';
 
@@ -539,7 +465,7 @@ class Token extends ComponentValue {
 
 	/**
 	 * Indicate whether the two tokens need to be separated
-	 * @see https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#serialization
+	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#serialization
 	 * @param Token $firstToken
 	 * @param Token $secondToken
 	 * @return bool
@@ -549,55 +475,45 @@ class Token extends ComponentValue {
 		static $sepTable = [
 			self::T_IDENT => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC, self::T_LEFT_PAREN,
-				// Internet Explorer is buggy in some contexts
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_CDC, self::T_LEFT_PAREN,
+				// Internet Explorer is buggy in some contexts (T191134)
 				self::T_HASH,
 			],
 			self::T_AT_KEYWORD => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_CDC,
 			],
 			self::T_HASH => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC,
-				// Internet Explorer is buggy in some contexts
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_CDC,
+				// Internet Explorer is buggy in some contexts (T191134)
 				self::T_HASH,
 			],
 			self::T_DIMENSION => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE, self::T_CDC,
-				// Internet Explorer is buggy in some contexts
+				self::T_PERCENTAGE, self::T_DIMENSION, self::T_CDC,
+				// Internet Explorer is buggy in some contexts (T191134)
 				self::T_HASH,
 			],
 			'#' => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE
+				self::T_PERCENTAGE, self::T_DIMENSION,
 			],
 			'-' => [
-				// Add '-' here from Editor's Draft, to go with the draft's
-				// adding of tokens beginning with "--" that we also picked up.
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE
+				self::T_PERCENTAGE, self::T_DIMENSION,
 			],
 			self::T_NUMBER => [
 				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, self::T_NUMBER,
-				self::T_PERCENTAGE, self::T_DIMENSION, self::T_UNICODE_RANGE,
+				self::T_PERCENTAGE, self::T_DIMENSION, '%',
 				// Internet Explorer is buggy in some contexts
 				self::T_HASH,
 			],
 			'@' => [
-				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-', self::T_UNICODE_RANGE
-			],
-			self::T_UNICODE_RANGE => [
-				self::T_IDENT, self::T_FUNCTION, self::T_NUMBER, self::T_PERCENTAGE, self::T_DIMENSION, '?'
+				self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '-',
 			],
 			'.' => [ self::T_NUMBER, self::T_PERCENTAGE, self::T_DIMENSION ],
 			'+' => [ self::T_NUMBER, self::T_PERCENTAGE, self::T_DIMENSION ],
-			'$' => [ '=' ],
-			'*' => [ '=' ],
-			'^' => [ '=' ],
-			'~' => [ '=' ],
-			'|' => [ '=', '|' ],
 			'/' => [ '*' ],
 		];
 
@@ -606,4 +522,22 @@ class Token extends ComponentValue {
 
 		return isset( $sepTable[$t1] ) && in_array( $t2, $sepTable[$t1], true );
 	}
+
+	/**
+	 * Allow for marking the 'U' T_IDENT beginning a <urange>, to later avoid
+	 * serializing it with extraneous comments.
+	 * @internal
+	 * @see Wikimedia\CSS\Util::stringify()
+	 * @see Wikimedia\CSS\Matcher\UrangeMatcher
+	 * @param int|null $hack Set the hack value
+	 * @return int Current/old hack value
+	 */
+	public function urangeHack( $hack = null ) {
+		$ret = $this->urangeHack;
+		if ( $hack !== null ) {
+			$this->urangeHack = max( (int)$this->urangeHack, $hack );
+		}
+		return $ret;
+	}
+
 }

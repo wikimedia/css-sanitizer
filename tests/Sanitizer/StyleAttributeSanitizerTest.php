@@ -69,11 +69,11 @@ class StyleAttributeSanitizerTest extends \PHPUnit\Framework\TestCase {
 		return [
 			'ok' => [
 				'display: block; border:1px solid red',
-				'display: block; border:1px solid red;',
+				'display:block; border:1px solid red;',
 			],
 			'invalid declarations in list' => [
 				'display:none;ident; foo: bar; all: inherit !important',
-				'display:none; all: inherit !important;',
+				'display:none; all:inherit !important;',
 				[ [ 'unrecognized-property', 1, 21 ] ],
 				[ [ 'expected-colon', 1, 19 ], [ 'unrecognized-property', 1, 21 ] ],
 			],

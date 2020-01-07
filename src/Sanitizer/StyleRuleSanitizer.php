@@ -20,7 +20,7 @@ use Wikimedia\CSS\Util;
 
 /**
  * Sanitizes a CSS style rule
- * @see https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#style-rules
+ * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#style-rules
  */
 class StyleRuleSanitizer extends RuleSanitizer {
 

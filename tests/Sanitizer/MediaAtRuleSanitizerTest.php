@@ -100,7 +100,7 @@ class MediaAtRuleSanitizerTest extends RuleSanitizerTestBase {
 				}',
 				true,
 				// phpcs:disable Generic.Files.LineLength
-				'@media { div .foo bar, div #baz { color: red; margin: calc(10px * 3 + 10%) ; } @media (width > 100px) { @media (height > 100px) { div #yeah { display:none; } } @media (height <= 100px) { div #nope { display:none; } } } }',
+				'@media { div .foo bar, div #baz { color:red; margin:calc(10px * 3 + 10%); } @media (width > 100px) { @media (height > 100px) { div #yeah { display:none; } } @media (height <= 100px) { div #nope { display:none; } } } }',
 				'@media{div .foo bar,div #baz{color:red;margin:calc(10px*3 + 10%)}@media(width>100px){@media(height>100px){div #yeah{display:none}}@media(height<=100px){div #nope{display:none}}}}',
 				// phpcs:enable
 				[

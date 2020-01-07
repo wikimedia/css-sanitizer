@@ -6,7 +6,10 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\CSS\Parser\Parser;
+use Wikimedia\CSS\Sanitizer\PropertySanitizer;
 
 /**
  * Factory for predefined Grammar matchers
@@ -20,8 +23,10 @@ class MatcherFactory {
 	protected $cache = [];
 
 	/** @var string[] length units */
-	protected static $lengthUnits = [ 'em', 'ex', 'ch', 'rem', 'vw', 'vh',
-		'vmin', 'vmax', 'cm', 'mm', 'Q', 'in', 'pc', 'pt', 'px' ];
+	protected static $lengthUnits = [
+		'em', 'ex', 'ch', 'rem', 'vw', 'vh', 'vmin', 'vmax',
+		'cm', 'mm', 'Q', 'in', 'pc', 'pt', 'px'
+	];
 
 	/** @var string[] angle units */
 	protected static $angleUnits = [ 'deg', 'grad', 'rad', 'turn' ];
@@ -94,12 +99,17 @@ class MatcherFactory {
 	 * meaning to various idents in a complex value, as CSS Sanitizer doesn't
 	 * deal with semantics on that level.
 	 *
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#identifier-value
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#identifier-value
 	 * @param string[] $exclude Additional values to exclude, all-lowercase.
 	 * @return Matcher
 	 */
 	public function customIdent( array $exclude = [] ) {
-		$exclude = array_merge( [ 'initial', 'inherit', 'unset', 'default' ], $exclude );
+		$exclude = array_merge( [
+			// https://www.w3.org/TR/2019/CR-css-values-3-20190606/#common-keywords
+			'initial', 'inherit', 'unset', 'default',
+			// https://www.w3.org/TR/2018/CR-css-cascade-4-20180828/#all-shorthand
+			'revert'
+		], $exclude );
 		return new TokenMatcher( Token::T_IDENT, static function ( Token $t ) use ( $exclude ) {
 			return !in_array( strtolower( $t->value() ), $exclude, true );
 		} );
@@ -107,7 +117,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a string
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#strings
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#strings
 	 * @warning If the string will be used as a URL, use self::urlstring() instead.
 	 * @return Matcher
 	 */
@@ -130,7 +140,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a URL
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#urls
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#urls
 	 * @param string $type Type of resource referenced, e.g. "image" or "audio".
 	 *  Not used here, but might be used by a subclass to validate the URL more strictly.
 	 * @return Matcher
@@ -144,24 +154,28 @@ class MatcherFactory {
 
 	/**
 	 * CSS-wide value keywords
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#common-keywords
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#common-keywords
 	 * @return Matcher
 	 */
 	public function cssWideKeywords() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new KeywordMatcher( [ 'initial', 'inherit', 'unset' ] );
+			$this->cache[__METHOD__] = new KeywordMatcher( [
+				// https://www.w3.org/TR/2019/CR-css-values-3-20190606/#common-keywords
+				'initial', 'inherit', 'unset',
+				// added by https://www.w3.org/TR/2018/CR-css-cascade-4-20180828/#all-shorthand
+				'revert'
+			] );
 		}
 		return $this->cache[__METHOD__];
 	}
 
 	/**
-	 * Add calc() support to a basic type matcher
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#calc-notation
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#calc-notation
 	 * @param Matcher $typeMatcher Matcher for the type
 	 * @param string $type Type being matched
-	 * @return Matcher
+	 * @return Matcher[]
 	 */
-	public function calc( Matcher $typeMatcher, $type ) {
+	protected function calcInternal( Matcher $typeMatcher, $type ) {
 		if ( $type === 'integer' ) {
 			$num = $this->rawInteger();
 		} else {
@@ -183,13 +197,23 @@ class MatcherFactory {
 				Quantifier::star( new Juxtaposition( [ $ows, new DelimMatcher( '*' ), $ows, &$calcValue ] ) )
 			] );
 		} else {
-			$calcProduct = new Juxtaposition( [
-				&$calcValue,
-				Quantifier::star( new Alternative( [
-					new Juxtaposition( [ $ows, new DelimMatcher( '*' ), $ows, &$calcValue ] ),
-					new Juxtaposition( [ $ows, new DelimMatcher( '/' ), $ows, $this->rawNumber() ] ),
-				] ) ),
-			] );
+			if ( $typeMatcher === $this->rawNumber() ) {
+				$calcProduct = new Juxtaposition( [
+					&$calcValue,
+					Quantifier::star(
+						new Juxtaposition( [ $ows, new DelimMatcher( [ '*', '/' ] ), $ows, &$calcValue ] )
+					),
+				] );
+			} else {
+				$calcNumValue = $this->calcInternal( $this->rawNumber(), 'number' )[1];
+				$calcProduct = new Juxtaposition( [
+					&$calcValue,
+					Quantifier::star( new Alternative( [
+						new Juxtaposition( [ $ows, new DelimMatcher( '*' ), $ows, &$calcValue ] ),
+						new Juxtaposition( [ $ows, new DelimMatcher( '/' ), $ows, $calcNumValue, ] ),
+					] ) ),
+				] );
+			}
 		}
 
 		$calcSum = new Juxtaposition( [
@@ -218,12 +242,26 @@ class MatcherFactory {
 			] );
 		}
 
-		return new Alternative( [ $typeMatcher, $calcFunc ] );
+		return [
+			new Alternative( [ $typeMatcher, $calcFunc ] ),
+			$calcValue,
+		];
+	}
+
+	/**
+	 * Add calc() support to a basic type matcher
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#calc-notation
+	 * @param Matcher $typeMatcher Matcher for the type
+	 * @param string $type Type being matched
+	 * @return Matcher
+	 */
+	public function calc( Matcher $typeMatcher, $type ) {
+		return $this->calcInternal( $typeMatcher, $type )[0];
 	}
 
 	/**
 	 * Matcher for an integer value, without calc()
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#integers
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#integers
 	 * @return Matcher
 	 */
 	protected function rawInteger() {
@@ -240,7 +278,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for an integer value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#integers
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#integers
 	 * @return Matcher
 	 */
 	public function integer() {
@@ -252,7 +290,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a real number, without calc()
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#numbers
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#numbers
 	 * @return Matcher
 	 */
 	public function rawNumber() {
@@ -264,7 +302,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a real number
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#numbers
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#numbers
 	 * @return Matcher
 	 */
 	public function number() {
@@ -276,7 +314,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a percentage value, without calc()
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#percentages
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#percentages
 	 * @return Matcher
 	 */
 	public function rawPercentage() {
@@ -288,7 +326,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a percentage value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#percentages
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#percentages
 	 * @return Matcher
 	 */
 	public function percentage() {
@@ -300,7 +338,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a length-percentage value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#typedef-length-percentage
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#typedef-length-percentage
 	 * @return Matcher
 	 */
 	public function lengthPercentage() {
@@ -315,7 +353,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a frequency-percentage value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#typedef-frequency-percentage
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#typedef-frequency-percentage
 	 * @return Matcher
 	 */
 	public function frequencyPercentage() {
@@ -330,7 +368,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a angle-percentage value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#typedef-angle-percentage
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#typedef-angle-percentage
 	 * @return Matcher
 	 */
 	public function anglePercentage() {
@@ -345,7 +383,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a time-percentage value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#typedef-time-percentage
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#typedef-time-percentage
 	 * @return Matcher
 	 */
 	public function timePercentage() {
@@ -360,7 +398,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a number-percentage value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#typedef-number-percentage
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#typedef-number-percentage
 	 * @return Matcher
 	 */
 	public function numberPercentage() {
@@ -375,7 +413,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a dimension value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#dimensions
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#dimensions
 	 * @return Matcher
 	 */
 	public function dimension() {
@@ -389,7 +427,7 @@ class MatcherFactory {
 	 * Matches the number 0
 	 * @return Matcher
 	 */
-	protected function zero() {
+	public function zero() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				return $t->value() === 0 || $t->value() === 0.0;
@@ -400,7 +438,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a length value, without calc()
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#lengths
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#lengths
 	 * @return Matcher
 	 */
 	protected function rawLength() {
@@ -419,7 +457,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a length value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#lengths
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#lengths
 	 * @return Matcher
 	 */
 	public function length() {
@@ -431,26 +469,25 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for an angle value, without calc()
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#angles
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#angles
 	 * @return Matcher
 	 */
 	protected function rawAngle() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$unitsRe = '/^(' . implode( '|', self::$angleUnits ) . ')$/i';
 
-			$this->cache[__METHOD__] = new Alternative( [
-				$this->zero(),
-				new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) use ( $unitsRe ) {
+			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION,
+				static function ( Token $t ) use ( $unitsRe ) {
 					return preg_match( $unitsRe, $t->unit() );
-				} ),
-			] );
+				}
+			);
 		}
 		return $this->cache[__METHOD__];
 	}
 
 	/**
 	 * Matcher for an angle value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#angles
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#angles
 	 * @return Matcher
 	 */
 	public function angle() {
@@ -462,7 +499,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a duration (time) value, without calc()
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#time
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#time
 	 * @return Matcher
 	 */
 	protected function rawTime() {
@@ -480,7 +517,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a duration (time) value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#time
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#time
 	 * @return Matcher
 	 */
 	public function time() {
@@ -492,7 +529,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a frequency value, without calc()
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#frequency
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#frequency
 	 * @return Matcher
 	 */
 	protected function rawFrequency() {
@@ -510,7 +547,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a frequency value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#frequency
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#frequency
 	 * @return Matcher
 	 */
 	public function frequency() {
@@ -522,7 +559,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a resolution value
-	 * @see https://www.w3.org/TR/2016/CR-css-values-3-20160929/#resolution
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#resolution
 	 * @return Matcher
 	 */
 	public function resolution() {
@@ -561,7 +598,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a color value
-	 * @see https://www.w3.org/TR/2018/PR-css-color-3-20180315/#colorunits
+	 * @see https://www.w3.org/TR/2018/REC-css-color-3-20180619/#colorunits
 	 * @return Matcher
 	 */
 	public function color() {
@@ -620,31 +657,33 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for an image value
-	 * @see https://www.w3.org/TR/2012/CR-css3-images-20120417/#image-values
+	 * @see https://www.w3.org/TR/2019/CR-css-images-3-20191010/#image-values
 	 * @return Matcher
 	 */
 	public function image() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			// https://www.w3.org/TR/2012/CR-css3-images-20120417/#image-list-type
-			// Note the undefined <element-reference> production has been dropped from the Editor's Draft.
-			$imageDecl = new Alternative( [
-				$this->url( 'image' ),
-				$this->urlstring( 'image' ),
-			] );
-
-			// https://www.w3.org/TR/2012/CR-css3-images-20120417/#gradients
+			// https://www.w3.org/TR/2019/CR-css-images-3-20191010/#gradients
 			$c = $this->comma();
-			$colorStops = Quantifier::hash( new Juxtaposition( [
+			$colorStop = UnorderedGroup::allOf( [
 				$this->color(),
-				// Not really <length-percentage>, but grammatically the same
 				Quantifier::optional( $this->lengthPercentage() ),
-			] ), 2, INF );
+			] );
+			$colorStopList = new Juxtaposition( [
+				$colorStop,
+				Quantifier::hash( new Juxtaposition( [
+					Quantifier::optional( $this->lengthPercentage() ),
+					$colorStop
+				], true ) ),
+			], true );
 			$atPosition = new Juxtaposition( [ new KeywordMatcher( 'at' ), $this->position() ] );
 
 			$linearGradient = new Juxtaposition( [
 				Quantifier::optional( new Juxtaposition( [
 					new Alternative( [
-						$this->angle(),
+						new Alternative( [
+							$this->zero(),
+							$this->angle(),
+						] ),
 						new Juxtaposition( [ new KeywordMatcher( 'to' ), UnorderedGroup::someOf( [
 							new KeywordMatcher( [ 'left', 'right' ] ),
 							new KeywordMatcher( [ 'top', 'bottom' ] ),
@@ -652,7 +691,7 @@ class MatcherFactory {
 					] ),
 					$c
 				] ) ),
-				$colorStops,
+				$colorStopList,
 			] );
 			$radialGradient = new Juxtaposition( [
 				Quantifier::optional( new Juxtaposition( [
@@ -662,13 +701,12 @@ class MatcherFactory {
 								UnorderedGroup::someOf( [ new KeywordMatcher( 'circle' ), $this->length() ] ),
 								UnorderedGroup::someOf( [
 									new KeywordMatcher( 'ellipse' ),
-									// Not really <length-percentage>, but grammatically the same
 									Quantifier::count( $this->lengthPercentage(), 2, 2 )
 								] ),
 								UnorderedGroup::someOf( [
 									new KeywordMatcher( [ 'circle', 'ellipse' ] ),
 									new KeywordMatcher( [
-										'closest-side', 'farthest-side', 'closest-corner', 'farthest-corner'
+										'closest-corner', 'closest-side', 'farthest-corner', 'farthest-side',
 									] ),
 								] ),
 							] ),
@@ -678,16 +716,12 @@ class MatcherFactory {
 					] ),
 					$c
 				] ) ),
-				$colorStops,
+				$colorStopList,
 			] );
 
 			// Putting it all together
 			$this->cache[__METHOD__] = new Alternative( [
 				$this->url( 'image' ),
-				new FunctionMatcher( 'image', new Juxtaposition( [
-					Quantifier::star( new Juxtaposition( [ $imageDecl, $c ] ) ),
-					new Alternative( [ $imageDecl, $this->color() ] ),
-				] ) ),
 				new FunctionMatcher( 'linear-gradient', $linearGradient ),
 				new FunctionMatcher( 'radial-gradient', $radialGradient ),
 				new FunctionMatcher( 'repeating-linear-gradient', $linearGradient ),
@@ -699,10 +733,41 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a position value
-	 * @see https://www.w3.org/TR/2017/CR-css-backgrounds-3-20171017/#typedef-bg-position
+	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#typedef-position
 	 * @return Matcher
 	 */
 	public function position() {
+		if ( !isset( $this->cache[__METHOD__] ) ) {
+			$lp = $this->lengthPercentage();
+			$center = new KeywordMatcher( 'center' );
+			$leftRight = new KeywordMatcher( [ 'left', 'right' ] );
+			$topBottom = new KeywordMatcher( [ 'top', 'bottom' ] );
+
+			$this->cache[__METHOD__] = new Alternative( [
+				UnorderedGroup::someOf( [
+					new Alternative( [ $center, $leftRight ] ),
+					new Alternative( [ $center, $topBottom ] ),
+				] ),
+				new Juxtaposition( [
+					new Alternative( [ $center, $leftRight, $lp ] ),
+					Quantifier::optional( new Alternative( [ $center, $topBottom, $lp ] ) ),
+				] ),
+
+				UnorderedGroup::allOf( [
+					new Juxtaposition( [ $leftRight, $lp ] ),
+					new Juxtaposition( [ $topBottom, $lp ] ),
+				] ),
+			] );
+		}
+		return $this->cache[__METHOD__];
+	}
+
+	/**
+	 * Matcher for a bg-position value
+	 * @see https://www.w3.org/TR/2017/CR-css-backgrounds-3-20171017/#typedef-bg-position
+	 * @return Matcher
+	 */
+	public function bgPosition() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$lp = $this->lengthPercentage();
 			$olp = Quantifier::optional( $lp );
@@ -859,11 +924,85 @@ class MatcherFactory {
 	}
 
 	/**
-	 * Matcher for single timing functions from CSS Timing Functions Level 1
-	 * @see https://www.w3.org/TR/2017/WD-css-timing-1-20170221/#single-timing-function-production
+	 * Matcher for a "supports-condition"
+	 * @see https://www.w3.org/TR/2013/CR-css3-conditional-20130404/#supports_condition
+	 * @param PropertySanitizer|null $declarationSanitizer Check declarations against this Sanitizer
+	 * @param bool $strict Only accept defined syntax. Default true.
 	 * @return Matcher
 	 */
-	public function cssSingleTimingFunction() {
+	public function cssSupportsCondition(
+		PropertySanitizer $declarationSanitizer = null, $strict = true
+	) {
+		$ws = $this->significantWhitespace();
+		$anythingPlus = new AnythingMatcher( [ 'quantifier' => '+' ] );
+
+		if ( $strict ) {
+			$generalEnclosed = new NothingMatcher();
+		} else {
+			$generalEnclosed = new Alternative( [
+				new FunctionMatcher( null, $anythingPlus ),
+				new BlockMatcher( Token::T_LEFT_PAREN, new Juxtaposition( [ $this->ident(), $anythingPlus ] ) ),
+			] );
+		}
+
+		$supportsConditionBlock = new NothingMatcher(); // temp
+		$supportsConditionInParens = new Alternative( [
+			&$supportsConditionBlock,
+			new BlockMatcher( Token::T_LEFT_PAREN, $this->cssDeclaration( $declarationSanitizer ) ),
+			$generalEnclosed,
+		] );
+		$supportsCondition = new Alternative( [
+			new Juxtaposition( [ new KeywordMatcher( 'not' ), $ws, $supportsConditionInParens ] ),
+			new Juxtaposition( [ $supportsConditionInParens, Quantifier::plus( new Juxtaposition( [
+				$ws, new KeywordMatcher( 'and' ), $ws, $supportsConditionInParens
+			] ) ) ] ),
+			new Juxtaposition( [ $supportsConditionInParens, Quantifier::plus( new Juxtaposition( [
+				$ws, new KeywordMatcher( 'or' ), $ws, $supportsConditionInParens
+			] ) ) ] ),
+			$supportsConditionInParens,
+		] );
+		$supportsConditionBlock = new BlockMatcher( Token::T_LEFT_PAREN, $supportsCondition );
+
+		return $supportsCondition;
+	}
+
+	/**
+	 * Matcher for a declaration
+	 * @param PropertySanitizer|null $declarationSanitizer Check declarations against this Sanitizer
+	 * @return Matcher
+	 */
+	public function cssDeclaration( PropertySanitizer $declarationSanitizer = null ) {
+		$anythingPlus = new AnythingMatcher( [ 'quantifier' => '+' ] );
+
+		return new CheckedMatcher(
+			$anythingPlus,
+			static function ( ComponentValueList $list, GrammarMatch $match, array $options )
+				use ( $declarationSanitizer )
+			{
+				$cvlist = new ComponentValueList( $match->getValues() );
+				$parser = Parser::newFromTokens( $cvlist->toTokenArray() );
+				$declaration = $parser->parseDeclaration();
+				if ( $parser->getParseErrors() || !$declaration ) {
+					return false;
+				}
+				if ( !$declarationSanitizer ) {
+					return true;
+				}
+				$reset = $declarationSanitizer->stashSanitizationErrors();
+				$ret = $declarationSanitizer->sanitize( $declaration );
+				$errors = $declarationSanitizer->getSanitizationErrors();
+				unset( $reset );
+				return $ret === $declaration && !$errors;
+			}
+		);
+	}
+
+	/**
+	 * Matcher for single easing functions from CSS Easing Functions Level 1
+	 * @see https://www.w3.org/TR/2019/CR-css-easing-1-20190430/#typedef-easing-function
+	 * @return Matcher
+	 */
+	public function cssSingleEasingFunction() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$this->cache[__METHOD__] = new Alternative( [
 				new KeywordMatcher( [
@@ -871,10 +1010,11 @@ class MatcherFactory {
 				] ),
 				new FunctionMatcher( 'steps', new Juxtaposition( [
 					$this->integer(),
-					Quantifier::optional( new KeywordMatcher( [ 'start', 'end' ] ) ),
+					Quantifier::optional( new KeywordMatcher( [
+						'jump-start', 'jump-end', 'jump-none', 'jump-both', 'start', 'end'
+					] ) ),
 				], true ) ),
 				new FunctionMatcher( 'cubic-bezier', Quantifier::hash( $this->number(), 4, 4 ) ),
-				new FunctionMatcher( 'frames', $this->integer() ),
 			] );
 		}
 
@@ -885,7 +1025,7 @@ class MatcherFactory {
 	 * @name   CSS Selectors Level 3
 	 * @{
 	 *
-	 * https://www.w3.org/TR/2018/CR-selectors-3-20180130/#w3cselgrammar
+	 * https://www.w3.org/TR/2018/REC-selectors-3-20181106/#w3cselgrammar
 	 */
 
 	/**
@@ -1141,14 +1281,12 @@ class MatcherFactory {
 					] )->capture( 'attribute' ),
 					$this->optionalWhitespace(),
 					Quantifier::optional( new Juxtaposition( [
-						Alternative::create( [
-							new TokenMatcher( Token::T_PREFIX_MATCH ),
-							new TokenMatcher( Token::T_SUFFIX_MATCH ),
-							new TokenMatcher( Token::T_SUBSTRING_MATCH ),
+						// Sigh. They removed various tokens from CSS Syntax 3, but didn't update the grammar
+						// in CSS Selectors 3. Wing it with a hint from CSS Selectors 4's <attr-matcher>
+						( new Juxtaposition( [
+							Quantifier::optional( new DelimMatcher( [ '^', '$', '*', '~', '|' ] ) ),
 							new DelimMatcher( [ '=' ] ),
-							new TokenMatcher( Token::T_INCLUDE_MATCH ),
-							new TokenMatcher( Token::T_DASH_MATCH ),
-						] )->capture( 'test' ),
+						] ) )->capture( 'test' ),
 						$this->optionalWhitespace(),
 						Alternative::create( [
 							$this->ident(),
@@ -1174,8 +1312,8 @@ class MatcherFactory {
 	 *
 	 * Although this actually only matches the pseudo-selectors defined in the
 	 * following sources:
-	 * - https://www.w3.org/TR/2018/CR-selectors-3-20180130/#pseudo-classes
-	 * - https://www.w3.org/TR/2016/WD-css-pseudo-4-20160607/
+	 * - https://www.w3.org/TR/2018/REC-selectors-3-20181106/#pseudo-classes
+	 * - https://www.w3.org/TR/2019/WD-css-pseudo-4-20190225/
 	 *
 	 * @return Matcher
 	 */
@@ -1219,7 +1357,7 @@ class MatcherFactory {
 	/**
 	 * An "AN+B" form
 	 *
-	 * https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#anb
+	 * https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#anb-microsyntax
 	 *
 	 * @return Matcher
 	 */
