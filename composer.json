@@ -38,7 +38,7 @@
 	"scripts": {
 		"lint": "parallel-lint . --exclude vendor",
 		"phpcs": "phpcs -p -s",
-		"phan": "phan -d . -p",
+		"phan": "phan -d . -p --allow-polyfill-parser",
 		"fix": [
 			"phpcbf",
 			"minus-x fix ."
