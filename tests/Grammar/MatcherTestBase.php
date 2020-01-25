@@ -49,9 +49,9 @@ class MatcherTestBase extends \PHPUnit\Framework\TestCase {
 	 * @param int $start Starting position
 	 * @param int[] $expectPos Expected ending positions
 	 * @param Iterator $iter
-	 * @param string|null $text
+	 * @param string $text
 	 */
-	public function assertPositions( $start, $expectPos, $iter, $text = null ) {
+	public function assertPositions( $start, $expectPos, $iter, string $text = '' ) {
 		$list = new ComponentValueList();
 		$expect = [];
 		foreach ( $expectPos as $end ) {
@@ -66,9 +66,9 @@ class MatcherTestBase extends \PHPUnit\Framework\TestCase {
 	 * Assert that two Matches match
 	 * @param Match $expected
 	 * @param Match $actual
-	 * @param string|null $text
+	 * @param string $text
 	 */
-	public function assertMatch( $expected, $actual, $text = null ) {
+	public function assertMatch( $expected, $actual, string $text = '' ) {
 		$this->assertEquals(
 			self::stripMatch( $expected ),
 			self::stripMatch( $actual ),

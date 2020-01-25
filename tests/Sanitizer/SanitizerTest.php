@@ -48,7 +48,6 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 
 		$san = $mb->getMockForAbstractClass();
 		$san->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgument PHPUnit declares the wrong type
 			->with( $this->identicalTo( $block ) )
 			->willReturn( null );
 		'@phan-var Sanitizer $san';
@@ -56,7 +55,6 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 
 		$san = $mb->getMockForAbstractClass();
 		$san->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgument PHPUnit declares the wrong type
 			->with( $this->identicalTo( $block ) )
 			->willReturn( $block2 );
 		'@phan-var Sanitizer $san';
@@ -64,7 +62,6 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 
 		$san = $mb->getMockForAbstractClass();
 		$san->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgument PHPUnit declares the wrong type
 			->with( $this->identicalTo( $block ) )
 			->willReturn( $block );
 		'@phan-var Sanitizer $san';
@@ -84,7 +81,6 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 			->setMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
 			->getMockForAbstractClass();
 		$sanitizer2->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgument PHPUnit declares the wrong type
 			->with( $this->identicalTo( $token1 ) )
 			->willReturn( $token2 );
 		$sanitizer2->expects( $this->once() )->method( 'getSanitizationErrors' )
@@ -112,15 +108,12 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 			->setMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
 			->getMock();
 		$sanitizer2->expects( $this->at( 0 ) )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgument PHPUnit declares the wrong type
 			->with( $this->identicalTo( $token1i ) )
 			->willReturn( $token1o );
 		$sanitizer2->expects( $this->at( 1 ) )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgument PHPUnit declares the wrong type
 			->with( $this->identicalTo( $token2i ) )
 			->willReturn( $token2o );
 		$sanitizer2->expects( $this->at( 2 ) )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgument PHPUnit declares the wrong type
 			->with( $this->identicalTo( $token3i ) )
 			->willReturn( $token3o );
 		$sanitizer2->expects( $this->at( 3 ) )->method( 'getSanitizationErrors' )

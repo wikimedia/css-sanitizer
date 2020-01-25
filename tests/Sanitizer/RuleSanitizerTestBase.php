@@ -66,10 +66,10 @@ abstract class RuleSanitizerTestBase extends \PHPUnit\Framework\TestCase {
 		if ( is_array( $index ) ) {
 			$this->assertCount( 2, $index );
 			list( $i1, $i2 ) = $index;
-			$this->assertInternalType( 'int', $i1, '$index[0]' );
-			$this->assertInternalType( 'int', $i2, '$index[1]' );
+			$this->assertIsInt( $i1, '$index[0]' );
+			$this->assertIsInt( $i2, '$index[1]' );
 		} else {
-			$this->assertInternalType( 'int', $index );
+			$this->assertIsInt( $index );
 		}
 	}
 }

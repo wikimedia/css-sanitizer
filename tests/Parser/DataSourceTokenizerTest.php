@@ -202,7 +202,7 @@ class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 					self::t( Token::T_WHITESPACE, 7, 5 ),
 					self::nt( Token::T_NUMBER, 8, 1, 0.00000012, '12E-8', 'number' ),
 					self::t( Token::T_WHITESPACE, 8, 6 ),
-					self::nt( Token::T_NUMBER, 9, 1, 120, '12E+01', 'number' ),
+					self::nt( Token::T_NUMBER, 9, 1, 120, '12e+01', 'number' ),
 					self::t( Token::T_WHITESPACE, 9, 7 ),
 					self::nt( Token::T_DIMENSION, 10, 1, 0.1, '.1', 'number', 'ex' ),
 					self::t( Token::T_WHITESPACE, 10, 5 ),
