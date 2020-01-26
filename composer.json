@@ -29,7 +29,7 @@
 	"require-dev": {
 		"jakub-onderka/php-parallel-lint": "1.0.0",
 		"jakub-onderka/php-console-highlighter": "0.4.0",
-		"mediawiki/mediawiki-codesniffer": "28.0.0",
+		"mediawiki/mediawiki-codesniffer": "29.0.0",
 		"mediawiki/mediawiki-phan-config": "0.9.0",
 		"phpunit/phpunit": "^8.5",
 		"wikimedia/testing-access-wrapper": "1.0.0",
@@ -40,8 +40,8 @@
 		"phpcs": "phpcs -p -s",
 		"phan": "phan -d . -p --allow-polyfill-parser",
 		"fix": [
-			"phpcbf",
-			"minus-x fix ."
+			"minus-x fix .",
+			"phpcbf"
 		],
 		"phpunit": "phpunit $PHPUNIT_ARGS",
 		"coverage": "phpunit --coverage-html coverage $PHPUNIT_ARGS",

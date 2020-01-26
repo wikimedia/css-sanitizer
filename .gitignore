@@ -9,3 +9,4 @@
 # Building and testing
 /coverage
 /doc
+/.phpunit.result.cache

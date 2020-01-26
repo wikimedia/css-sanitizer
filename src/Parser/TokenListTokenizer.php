@@ -6,9 +6,9 @@
 
 namespace Wikimedia\CSS\Parser;
 
-use Wikimedia\CSS\Util;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Objects\TokenList;
+use Wikimedia\CSS\Util;
 
 /**
  * Tokenizer that just returns a predefined list of tokens

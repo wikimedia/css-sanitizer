@@ -9,8 +9,8 @@ namespace Wikimedia\CSS\Grammar;
 use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
-use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Objects\SimpleBlock;
+use Wikimedia\CSS\Objects\Token;
 use Wikimedia\TestingAccessWrapper;
 
 /**

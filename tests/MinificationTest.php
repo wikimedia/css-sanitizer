@@ -6,8 +6,8 @@
 
 namespace Wikimedia\CSS;
 
-use Wikimedia\CSS\Sanitizer\StylesheetSanitizer;
 use Wikimedia\CSS\Parser\Parser;
+use Wikimedia\CSS\Sanitizer\StylesheetSanitizer;
 
 /**
  * @coversNothing

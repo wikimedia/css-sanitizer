@@ -6,9 +6,9 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
-use Wikimedia\CSS\Objects\Rule;
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\CSSFunction;
+use Wikimedia\CSS\Objects\Rule;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;

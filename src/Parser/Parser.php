@@ -7,12 +7,12 @@
 namespace Wikimedia\CSS\Parser;
 
 use Wikimedia\CSS\Objects\AtRule;
-use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\ComponentValue;
+use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
+use Wikimedia\CSS\Objects\Declaration;
 use Wikimedia\CSS\Objects\DeclarationList;
 use Wikimedia\CSS\Objects\DeclarationOrAtRuleList;
-use Wikimedia\CSS\Objects\Declaration;
 use Wikimedia\CSS\Objects\QualifiedRule;
 use Wikimedia\CSS\Objects\Rule;
 use Wikimedia\CSS\Objects\RuleList;
