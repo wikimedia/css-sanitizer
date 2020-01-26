@@ -224,6 +224,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 
 	/**
 	 * @param string $function Function to call, toTokenArray() or toComponentValueArray()
+	 * @return Token[]|ComponentValue[]
 	 */
 	private function toTokenOrCVArray( $function ) {
 		$ret = [];

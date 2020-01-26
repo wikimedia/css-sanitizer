@@ -90,6 +90,7 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 
 	/**
 	 * @param string $function Function to call, toTokenArray() or toComponentValueArray()
+	 * @return Token[]|ComponentValue[]
 	 */
 	private function toTokenOrCVArray( $function ) {
 		$ret = [];
