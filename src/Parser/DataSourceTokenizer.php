@@ -922,7 +922,6 @@ class DataSourceTokenizer implements Tokenizer {
 		}
 
 		// 5.
-		// @phan-suppress-next-line PhanSuspiciousValueComparison
 		if ( $this->nextCharacter === 'e' || $this->nextCharacter === 'E' ) {
 			list( $next, $next2, $next3 ) = $this->lookAhead();
 			$ok = false;

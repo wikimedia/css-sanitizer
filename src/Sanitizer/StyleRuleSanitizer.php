@@ -67,7 +67,6 @@ class StyleRuleSanitizer extends RuleSanitizer {
 		Util::assertAllInstanceOf(
 			$options['prependSelectors'], ComponentValue::class, 'prependSelectors'
 		);
-		// @phan-suppress-next-line PhanSuspiciousValueComparison
 		if ( $options['hoistableComponentMatcher'] !== null &&
 			 !$options['hoistableComponentMatcher'] instanceof Matcher
 		) {

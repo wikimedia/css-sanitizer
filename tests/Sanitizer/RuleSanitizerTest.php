@@ -49,6 +49,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 			$rm->setAccessible( true );
 			$san->method( 'doSanitize' )->willReturnCallback( function ( $rule ) use ( $rm, $san, $arg ) {
 				$ret = clone $rule;
+				// @phan-suppress-next-line PhanPossiblyUndeclaredVariable $arg set when reaching this code
 				$rm->invoke( $san, $ret->getBlock(), $arg );
 				return $ret;
 			} );
