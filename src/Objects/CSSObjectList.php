@@ -126,7 +126,7 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 	// SeekableIterator interface
 
 	/** @inheritDoc */
-	public function seek( $offset ): void {
+	public function seek( int $offset ): void {
 		if ( $offset < 0 || $offset >= count( $this->objects ) ) {
 			throw new OutOfBoundsException( 'Offset is out of range.' );
 		}
