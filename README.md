@@ -12,7 +12,7 @@ recognizes various [CSS3 modules][CSSWORK].
 Usage
 -----
 
-<pre lang="php">
+```php
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Sanitizer\StylesheetSanitizer;
 
@@ -52,7 +52,7 @@ $newText = (string)$newStylesheet;
 
 // Or if you'd rather have it minified too
 $minifiedText = Wikimedia\CSS\Util::stringify( $newStylesheet, [ 'minify' => true ] );
-</pre>
+```
 
 Running tests
 -------------
