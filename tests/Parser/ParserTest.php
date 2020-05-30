@@ -749,7 +749,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 		// This one is over. This also tests "unexpected EOF" error suppression for blocks.
 		$parser = Parser::newFromString( $overlimit );
 		$list = $parser->parseComponentValueList();
-		$this->assertEquals( 1, $list->count() );
+		$this->assertSame( 1, $list->count() );
 		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 101 ] ], $parser->getParseErrors() );
 
 		// Test "unexpected EOF" error suppression for functions

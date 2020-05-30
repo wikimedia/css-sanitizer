@@ -658,5 +658,6 @@ class Parser {
 		}
 		// @codeCoverageIgnoreStart
 	}
+
 	// @codeCoverageIgnoreEnd
 }
