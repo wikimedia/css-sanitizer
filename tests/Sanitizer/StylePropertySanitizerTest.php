@@ -27,6 +27,7 @@ class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 		if ( !self::$sanitizer ) {
 			self::$sanitizer = new StylePropertySanitizer( TestMatcherFactory::singleton() );
 		} else {
+			// @phan-suppress-next-line PhanNonClassMethodCall
 			self::$sanitizer->clearSanitizationErrors();
 		}
 		return self::$sanitizer;
