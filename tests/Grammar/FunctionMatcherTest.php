@@ -126,7 +126,7 @@ class FunctionMatcherTest extends MatcherTestBase {
 		$list = new ComponentValueList( [ $f1 ] );
 		$ret = iterator_to_array( $m->generateMatches( $list, 0, [ 'skip-whitespace' => true ] ) );
 		$this->assertEquals( [
-			new Match( $list, 0, 1, null, [ new Match( $f1->getValue(), 1, 2, 'foo' ) ] ),
+			new GrammarMatch( $list, 0, 1, null, [ new GrammarMatch( $f1->getValue(), 1, 2, 'foo' ) ] ),
 		], $ret );
 	}
 }

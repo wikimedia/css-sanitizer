@@ -56,7 +56,7 @@ class UnorderedGroup extends Matcher {
 		// of remaining matchers.
 		$stack = [
 			[
-				new Match( $values, $start, 0 ),
+				new GrammarMatch( $values, $start, 0 ),
 				$this->matchers,
 				new \ArrayIterator( $this->matchers ),
 				null,
@@ -64,11 +64,11 @@ class UnorderedGroup extends Matcher {
 			]
 		];
 		do {
-			/** @var $lastMatch Match */
+			/** @var $lastMatch GrammarMatch */
 			/** @var $matchers Matcher[] */
 			/** @var $matcherIter \Iterator<Matcher> */
 			/** @var $curMatcher Matcher|null */
-			/** @var $iter \Iterator<Match> */
+			/** @var $iter \Iterator<GrammarMatch> */
 			list( $lastMatch, $matchers, $matcherIter, $curMatcher, $iter ) = $stack[count( $stack ) - 1];
 
 			// If the top of the stack has more matches, process the next one.

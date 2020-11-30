@@ -67,7 +67,7 @@ class MediaAtRuleSanitizer extends RuleSanitizer {
 		}
 
 		// Test the media query
-		$match = $this->mediaQueryListMatcher->match(
+		$match = $this->mediaQueryListMatcher->matchAgainst(
 			$object->getPrelude(), [ 'mark-significance' => true ]
 		);
 		if ( !$match ) {

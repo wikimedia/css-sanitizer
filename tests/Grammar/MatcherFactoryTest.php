@@ -45,7 +45,7 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			}
 		}
 		$list = Parser::newFromString( $string )->parseComponentValueList();
-		$ret = $matcher->match( $list );
+		$ret = $matcher->matchAgainst( $list );
 		if ( is_bool( $expect ) ) {
 			$this->assertSame( $expect, (bool)$ret );
 		} else {
@@ -91,14 +91,14 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			[ 'urlstring', 'url("http://www.example.com")', null ],
 
 			[ 'url', 'url(http://www.example.com)',
-				new Match( $dummy, 0, 1, null, [
-					new Match( $dummy, 0, 1, 'url' ),
+				new GrammarMatch( $dummy, 0, 1, null, [
+					new GrammarMatch( $dummy, 0, 1, 'url' ),
 				] )
 			],
 			[ 'url', 'url(http://www.example.com x)', null ],
 			[ 'url', 'url( "http://www.example.com" )',
-				new Match( $dummy, 0, 1, null, [
-					new Match( $dummy, 1, 2, 'url' ),
+				new GrammarMatch( $dummy, 0, 1, null, [
+					new GrammarMatch( $dummy, 1, 2, 'url' ),
 				] )
 			],
 			[ 'url', 'url( "http://www.example.com" x )', null ],
@@ -106,11 +106,11 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			[ 'url test', 'url( "http://www.example.com/" )', null ],
 			[ 'url test', 'url( "http://www.example.com/dummy" )' ],
 			[ 'url test', 'url( "http://www.example.com/dummy" x y z(z) )',
-				new Match( $dummy, 0, 1, null, [
-					new Match( $dummy, 1, 2, 'url' ),
-					new Match( $dummy, 3, 2, 'modifier' ),
-					new Match( $dummy, 5, 2, 'modifier' ),
-					new Match( $dummy, 7, 2, 'modifier' ),
+				new GrammarMatch( $dummy, 0, 1, null, [
+					new GrammarMatch( $dummy, 1, 2, 'url' ),
+					new GrammarMatch( $dummy, 3, 2, 'modifier' ),
+					new GrammarMatch( $dummy, 5, 2, 'modifier' ),
+					new GrammarMatch( $dummy, 7, 2, 'modifier' ),
 				] )
 			],
 			[ 'url test', 'url( "http://www.example.com/dummy" x y z(?) )', null ],
@@ -604,36 +604,36 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			[ 'cssSelector', '+ x', null ],
 
 			[ 'cssSelectorList', 'h1.class[att] > h2 h3, #id[ attr = val ]:link:not( foo )',
-				new Match( $dummy, 0, 18, null, [
-					new Match( $dummy, 0, 10, 'selector', [
-						new Match( $dummy, 0, 4, 'simple', [
-							new Match( $dummy, 0, 1, 'element' ),
-							new Match( $dummy, 1, 2, 'class' ),
-							new Match( $dummy, 3, 1, 'attrib', [
-								new Match( $dummy, 0, 1, 'attribute' ),
+				new GrammarMatch( $dummy, 0, 18, null, [
+					new GrammarMatch( $dummy, 0, 10, 'selector', [
+						new GrammarMatch( $dummy, 0, 4, 'simple', [
+							new GrammarMatch( $dummy, 0, 1, 'element' ),
+							new GrammarMatch( $dummy, 1, 2, 'class' ),
+							new GrammarMatch( $dummy, 3, 1, 'attrib', [
+								new GrammarMatch( $dummy, 0, 1, 'attribute' ),
 							] ),
 						] ),
-						new Match( $dummy, 4, 3, 'combinator' ),
-						new Match( $dummy, 7, 1, 'simple', [
-							new Match( $dummy, 7, 1, 'element' ),
+						new GrammarMatch( $dummy, 4, 3, 'combinator' ),
+						new GrammarMatch( $dummy, 7, 1, 'simple', [
+							new GrammarMatch( $dummy, 7, 1, 'element' ),
 						] ),
-						new Match( $dummy, 8, 1, 'combinator', [
-							new Match( $dummy, 8, 1, 'significantWhitespace' ),
+						new GrammarMatch( $dummy, 8, 1, 'combinator', [
+							new GrammarMatch( $dummy, 8, 1, 'significantWhitespace' ),
 						] ),
-						new Match( $dummy, 9, 1, 'simple', [
-							new Match( $dummy, 9, 1, 'element' ),
+						new GrammarMatch( $dummy, 9, 1, 'simple', [
+							new GrammarMatch( $dummy, 9, 1, 'element' ),
 						] ),
 					] ),
-					new Match( $dummy, 12, 6, 'selector', [
-						new Match( $dummy, 12, 6, 'simple', [
-							new Match( $dummy, 12, 1, 'id' ),
-							new Match( $dummy, 13, 1, 'attrib', [
-								new Match( $dummy, 1, 1, 'attribute' ),
-								new Match( $dummy, 3, 1, 'test' ),
-								new Match( $dummy, 5, 1, 'value' ),
+					new GrammarMatch( $dummy, 12, 6, 'selector', [
+						new GrammarMatch( $dummy, 12, 6, 'simple', [
+							new GrammarMatch( $dummy, 12, 1, 'id' ),
+							new GrammarMatch( $dummy, 13, 1, 'attrib', [
+								new GrammarMatch( $dummy, 1, 1, 'attribute' ),
+								new GrammarMatch( $dummy, 3, 1, 'test' ),
+								new GrammarMatch( $dummy, 5, 1, 'value' ),
 							] ),
-							new Match( $dummy, 14, 2, 'pseudo' ),
-							new Match( $dummy, 16, 2, 'negation' ),
+							new GrammarMatch( $dummy, 14, 2, 'pseudo' ),
+							new GrammarMatch( $dummy, 16, 2, 'negation' ),
 						] ),
 					] )
 				] )
@@ -656,7 +656,7 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			'typeFlag' => 'integer',
 		] ) ] );
 
-		$res = (bool)$matcher->match( $list );
+		$res = (bool)$matcher->matchAgainst( $list );
 		$this->assertSame( $expectMatch, $res, "1$unit as $type" );
 	}
 

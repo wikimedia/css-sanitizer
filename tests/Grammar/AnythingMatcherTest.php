@@ -106,42 +106,42 @@ class AnythingMatcherTest extends MatcherTestBase {
 
 		$options = [ 'skip-whitespace' => true ];
 		$this->assertEquals(
-			[ new Match( $list, 0, 3 ) ],
+			[ new GrammarMatch( $list, 0, 3 ) ],
 			iterator_to_array( $matcher->generateMatches( $list, 0, $options ) )
 		);
 		$this->assertEquals(
 			[
-				new Match( $list, 1, 2, null, [
-					new Match( $list, 1, 1, 'significantWhitespace' ),
+				new GrammarMatch( $list, 1, 2, null, [
+					new GrammarMatch( $list, 1, 1, 'significantWhitespace' ),
 				] )
 			],
 			iterator_to_array( $matcher->generateMatches( $list, 1, $options ) )
 		);
 		$this->assertEquals(
-			[ new Match( $list, 3, 1 ) ],
+			[ new GrammarMatch( $list, 3, 1 ) ],
 			iterator_to_array( $matcher->generateMatches( $list, 3, $options ) )
 		);
 
 		$options = [ 'skip-whitespace' => false ];
 		$this->assertEquals(
-			[ new Match( $list, 0, 1 ) ],
+			[ new GrammarMatch( $list, 0, 1 ) ],
 			iterator_to_array( $matcher->generateMatches( $list, 0, $options ) )
 		);
 		$this->assertEquals(
 			[
-				new Match( $list, 1, 1, null, [
-					new Match( $list, 1, 1, 'significantWhitespace' ),
+				new GrammarMatch( $list, 1, 1, null, [
+					new GrammarMatch( $list, 1, 1, 'significantWhitespace' ),
 				] )
 			],
 			iterator_to_array( $matcher->generateMatches( $list, 1, $options ) )
 		);
 		$this->assertEquals(
 			[
-				new Match( $list, 3, 1, null, [
-					new Match( $bv, 0, 1, 'significantWhitespace' ),
-					new Match( $bv, 2, 1, 'significantWhitespace' ),
-					new Match( $bv, 3, 1, 'significantWhitespace' ),
-					new Match( $bv, 5, 1, 'significantWhitespace' ),
+				new GrammarMatch( $list, 3, 1, null, [
+					new GrammarMatch( $bv, 0, 1, 'significantWhitespace' ),
+					new GrammarMatch( $bv, 2, 1, 'significantWhitespace' ),
+					new GrammarMatch( $bv, 3, 1, 'significantWhitespace' ),
+					new GrammarMatch( $bv, 5, 1, 'significantWhitespace' ),
 				] )
 			],
 			iterator_to_array( $matcher->generateMatches( $list, 3, $options ) )

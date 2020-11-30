@@ -95,7 +95,7 @@ class PageAtRuleSanitizer extends RuleSanitizer {
 		}
 
 		// Test the page selector
-		$match = $this->pageSelectorMatcher->match(
+		$match = $this->pageSelectorMatcher->matchAgainst(
 			$object->getPrelude(), [ 'mark-significance' => true ]
 		);
 		if ( !$match ) {

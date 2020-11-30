@@ -21,7 +21,7 @@ class CheckedMatcher extends Matcher {
 	/**
 	 * @param Matcher $matcher Base matcher
 	 * @param callable $check Function to check the match is really valid.
-	 *  Prototype is bool func( ComponentValueList $values, Match $match, array $options )
+	 *  Prototype is bool func( ComponentValueList $values, GrammarMatch $match, array $options )
 	 */
 	public function __construct( Matcher $matcher, callable $check ) {
 		$this->matcher = $matcher;

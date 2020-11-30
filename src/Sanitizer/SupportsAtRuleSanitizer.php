@@ -11,9 +11,9 @@ use Wikimedia\CSS\Grammar\AnythingMatcher;
 use Wikimedia\CSS\Grammar\BlockMatcher;
 use Wikimedia\CSS\Grammar\CheckedMatcher;
 use Wikimedia\CSS\Grammar\FunctionMatcher;
+use Wikimedia\CSS\Grammar\GrammarMatch;
 use Wikimedia\CSS\Grammar\Juxtaposition;
 use Wikimedia\CSS\Grammar\KeywordMatcher;
-use Wikimedia\CSS\Grammar\Match;
 use Wikimedia\CSS\Grammar\Matcher;
 use Wikimedia\CSS\Grammar\MatcherFactory;
 use Wikimedia\CSS\Grammar\NothingMatcher;
@@ -77,7 +77,7 @@ class SupportsAtRuleSanitizer extends RuleSanitizer {
 			&$supportsConditionBlock,
 			new BlockMatcher( Token::T_LEFT_PAREN, new CheckedMatcher(
 				$anythingPlus,
-				function ( ComponentValueList $list, Match $match, array $options )
+				function ( ComponentValueList $list, GrammarMatch $match, array $options )
 					use ( $declarationSanitizer )
 				{
 					$cvlist = new ComponentValueList( $match->getValues() );
@@ -149,7 +149,7 @@ class SupportsAtRuleSanitizer extends RuleSanitizer {
 		}
 
 		// Test the media query
-		if ( !$this->conditionMatcher->match( $object->getPrelude(), [ 'mark-significance' => true ] ) ) {
+		if ( !$this->conditionMatcher->matchAgainst( $object->getPrelude(), [ 'mark-significance' => true ] ) ) {
 			$cv = Util::findFirstNonWhitespace( $object->getPrelude() );
 			if ( $cv ) {
 				$this->sanitizationError( 'invalid-supports-condition', $cv );

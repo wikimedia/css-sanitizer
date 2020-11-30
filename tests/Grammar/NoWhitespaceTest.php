@@ -29,7 +29,7 @@ class NoWhitespaceTest extends MatcherTestBase {
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
-				$v === false ? [] : [ new Match( $list, $i, 0 ) ],
+				$v === false ? [] : [ new GrammarMatch( $list, $i, 0 ) ],
 				iterator_to_array( $matcher->generateMatches( $list, $i, $options ) ),
 				"Skipping whitespace, index $i"
 			);
@@ -38,7 +38,7 @@ class NoWhitespaceTest extends MatcherTestBase {
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
-				$v === false ? [] : [ new Match( $list, $i, 0 ) ],
+				$v === false ? [] : [ new GrammarMatch( $list, $i, 0 ) ],
 				iterator_to_array( $matcher->generateMatches( $list, $i, $options ) ),
 				"Not skipping whitespace, index $i"
 			);

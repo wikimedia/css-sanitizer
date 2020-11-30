@@ -29,7 +29,7 @@ class NonEmptyTest extends MatcherTestBase {
 			->willReturnCallback( function ( $values, $i, $options ) use ( $start, $ret ) {
 				$this->assertSame( $i, $start );
 				foreach ( $ret as $v ) {
-					yield new Match( $values, $i, $v - $i );
+					yield new GrammarMatch( $values, $i, $v - $i );
 				}
 			} );
 		'@phan-var Matcher $matcher';
@@ -55,7 +55,7 @@ class NonEmptyTest extends MatcherTestBase {
 
 		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertEquals( [
-			new Match( $list, 0, 1, null, [ new Match( $list, 0, 1, 'foo' ) ] ),
+			new GrammarMatch( $list, 0, 1, null, [ new GrammarMatch( $list, 0, 1, 'foo' ) ] ),
 		], iterator_to_array( $ret ) );
 	}
 }

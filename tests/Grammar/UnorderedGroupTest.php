@@ -168,45 +168,45 @@ class UnorderedGroupTest extends MatcherTestBase {
 		$A = new Token( Token::T_IDENT, 'A' );
 		$list = new ComponentValueList( [ $A, $A, $A, $A ] );
 
-		$foo00 = new Match( $list, 0, 0, 'foo' );
-		$foo01 = new Match( $list, 0, 1, 'foo' );
-		$foo10 = new Match( $list, 1, 0, 'foo' );
-		$foo11 = new Match( $list, 1, 1, 'foo' );
-		$foo20 = new Match( $list, 2, 0, 'foo' );
-		$foo21 = new Match( $list, 2, 1, 'foo' );
-		$bar00 = new Match( $list, 0, 0, 'bar' );
-		$bar01 = new Match( $list, 0, 1, 'bar' );
-		$bar10 = new Match( $list, 1, 0, 'bar' );
-		$bar11 = new Match( $list, 1, 1, 'bar' );
-		$bar20 = new Match( $list, 2, 0, 'bar' );
-		$bar21 = new Match( $list, 2, 1, 'bar' );
+		$foo00 = new GrammarMatch( $list, 0, 0, 'foo' );
+		$foo01 = new GrammarMatch( $list, 0, 1, 'foo' );
+		$foo10 = new GrammarMatch( $list, 1, 0, 'foo' );
+		$foo11 = new GrammarMatch( $list, 1, 1, 'foo' );
+		$foo20 = new GrammarMatch( $list, 2, 0, 'foo' );
+		$foo21 = new GrammarMatch( $list, 2, 1, 'foo' );
+		$bar00 = new GrammarMatch( $list, 0, 0, 'bar' );
+		$bar01 = new GrammarMatch( $list, 0, 1, 'bar' );
+		$bar10 = new GrammarMatch( $list, 1, 0, 'bar' );
+		$bar11 = new GrammarMatch( $list, 1, 1, 'bar' );
+		$bar20 = new GrammarMatch( $list, 2, 0, 'bar' );
+		$bar21 = new GrammarMatch( $list, 2, 1, 'bar' );
 
 		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertEquals( [
-			new Match( $list, 0, 3, null, [ $foo01, $bar11, $foo21 ] ),
-			new Match( $list, 0, 2, null, [ $foo01, $bar11, $foo20 ] ),
-			new Match( $list, 0, 2, null, [ $foo01, $bar10, $foo11 ] ),
-			new Match( $list, 0, 1, null, [ $foo01, $bar10, $foo10 ] ),
-			new Match( $list, 0, 3, null, [ $foo01, $foo11, $bar21 ] ),
-			new Match( $list, 0, 2, null, [ $foo01, $foo11, $bar20 ] ),
-			new Match( $list, 0, 2, null, [ $foo01, $foo10, $bar11 ] ),
-			new Match( $list, 0, 1, null, [ $foo01, $foo10, $bar10 ] ),
-			new Match( $list, 0, 2, null, [ $foo00, $bar01, $foo11 ] ),
-			new Match( $list, 0, 1, null, [ $foo00, $bar01, $foo10 ] ),
-			new Match( $list, 0, 1, null, [ $foo00, $bar00, $foo01 ] ),
-			new Match( $list, 0, 0, null, [ $foo00, $bar00, $foo00 ] ),
-			new Match( $list, 0, 2, null, [ $foo00, $foo01, $bar11 ] ),
-			new Match( $list, 0, 1, null, [ $foo00, $foo01, $bar10 ] ),
-			new Match( $list, 0, 1, null, [ $foo00, $foo00, $bar01 ] ),
-			new Match( $list, 0, 0, null, [ $foo00, $foo00, $bar00 ] ),
-			new Match( $list, 0, 3, null, [ $bar01, $foo11, $foo21 ] ),
-			new Match( $list, 0, 2, null, [ $bar01, $foo11, $foo20 ] ),
-			new Match( $list, 0, 2, null, [ $bar01, $foo10, $foo11 ] ),
-			new Match( $list, 0, 1, null, [ $bar01, $foo10, $foo10 ] ),
-			new Match( $list, 0, 2, null, [ $bar00, $foo01, $foo11 ] ),
-			new Match( $list, 0, 1, null, [ $bar00, $foo01, $foo10 ] ),
-			new Match( $list, 0, 1, null, [ $bar00, $foo00, $foo01 ] ),
-			new Match( $list, 0, 0, null, [ $bar00, $foo00, $foo00 ] ),
+			new GrammarMatch( $list, 0, 3, null, [ $foo01, $bar11, $foo21 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $foo01, $bar11, $foo20 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $foo01, $bar10, $foo11 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $foo01, $bar10, $foo10 ] ),
+			new GrammarMatch( $list, 0, 3, null, [ $foo01, $foo11, $bar21 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $foo01, $foo11, $bar20 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $foo01, $foo10, $bar11 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $foo01, $foo10, $bar10 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $foo00, $bar01, $foo11 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $foo00, $bar01, $foo10 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $foo00, $bar00, $foo01 ] ),
+			new GrammarMatch( $list, 0, 0, null, [ $foo00, $bar00, $foo00 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $foo00, $foo01, $bar11 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $foo00, $foo01, $bar10 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $foo00, $foo00, $bar01 ] ),
+			new GrammarMatch( $list, 0, 0, null, [ $foo00, $foo00, $bar00 ] ),
+			new GrammarMatch( $list, 0, 3, null, [ $bar01, $foo11, $foo21 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $bar01, $foo11, $foo20 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $bar01, $foo10, $foo11 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $bar01, $foo10, $foo10 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $bar00, $foo01, $foo11 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $bar00, $foo01, $foo10 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $bar00, $foo00, $foo01 ] ),
+			new GrammarMatch( $list, 0, 0, null, [ $bar00, $foo00, $foo00 ] ),
 		], iterator_to_array( $ret ) );
 	}
 }
