@@ -97,11 +97,14 @@ class Quantifier extends Matcher {
 
 		// Maintain a stack of matches for backtracking purposes.
 		$stack = [
-			[ new Match( $values, $start, 0 ), $this->matcher->generateMatches( $values, $start, $options ) ]
+			[
+				new GrammarMatch( $values, $start, 0 ),
+				$this->matcher->generateMatches( $values, $start, $options )
+			]
 		];
 		do {
-			/** @var $lastMatch Match */
-			/** @var $iter \Iterator<Match> */
+			/** @var $lastMatch GrammarMatch */
+			/** @var $iter \Iterator<GrammarMatch> */
 			list( $lastMatch, $iter ) = $stack[count( $stack ) - 1];
 
 			// If the top of the stack has no more matches, pop it, maybe

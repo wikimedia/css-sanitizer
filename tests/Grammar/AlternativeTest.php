@@ -40,7 +40,7 @@ class AlternativeTest extends MatcherTestBase {
 			$matcher->expects( $this->once() )->method( 'generateMatches' )
 				->willReturnCallback( function ( $values, $i, $options ) use ( $ret ) {
 					foreach ( $ret as $v ) {
-						yield new Match( $values, $i, $v - $i );
+						yield new GrammarMatch( $values, $i, $v - $i );
 					}
 				} );
 			$matchers[] = $matcher;
@@ -84,9 +84,9 @@ class AlternativeTest extends MatcherTestBase {
 			$alternative->generateMatches( $list, 0, [ 'skip-whitespace' => true ] )
 		);
 		$this->assertEquals( [
-			new Match( $list, 0, 1, null, [ new Match( $list, 0, 1, 'foo' ) ] ),
-			new Match( $list, 0, 1, null, [ new Match( $list, 0, 1, 'bar' ) ] ),
-			new Match( $list, 0, 1, null, [ new Match( $list, 0, 1, 'baz' ) ] ),
+			new GrammarMatch( $list, 0, 1, null, [ new GrammarMatch( $list, 0, 1, 'foo' ) ] ),
+			new GrammarMatch( $list, 0, 1, null, [ new GrammarMatch( $list, 0, 1, 'bar' ) ] ),
+			new GrammarMatch( $list, 0, 1, null, [ new GrammarMatch( $list, 0, 1, 'baz' ) ] ),
 		], $ret );
 	}
 }

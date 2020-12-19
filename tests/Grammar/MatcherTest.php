@@ -125,16 +125,16 @@ class MatcherTest extends MatcherTestBase {
 					$this->assertSame( $expectStart, $start );
 
 					foreach ( $ret as $v ) {
-						yield new Match( $values, $start, $v - $start );
+						yield new GrammarMatch( $values, $start, $v - $start );
 					}
 				}
 			);
 		'@phan-var Matcher $matcher';
 
-		$this->assertSame( $expect, (bool)$matcher->match( $list, $options ) );
+		$this->assertSame( $expect, (bool)$matcher->matchAgainst( $list, $options ) );
 
 		$matcher->setDefaultOptions( $options );
-		$this->assertSame( $expect, (bool)$matcher->match( $list ) );
+		$this->assertSame( $expect, (bool)$matcher->matchAgainst( $list ) );
 	}
 
 	public static function provideMatch() {
@@ -197,26 +197,26 @@ class MatcherTest extends MatcherTestBase {
 
 		$matcher = $this->getMockForAbstractClass( Matcher::class );
 		$matcher->method( 'generateMatches' )->willReturn( new \ArrayIterator( [
-			new Match( $testList, 1, 6, null, [
-				new Match( $testList, 2, 1, 'significantWhitespace' ),
-				new Match( $testList, 2, 2, 'not-significantWhitespace' ),
-				new Match( $testList, 6, 1, 'block', [
-					new Match( $testBlock->getValue(), 2, 1, 'significantWhitespace' ),
-					new Match( $testBlock->getValue(), 4, 2, 'something', [
-						new Match( $testBlock->getValue(), 5, 1, 'significantWhitespace' ),
+			new GrammarMatch( $testList, 1, 6, null, [
+				new GrammarMatch( $testList, 2, 1, 'significantWhitespace' ),
+				new GrammarMatch( $testList, 2, 2, 'not-significantWhitespace' ),
+				new GrammarMatch( $testList, 6, 1, 'block', [
+					new GrammarMatch( $testBlock->getValue(), 2, 1, 'significantWhitespace' ),
+					new GrammarMatch( $testBlock->getValue(), 4, 2, 'something', [
+						new GrammarMatch( $testBlock->getValue(), 5, 1, 'significantWhitespace' ),
 					] ),
 				] ),
-				new Match( $testList, 5, 1, 'significantWhitespace' ),
+				new GrammarMatch( $testList, 5, 1, 'significantWhitespace' ),
 			] )
 		] ) );
 		'@phan-var Matcher $matcher';
 
 		$options = [ 'mark-significance' => true, 'nonterminal' => false ];
-		$this->assertFalse( (bool)$matcher->match( $testList, $options ) );
+		$this->assertFalse( (bool)$matcher->matchAgainst( $testList, $options ) );
 		$this->assertEquals( $origList, $testList );
 
 		$options = [ 'mark-significance' => true, 'nonterminal' => true ];
-		$this->assertTrue( (bool)$matcher->match( $testList, $options ) );
+		$this->assertTrue( (bool)$matcher->matchAgainst( $testList, $options ) );
 		$this->assertEquals( $expectList, $testList );
 	}
 
@@ -227,38 +227,38 @@ class MatcherTest extends MatcherTestBase {
 		);
 		$matcher2 = TestingAccessWrapper::newFromObject( $matcher->capture( 'foo' ) );
 
-		$m0 = new Match( $dummy, 0, 0 );
-		$m1 = new Match( $dummy, 1, 0, 'm1' );
-		$m2 = new Match( $dummy, 2, 0, 'm2' );
-		$m3 = new Match( $dummy, 3, 0, 'm3' );
-		$m4 = new Match( $dummy, 4, 0, 'm4', [ $m2, $m3 ] );
-		$m5 = new Match( $dummy, 5, 0, 'm5' );
-		$m6 = new Match( $dummy, 6, 0, 'm6' );
-		$m7 = new Match( $dummy, 7, 0, null, [ $m5, $m6 ] );
-		$m8 = new Match( $dummy, 8, 0, 'm8' );
+		$m0 = new GrammarMatch( $dummy, 0, 0 );
+		$m1 = new GrammarMatch( $dummy, 1, 0, 'm1' );
+		$m2 = new GrammarMatch( $dummy, 2, 0, 'm2' );
+		$m3 = new GrammarMatch( $dummy, 3, 0, 'm3' );
+		$m4 = new GrammarMatch( $dummy, 4, 0, 'm4', [ $m2, $m3 ] );
+		$m5 = new GrammarMatch( $dummy, 5, 0, 'm5' );
+		$m6 = new GrammarMatch( $dummy, 6, 0, 'm6' );
+		$m7 = new GrammarMatch( $dummy, 7, 0, null, [ $m5, $m6 ] );
+		$m8 = new GrammarMatch( $dummy, 8, 0, 'm8' );
 		$stack = [ [ $m0 ], [ $m1 ], [ $m4 ], [ $m7 ] ];
 		$expect = [ $m1, $m4, $m5, $m6, $m8 ];
 
-		$this->assertMatch( new Match( $dummy, 1, 1 ), $matcher->makeMatch( $dummy, 1, 2 ) );
-		$this->assertMatch( new Match( $dummy, 1, 1, 'foo' ), $matcher2->makeMatch( $dummy, 1, 2 ) );
+		$this->assertMatch( new GrammarMatch( $dummy, 1, 1 ), $matcher->makeMatch( $dummy, 1, 2 ) );
+		$this->assertMatch( new GrammarMatch( $dummy, 1, 1, 'foo' ), $matcher2->makeMatch( $dummy, 1, 2 ) );
 
-		$this->assertMatch( new Match( $dummy, 1, 1 ), $matcher->makeMatch( $dummy, 1, 2, $m0 ) );
+		$this->assertMatch( new GrammarMatch( $dummy, 1, 1 ), $matcher->makeMatch( $dummy, 1, 2, $m0 ) );
 		$this->assertMatch(
-			new Match( $dummy, 1, 1, 'foo' ), $matcher2->makeMatch( $dummy, 1, 2, $m0 )
-		);
-
-		$this->assertMatch(
-			new Match( $dummy, 1, 1, null, [ $m8 ] ), $matcher->makeMatch( $dummy, 1, 2, $m8 )
-		);
-		$this->assertMatch(
-			new Match( $dummy, 1, 1, 'foo', [ $m8 ] ), $matcher2->makeMatch( $dummy, 1, 2, $m8 )
+			new GrammarMatch( $dummy, 1, 1, 'foo' ), $matcher2->makeMatch( $dummy, 1, 2, $m0 )
 		);
 
 		$this->assertMatch(
-			new Match( $dummy, 1, 1, null, $expect ), $matcher->makeMatch( $dummy, 1, 2, $m8, $stack )
+			new GrammarMatch( $dummy, 1, 1, null, [ $m8 ] ), $matcher->makeMatch( $dummy, 1, 2, $m8 )
 		);
 		$this->assertMatch(
-			new Match( $dummy, 1, 1, 'foo', $expect ), $matcher2->makeMatch( $dummy, 1, 2, $m8, $stack )
+			new GrammarMatch( $dummy, 1, 1, 'foo', [ $m8 ] ), $matcher2->makeMatch( $dummy, 1, 2, $m8 )
+		);
+
+		$this->assertMatch(
+			new GrammarMatch( $dummy, 1, 1, null, $expect ), $matcher->makeMatch( $dummy, 1, 2, $m8, $stack )
+		);
+		$this->assertMatch(
+			new GrammarMatch( $dummy, 1, 1, 'foo', $expect ), $matcher2->makeMatch( $dummy, 1, 2, $m8, $stack )
 		);
 
 		$tok1 = new Token( Token::T_IDENT, 'a' );
@@ -267,7 +267,7 @@ class MatcherTest extends MatcherTestBase {
 		$tok4 = new Token( Token::T_IDENT, 'd' );
 		$tok5 = new Token( Token::T_IDENT, 'e' );
 		$list = new ComponentValueList( [ $tok1, $tok2, $tok3, $tok4, $tok5 ] );
-		$match = new Match( $list, 2, 2 );
+		$match = new GrammarMatch( $list, 2, 2 );
 		$this->assertSame( [ $tok3, $tok4 ], $match->getValues() );
 	}
 }

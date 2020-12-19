@@ -7,7 +7,7 @@
 namespace Wikimedia\CSS\Sanitizer;
 
 use Wikimedia\CSS\Grammar\CheckedMatcher;
-use Wikimedia\CSS\Grammar\Match;
+use Wikimedia\CSS\Grammar\GrammarMatch;
 use Wikimedia\CSS\Grammar\MatcherFactory;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
@@ -47,7 +47,7 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 	public static function provideRules() {
 		$htmlOrBodySimpleSelectorSeqMatcher = new CheckedMatcher(
 			MatcherFactory::singleton()->cssSimpleSelectorSeq(),
-			function ( ComponentValueList $values, Match $match, array $options ) {
+			function ( ComponentValueList $values, GrammarMatch $match, array $options ) {
 				foreach ( $match->getCapturedMatches() as $m ) {
 					if ( $m->getName() !== 'element' ) {
 						continue;

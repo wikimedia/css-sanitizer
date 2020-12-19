@@ -112,8 +112,8 @@ class PropertySanitizer extends Sanitizer {
 		}
 
 		$list = $object->getValue();
-		if ( !$knownProperties[$name]->match( $list, [ 'mark-significance' => true ] ) &&
-			!$this->getCssWideKeywordsMatcher()->match( $list, [ 'mark-significance' => true ] )
+		if ( !$knownProperties[$name]->matchAgainst( $list, [ 'mark-significance' => true ] ) &&
+			!$this->getCssWideKeywordsMatcher()->matchAgainst( $list, [ 'mark-significance' => true ] )
 		) {
 			$cv = Util::findFirstNonWhitespace( $list );
 			if ( $cv ) {

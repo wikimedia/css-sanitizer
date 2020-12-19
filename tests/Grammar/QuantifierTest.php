@@ -172,7 +172,7 @@ class QuantifierTest extends MatcherTestBase {
 			->setMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();
 		$matcher->expects( $this->once() )->method( 'generateMatches' )
-			->willReturn( new \ArrayIterator( [ new Match( $list, 1, 0 ) ] ) );
+			->willReturn( new \ArrayIterator( [ new GrammarMatch( $list, 1, 0 ) ] ) );
 		'@phan-var Matcher $matcher';
 
 		$quantifier = TestingAccessWrapper::newFromObject( Quantifier::optional( $matcher ) );
@@ -191,16 +191,16 @@ class QuantifierTest extends MatcherTestBase {
 		$A = new Token( Token::T_IDENT, 'A' );
 		$list = new ComponentValueList( [ $A, $A, $A, $A ] );
 
-		$foo0 = new Match( $list, 0, 1, 'foo' );
-		$foo1 = new Match( $list, 1, 1, 'foo' );
-		$foo2 = new Match( $list, 2, 1, 'foo' );
+		$foo0 = new GrammarMatch( $list, 0, 1, 'foo' );
+		$foo1 = new GrammarMatch( $list, 1, 1, 'foo' );
+		$foo2 = new GrammarMatch( $list, 2, 1, 'foo' );
 
 		$ret = $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] );
 		$this->assertEquals( [
-			new Match( $list, 0, 3, null, [ $foo0, $foo1, $foo2 ] ),
-			new Match( $list, 0, 2, null, [ $foo0, $foo1 ] ),
-			new Match( $list, 0, 1, null, [ $foo0 ] ),
-			new Match( $list, 0, 0 ),
+			new GrammarMatch( $list, 0, 3, null, [ $foo0, $foo1, $foo2 ] ),
+			new GrammarMatch( $list, 0, 2, null, [ $foo0, $foo1 ] ),
+			new GrammarMatch( $list, 0, 1, null, [ $foo0 ] ),
+			new GrammarMatch( $list, 0, 0 ),
 		], iterator_to_array( $ret ) );
 	}
 }

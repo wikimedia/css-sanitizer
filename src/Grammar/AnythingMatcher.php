@@ -93,7 +93,7 @@ class AnythingMatcher extends Matcher {
 						// If we encounter whitespace, assume it's significant.
 						$newMatch = $this->makeMatch(
 							$values, $origStart, $this->next( $values, $start, $options ),
-							new Match( $values, $start, 1, 'significantWhitespace' ),
+							new GrammarMatch( $values, $start, 1, 'significantWhitespace' ),
 							[ [ $lastMatch ] ]
 						);
 						break;

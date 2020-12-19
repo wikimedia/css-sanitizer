@@ -66,7 +66,7 @@ class BlockMatcherTest extends MatcherTestBase {
 		$list = new ComponentValueList( [ $b1 ] );
 		$ret = iterator_to_array( $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] ) );
 		$this->assertEquals( [
-			new Match( $list, 0, 1, null, [ new Match( $b1->getValue(), 1, 2, 'foo' ) ] ),
+			new GrammarMatch( $list, 0, 1, null, [ new GrammarMatch( $b1->getValue(), 1, 2, 'foo' ) ] ),
 		], $ret );
 	}
 }

@@ -21,7 +21,7 @@ class CheckedMatcherTest extends MatcherTestBase {
 		$matcher->expects( $this->once() )->method( 'generateMatches' )
 			->willReturnCallback( function ( $values, $i, $options ) {
 				for ( $i = 0; $i < 10; $i++ ) {
-					yield new Match( $values, 0, $i );
+					yield new GrammarMatch( $values, 0, $i );
 				}
 			} );
 		'@phan-var Matcher $matcher';

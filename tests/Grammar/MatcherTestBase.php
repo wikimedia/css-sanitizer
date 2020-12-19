@@ -13,9 +13,9 @@ use Wikimedia\TestingAccessWrapper;
 class MatcherTestBase extends \PHPUnit\Framework\TestCase {
 
 	/**
-	 * Strip the tokens from a Match
-	 * @param Match|null $match
-	 * @return Match|null
+	 * Strip the tokens from a GrammarMatch
+	 * @param GrammarMatch|null $match
+	 * @return GrammarMatch|null
 	 */
 	public static function stripMatch( $match ) {
 		if ( $match === null ) {
@@ -31,8 +31,8 @@ class MatcherTestBase extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * Strip the tokens from the Matches
-	 * @param Match[]|Iterator $matches
-	 * @return Match[]
+	 * @param GrammarMatch[]|Iterator $matches
+	 * @return GrammarMatch[]
 	 */
 	public static function stripMatches( $matches ) {
 		if ( $matches instanceof Iterator ) {
@@ -55,7 +55,7 @@ class MatcherTestBase extends \PHPUnit\Framework\TestCase {
 		$list = new ComponentValueList();
 		$expect = [];
 		foreach ( $expectPos as $end ) {
-			$expect[] = new Match( $list, $start, $end - $start );
+			$expect[] = new GrammarMatch( $list, $start, $end - $start );
 		}
 		$expect = self::stripMatches( $expect );
 		$actual = self::stripMatches( $iter );
@@ -64,8 +64,8 @@ class MatcherTestBase extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * Assert that two Matches match
-	 * @param Match $expected
-	 * @param Match $actual
+	 * @param GrammarMatch $expected
+	 * @param GrammarMatch $actual
 	 * @param string $text
 	 */
 	public function assertMatch( $expected, $actual, string $text = '' ) {

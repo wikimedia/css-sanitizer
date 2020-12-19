@@ -55,7 +55,7 @@ class WhitespaceMatcher extends Matcher {
 
 		// Return the match. Include a 'significantWhitespace' capture.
 		yield $this->makeMatch( $values, $start, $end,
-			new Match( $values, $start, 1, 'significantWhitespace' )
+			new GrammarMatch( $values, $start, 1, 'significantWhitespace' )
 		);
 	}
 }

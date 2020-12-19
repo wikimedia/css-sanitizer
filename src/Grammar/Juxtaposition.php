@@ -40,16 +40,16 @@ class Juxtaposition extends Matcher {
 		// we process it and popping a match once its exhausted.
 		$stack = [
 			[
-				new Match( $values, $start, 0 ),
+				new GrammarMatch( $values, $start, 0 ),
 				$start,
 				$this->matchers[0]->generateMatches( $values, $start, $options ),
 				false
 			]
 		];
 		do {
-			/** @var $lastMatch Match */
+			/** @var $lastMatch GrammarMatch */
 			/** @var $lastEnd int */
-			/** @var $iter \Iterator<Match> */
+			/** @var $iter \Iterator<GrammarMatch> */
 			/** @var $needEmpty bool */
 			list( $lastMatch, $lastEnd, $iter, $needEmpty ) = $stack[count( $stack ) - 1];
 

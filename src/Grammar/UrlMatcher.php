@@ -61,7 +61,7 @@ class UrlMatcher extends FunctionMatcher {
 		if ( $cv instanceof Token && $cv->type() === Token::T_URL ) {
 			$url = $cv->value();
 			if ( !$this->urlCheck || call_user_func( $this->urlCheck, $url, [] ) ) {
-				$match = new Match( $values, $start, 1, 'url' );
+				$match = new GrammarMatch( $values, $start, 1, 'url' );
 				yield $this->makeMatch( $values, $start, $this->next( $values, $start, $options ), $match );
 			}
 			return;

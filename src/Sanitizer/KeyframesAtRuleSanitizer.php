@@ -65,7 +65,7 @@ class KeyframesAtRuleSanitizer extends RuleSanitizer {
 		}
 
 		// Test the keyframe name
-		if ( !$this->nameMatcher->match( $object->getPrelude(), [ 'mark-significance' => true ] ) ) {
+		if ( !$this->nameMatcher->matchAgainst( $object->getPrelude(), [ 'mark-significance' => true ] ) ) {
 			$cv = Util::findFirstNonWhitespace( $object->getPrelude() );
 			if ( $cv ) {
 				$this->sanitizationError( 'invalid-keyframe-name', $cv );

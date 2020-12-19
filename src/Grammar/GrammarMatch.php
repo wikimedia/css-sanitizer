@@ -14,7 +14,7 @@ use Wikimedia\CSS\Util;
 /**
  * Represent a match from a Matcher.
  */
-class Match {
+class GrammarMatch {
 
 	/** @var int */
 	protected $start, $length;
@@ -25,7 +25,7 @@ class Match {
 	/** @var string|null */
 	protected $name = null;
 
-	/** @var Match[] Captured submatches */
+	/** @var GrammarMatch[] Captured submatches */
 	protected $capturedMatches = [];
 
 	/**
@@ -33,7 +33,7 @@ class Match {
 	 * @param int $start Starting index of the match.
 	 * @param int $length Number of tokens in the match.
 	 * @param string|null $name Give a name to this match.
-	 * @param Match[] $capturedMatches Captured submatches of this match.
+	 * @param GrammarMatch[] $capturedMatches Captured submatches of this match.
 	 */
 	public function __construct(
 		ComponentValueList $list, $start, $length, $name = null, array $capturedMatches = []
@@ -93,21 +93,21 @@ class Match {
 	 * This returns the matches from capturing submatchers (see
 	 * Matcher::capture()) that matched during the matching of the top-level
 	 * matcher that returned this match. If capturing submatchers were nested,
-	 * the Match objects returned here will themselves have captured submatches to
-	 * return.
+	 * the GrammarMatch objects returned here will themselves have captured sub-
+	 * matches to return.
 	 *
 	 * To borrow PCRE regular expression syntax, if the "pattern" described by
 	 * the Matchers resembled `www(?<A>xxx(?<B>yyy)xxx)(?<C>zzz)*` then the
-	 * top-level Match's getCapturedMatches() would return a Match named "A"
-	 * (containing the "xxxyyyxxx" bit) and zero or more matches named "C" (for
-	 * each "zzz"), and that "A" Match's getCapturedMatches() would return a Match
-	 * named "B" (containing just the "yyy").
+	 * top-level GrammarMatch's getCapturedMatches() would return a GrammarMatch
+	 * named "A" (containing the "xxxyyyxxx" bit) and zero or more matches named
+	 * "C" (for each "zzz"), and that "A" GrammarMatch's getCapturedMatches()
+	 * would return a GrammarMatch named "B" (containing just the "yyy").
 	 *
 	 * Note that the start and end positions reported by captured matches may be
 	 * relative to a containing SimpleBlock or CSSFunction's value rather than
 	 * to the ComponentValueList passed to the top-level Matcher.
 	 *
-	 * @return Match[]
+	 * @return GrammarMatch[]
 	 */
 	public function getCapturedMatches() {
 		return $this->capturedMatches;

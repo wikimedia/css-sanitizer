@@ -30,7 +30,7 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 		$options = [ 'skip-whitespace' => true ];
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
-				[ new Match( $list, $i, $v - $i ) ],
+				[ new GrammarMatch( $list, $i, $v - $i ) ],
 				iterator_to_array( $m1->generateMatches( $list, $i, $options ) ),
 				"Insignificant, skipping whitespace, index $i"
 			);
@@ -39,7 +39,7 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 		$options = [ 'skip-whitespace' => false ];
 		foreach ( $expect as $i => $v ) {
 			$this->assertEquals(
-				[ new Match( $list, $i, $v - $i ) ],
+				[ new GrammarMatch( $list, $i, $v - $i ) ],
 				iterator_to_array( $m1->generateMatches( $list, $i, $options ) ),
 				"Insignificant, not skipping whitespace, index $i"
 			);
@@ -52,11 +52,11 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 				$ex = [];
 			} elseif ( $i === $v ) {
 				$ex = [
-					new Match( $list, $i - 1, 1, null, [ new Match( $list, $i - 1, 1, 'significantWhitespace' ) ] )
+					new GrammarMatch( $list, $i - 1, 1, null, [ new GrammarMatch( $list, $i - 1, 1, 'significantWhitespace' ) ] )
 				];
 			} else {
 				$ex = [
-					new Match( $list, $i, $v - $i, null, [ new Match( $list, $i, 1, 'significantWhitespace' ) ] )
+					new GrammarMatch( $list, $i, $v - $i, null, [ new GrammarMatch( $list, $i, 1, 'significantWhitespace' ) ] )
 				];
 			}
 			$this->assertEquals(
@@ -73,7 +73,7 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 				$ex = [];
 			} else {
 				$ex = [
-					new Match( $list, $i, $v - $i, null, [ new Match( $list, $i, 1, 'significantWhitespace' ) ] )
+					new GrammarMatch( $list, $i, $v - $i, null, [ new GrammarMatch( $list, $i, 1, 'significantWhitespace' ) ] )
 				];
 			}
 			$this->assertEquals(
