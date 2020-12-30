@@ -41,6 +41,7 @@ class StringDataSourceTest extends \PHPUnit\Framework\TestCase {
 
 		$this->assertSame( 'f', $source->readCharacter() );
 		$this->assertSame( 'o', $source->readCharacter() );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$this->assertSame( 'o', $source->readCharacter() );
 		$this->assertSame( ' ', $source->readCharacter() );
 		$source->putBackCharacter( 'X' );
@@ -55,6 +56,7 @@ class StringDataSourceTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( ' ', $source->readCharacter() );
 		$this->assertSame( "\xf0\x9f\x92\xa9", $source->readCharacter() );
 		$this->assertSame( DataSource::EOF, $source->readCharacter() );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$this->assertSame( DataSource::EOF, $source->readCharacter() );
 		$source->putBackCharacter( "\xe2\x98\x83" );
 		$source->putBackCharacter( DataSource::EOF );

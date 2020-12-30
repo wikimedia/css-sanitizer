@@ -26,7 +26,9 @@ class TokenListTokenizerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $tokens[1], $t->consumeToken() );
 		$this->assertSame( $tokens[2], $t->consumeToken() );
 		$this->assertSame( $eofToken, $t->consumeToken() );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$this->assertSame( $eofToken, $t->consumeToken() );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$this->assertSame( $eofToken, $t->consumeToken() );
 		$this->assertSame( [], $t->getParseErrors() );
 
@@ -37,7 +39,7 @@ class TokenListTokenizerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $eofToken, $t->consumeToken() );
 
 		try {
-			// @phan-suppress-next-line PhanTypeMismatchArgument,PhanNoopNew
+			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal,PhanNoopNew
 			new TokenListTokenizer( new ComponentValueList() );
 			$this->fail( 'Expected exception not thrown' );
 		} catch ( InvalidArgumentException $ex ) {

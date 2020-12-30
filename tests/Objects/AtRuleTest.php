@@ -67,6 +67,7 @@ class AtRuleTest extends \PHPUnit\Framework\TestCase {
 		$this->assertNull( $rule->getBlock() );
 
 		$rule->getPrelude()->add( $ws );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$rule->getPrelude()->add( $ws );
 
 		$this->assertEquals(

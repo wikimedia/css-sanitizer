@@ -166,6 +166,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 * Read a token from the data source
 	 * @see https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#consume-a-token
 	 * @return Token
+	 * @suppress PhanPluginDuplicateAdjacentStatement
 	 */
 	public function consumeToken() {
 		$this->consumeCharacter();
@@ -884,6 +885,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 *
 	 * @see https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#consume-a-number
 	 * @return array [ string $value, int|float $number, string $type ('integer' or 'number') ]
+	 * @suppress PhanPluginDuplicateAdjacentStatement
 	 */
 	protected function consumeNumber() {
 		// 1.

@@ -78,6 +78,7 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		// Test that iterator methods work sanely with insertion
 		$list = new TestCSSObjectList( [ $value1, $value2, $value3 ] );
 		$list->next();
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$list->next();
 		$this->assertSame( $value3, $list->current() );
 		// Inserting at the current position keeps the current position
@@ -93,6 +94,7 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		// Test multi-item insertion
 		$list = new TestCSSObjectList( [ $value1, $value2, $value3 ] );
 		$list->next();
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$list->next();
 		$list->add( [ $value4, $value5 ], 0 );
 		$this->assertSame( $value3, $list->current() );
@@ -103,6 +105,7 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 
 		$list = new TestCSSObjectList( [ $value1, $value2, $value3 ] );
 		$list->next();
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$list->next();
 		$list->add( new TestCSSObjectList( [ $value4, $value5 ] ), 0 );
 		$this->assertSame( $value3, $list->current() );
@@ -147,7 +150,9 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		// Test that iterator methods work sanely with removal
 		$list = new TestCSSObjectList( [ $value1, $value2, $value3, $value4, $value5, $value6 ] );
 		$list->next();
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$list->next();
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$list->next();
 		$this->assertSame( $value4, $list->current() );
 		// Removing before the current position keeps the current item
@@ -229,6 +234,7 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( $key, $list->key() );
 
 		$list->next();
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$list->next();
 		$this->assertSame( 2, $list->key() );
 		$this->assertSame( $value3, $list->current() );

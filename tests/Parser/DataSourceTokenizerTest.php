@@ -28,6 +28,7 @@ class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( "\n", $t->nextChar() );
 		$this->assertSame( '-', $t->nextChar() );
 		$this->assertSame( "\n", $t->nextChar() );
+		// @phan-suppress-next-line PhanPluginDuplicateAdjacentStatement
 		$this->assertSame( "\n", $t->nextChar() );
 		$this->assertSame( '-', $t->nextChar() );
 	}

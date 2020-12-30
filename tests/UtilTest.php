@@ -127,7 +127,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 		);
 
 		try {
-			// @phan-suppress-next-line PhanTypeMismatchArgument
+			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal
 			Util::findFirstNonWhitespace( new RuleList( [] ) );
 			$this->fail( 'Expected exception not thrown' );
 		} catch ( \InvalidArgumentException $ex ) {

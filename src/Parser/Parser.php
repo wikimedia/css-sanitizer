@@ -471,6 +471,7 @@ class Parser {
 		}
 
 		// 5.
+		// @phan-suppress-next-line PhanSuspiciousValueComparison False positive about $l1 is -1
 		$v1 = $l1 >= 0 ? $value[$l1] : null;
 		$v2 = $l2 >= 0 ? $value[$l2] : null;
 		if ( $v1 instanceof Token && $v1->type() === Token::T_DELIM && $v1->value() === '!' &&
