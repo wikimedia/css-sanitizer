@@ -8,3 +8,4 @@ Doxyfile export-ignore
 composer.json export-ignore
 phpunit.xml.dist export-ignore
 tests/ export-ignore
+.phan/ export-ignore
