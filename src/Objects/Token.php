@@ -386,7 +386,7 @@ class Token extends ComponentValue {
 		// have to be, but it's saner to do so. Angle brackets are escaped
 		// numerically too to make it safer to embed in HTML.
 		if ( preg_match( '/[^ \P{Z}]|[\p{Cc}\p{Cf}\p{Co}\p{Cs}0-9a-fA-F<>]/u', $m[0] ) ) {
-			return sprintf( '\\%x ', \UtfNormal\Utils::utf8ToCodepoint( $m[0] ) );
+			return sprintf( '\\%x ', mb_ord( $m[0] ) );
 		}
 		return '\\' . $m[0];
 	}
