@@ -23,7 +23,7 @@
 		"php": ">=7.2.0",
 		"ext-mbstring": "*",
 		"ext-iconv": "*",
-		"wikimedia/at-ease": "2.0.0",
+		"wikimedia/at-ease": "^2.0.0",
 		"wikimedia/utfnormal": "2.0.0 || ^3.0.1"
 	},
 	"require-dev": {
