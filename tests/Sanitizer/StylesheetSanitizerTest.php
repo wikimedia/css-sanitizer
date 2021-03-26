@@ -117,9 +117,8 @@ class StylesheetSanitizerTest extends \PHPUnit\Framework\TestCase {
 
 					.noprint { display: none; }
 				}',
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
+				// phpcs:ignore Generic.Files.LineLength
 				'@import "foo"; @import url( "bar" ); @namespace "foo"; @namespace "bar"; .foo { display: none; } @media print { @page { size: portrait; } .noprint { display: none; } }',
-				// @codingStandardsIgnoreEnd
 				[
 					[ 'misordered-rule', 5, 5 ],
 					[ 'bad-value-for-property', 9, 13, 'color' ],
@@ -145,9 +144,7 @@ class StylesheetSanitizerTest extends \PHPUnit\Framework\TestCase {
 					}
 					@bar;
 				}',
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
 				'@media screen { @supports ( color : red ) { @media screen { @supports (color:red) {} } } }',
-				// @codingStandardsIgnoreEnd
 				[
 					[ 'unrecognized-rule', 2, 6 ],
 					[ 'unrecognized-rule', 6, 8 ],

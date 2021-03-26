@@ -34,9 +34,8 @@ class MinificationTest extends \PHPUnit\Framework\TestCase {
 					border: solid 0 #000;
 					border-color: #000 #000 #000 #000;
 				}',
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
+				// phpcs:ignore Generic.Files.LineLength
 				'.foo{border:1px solid #000;border:solid 1px #000;border:solid 0 #000;border-color:#000 #000 #000 #000}',
-				// @codingStandardsIgnoreEnd
 			]
 		];
 	}

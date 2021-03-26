@@ -104,10 +104,8 @@ class KeyframesAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					}
 				}',
 				true,
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
 				'@keyframes x { from { color: black; } 10%, 20% { color: red; } 90%, to { color: white; } }',
 				'@keyframes x{from{color:black}10%,20%{color:red}90%,to{color:white}}',
-				// @codingStandardsIgnoreEnd
 				[
 					[ 'bad-value-for-property', 4, 14, 'color' ],
 					[ 'unrecognized-property', 5, 7 ],

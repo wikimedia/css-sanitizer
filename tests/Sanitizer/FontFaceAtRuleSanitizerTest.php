@@ -80,10 +80,10 @@ class FontFaceAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					font-weight: bold
 				}',
 				true,
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
+				// phpcs:disable Generic.Files.LineLength
 				'@font-face { font-family: "foo bar"; font-family: foo bar; src: local("foo bar"); src: local(foo bar), url("font.fnt") format("a","b"), url("font2.fnt"); font-style: italic; font-weight: bold; font-weight: 600; font-stretch: normal; unicode-range: U+0-7f, U+1000; font-variant: super slashed-zero common-ligatures unicase tabular-nums proportional-width; font-feature-settings: "abcd", "defg" off, "qq ~" 99; font-weight: bold ; }',
 				'@font-face{font-family:"foo bar";font-family:foo bar;src:local("foo bar");src:local(foo bar),url("font.fnt")format("a","b"),url("font2.fnt");font-style:italic;font-weight:bold;font-weight:600;font-stretch:normal;unicode-range:U+0-7f,U+1000;font-variant:super slashed-zero common-ligatures unicase tabular-nums proportional-width;font-feature-settings:"abcd","defg"off,"qq ~"99;font-weight:bold}',
-				// @codingStandardsIgnoreEnd
+				// phpcs:enable
 				[
 					[ 'unexpected-token-in-declaration-list', 20, 6 ],
 					[ 'bad-value-for-property', 4, 19, 'font-family' ],

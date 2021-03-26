@@ -84,10 +84,10 @@ class FontFeatureValuesAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					@font-feature-values {}
 				}',
 				true,
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
+				// phpcs:disable Generic.Files.LineLength
 				'@font-feature-values foo { @stylistic { a: 1; b: 2; } @styleset { a: 1; b: 2 3; c: 3 4 5 6 7; f:1 ; } @character-variant { a: 1; b: 2 3; f:1 ; } @swash { a: 1; b: 2; } @ornaments { a: 1; b: 2; } @annotation { a: 1; b: 2; } }',
 				'@font-feature-values foo{@stylistic{a:1;b:2}@styleset{a:1;b:2 3;c:3 4 5 6 7;f:1}@character-variant{a:1;b:2 3;f:1}@swash{a:1;b:2}@ornaments{a:1;b:2}@annotation{a:1;b:2}}',
-				// @codingStandardsIgnoreEnd
+				// phpcs:enable
 				[
 					[ 'unrecognized-rule', 2, 6 ],
 					[ 'invalid-font-feature-value-declaration', 4, 31, 'stylistic' ],

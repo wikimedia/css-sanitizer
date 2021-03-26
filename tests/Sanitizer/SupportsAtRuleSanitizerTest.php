@@ -185,10 +185,10 @@ class SupportsAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					}
 				}',
 				true,
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
+				// phpcs:disable Generic.Files.LineLength
 				'@supports (a:b) { div .foo bar, div #baz { color: red; } @supports (c:d) { @supports (e:f) { div #yeah { display:none; } } @supports not (e:f) { div #nope { display:none; } } } }',
 				'@supports(a:b){div .foo bar,div #baz{color:red}@supports(c:d){@supports(e:f){div #yeah{display:none}}@supports not (e:f){div #nope{display:none}}}}',
-				// @codingStandardsIgnoreEnd
+				// phpcs:enable
 				[
 					[ 'invalid-selector-list', 6, 6 ],
 					[ 'unrecognized-rule', 8, 6 ],

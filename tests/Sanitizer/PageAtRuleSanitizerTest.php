@@ -92,10 +92,10 @@ class PageAtRuleSanitizerTest extends RuleSanitizerTestBase {
 					@top-right {}
 				}',
 				true,
-				// @codingStandardsIgnoreStart Ignore Generic.Files.LineLength.TooLong
+				// phpcs:disable Generic.Files.LineLength
 				'@page x { color: red; size: 10in; size: 8.5in 11in; size: a4 landscape; @top-left { color: red; } color: blue; @top-right {} }',
 				'@page x{color:red;size:10in;size:8.5in 11in;size:a4 landscape;@top-left{color:red}color:blue;@top-right{}}',
-				// @codingStandardsIgnoreEnd
+				// phpcs:enable
 				[
 					[ 'unrecognized-property', 3, 6 ],
 					[ 'unrecognized-property', 10, 7 ],
