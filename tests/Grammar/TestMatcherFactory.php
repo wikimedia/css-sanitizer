@@ -30,7 +30,7 @@ class TestMatcherFactory extends MatcherFactory {
 	public function urlstring( $type ) {
 		$key = __METHOD__ . ':' . $type;
 		if ( !isset( $this->cache[$key] ) ) {
-			$this->cache[$key] = new TokenMatcher( Token::T_STRING, function ( $url ) use ( $type ) {
+			$this->cache[$key] = new TokenMatcher( Token::T_STRING, static function ( $url ) use ( $type ) {
 				return strpos( $url, $type ) !== false;
 			} );
 		}
@@ -41,7 +41,7 @@ class TestMatcherFactory extends MatcherFactory {
 	public function url( $type ) {
 		$key = __METHOD__ . ':' . $type;
 		if ( !isset( $this->cache[$key] ) ) {
-			$this->cache[$key] = new UrlMatcher( function ( $url, $modifiers ) use ( $type ) {
+			$this->cache[$key] = new UrlMatcher( static function ( $url, $modifiers ) use ( $type ) {
 				return strpos( $url, $type ) !== false;
 			}, [
 				'modifierMatcher' => new Alternative( [

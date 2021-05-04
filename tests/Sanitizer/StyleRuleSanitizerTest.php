@@ -47,7 +47,7 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 	public static function provideRules() {
 		$htmlOrBodySimpleSelectorSeqMatcher = new CheckedMatcher(
 			MatcherFactory::singleton()->cssSimpleSelectorSeq(),
-			function ( ComponentValueList $values, GrammarMatch $match, array $options ) {
+			static function ( ComponentValueList $values, GrammarMatch $match, array $options ) {
 				foreach ( $match->getCapturedMatches() as $m ) {
 					if ( $m->getName() !== 'element' ) {
 						continue;

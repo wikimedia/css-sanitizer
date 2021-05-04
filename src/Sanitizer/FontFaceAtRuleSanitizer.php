@@ -53,7 +53,7 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 			] ),
 			'font-stretch' => $matchData['font-stretch'],
 			'unicode-range' => Quantifier::hash(
-				new TokenMatcher( Token::T_UNICODE_RANGE, function ( Token $t ) {
+				new TokenMatcher( Token::T_UNICODE_RANGE, static function ( Token $t ) {
 					list( $start, $end ) = $t->range();
 					return $start <= $end && $end <= 0x10ffff;
 				} )
@@ -76,7 +76,7 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 				$matcherFactory->string(),
 				Quantifier::plus( $matcherFactory->ident() ),
 			] ),
-			'numWeight' => new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+			'numWeight' => new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				return $t->typeFlag() === 'integer' && preg_match( '/^[1-9]00$/', $t->representation() );
 			} ),
 			'font-style' => new KeywordMatcher( [ 'normal', 'italic', 'oblique' ] ),
@@ -87,7 +87,7 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 			'font-feature-settings' => new Alternative( [
 				new KeywordMatcher( 'normal' ),
 				Quantifier::hash( new Juxtaposition( [
-					new TokenMatcher( Token::T_STRING, function ( Token $t ) {
+					new TokenMatcher( Token::T_STRING, static function ( Token $t ) {
 						return preg_match( '/^[\x20-\x7e]{4}$/', $t->value() );
 					} ),
 					Quantifier::optional( new Alternative( [

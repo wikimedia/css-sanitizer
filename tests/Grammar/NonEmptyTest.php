@@ -23,7 +23,7 @@ class NonEmptyTest extends MatcherTestBase {
 	 */
 	public function testGenerateMatches( $start, $ret, $expect ) {
 		$matcher = $this->getMockBuilder( Matcher::class )
-			->setMethods( [ 'generateMatches' ] )
+			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();
 		$matcher->expects( $this->once() )->method( 'generateMatches' )
 			->willReturnCallback( function ( $values, $i, $options ) use ( $start, $ret ) {

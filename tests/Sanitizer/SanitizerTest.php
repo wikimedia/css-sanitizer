@@ -44,7 +44,7 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 		$block->getValue()->add( $ws );
 		$block2 = SimpleBlock::newFromDelimiter( Token::T_LEFT_BRACE );
 
-		$mb = $this->getMockBuilder( Sanitizer::class )->setMethods( [ 'doSanitize' ] );
+		$mb = $this->getMockBuilder( Sanitizer::class )->onlyMethods( [ 'doSanitize' ] );
 
 		$san = $mb->getMockForAbstractClass();
 		$san->expects( $this->once() )->method( 'doSanitize' )
@@ -78,7 +78,7 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 		$sanitizer1->sanitizationErrors = [ [ 'x', 1, 2 ] ];
 
 		$sanitizer2 = $this->getMockBuilder( Sanitizer::class )
-			->setMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
+			->onlyMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
 			->getMockForAbstractClass();
 		$sanitizer2->expects( $this->once() )->method( 'doSanitize' )
 			->with( $this->identicalTo( $token1 ) )
@@ -105,7 +105,7 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 		$sanitizer1->sanitizationErrors = [ [ 'x', 1, 2 ] ];
 
 		$sanitizer2 = $this->getMockBuilder( Sanitizer::class )
-			->setMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
+			->onlyMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
 			->getMock();
 		$sanitizer2->expects( $this->at( 0 ) )->method( 'doSanitize' )
 			->with( $this->identicalTo( $token1i ) )
@@ -130,13 +130,13 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 
 	public function testSanitizeRules() {
 		$mb = $this->getMockBuilder( RuleSanitizer::class )
-			->setMethods( [ 'handlesRule', 'getIndex', 'doSanitize' ] );
+			->onlyMethods( [ 'handlesRule', 'getIndex', 'doSanitize' ] );
 
 		$san1 = $mb->getMockForAbstractClass();
-		$san1->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( function ( $rule ) {
+		$san1->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san1';
 		} );
-		$san1->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( function () {
+		$san1->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( static function () {
 			return [ 1, 2 ];
 		} );
 		$san1->expects( $this->any() )->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
@@ -145,10 +145,10 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 		} );
 
 		$san2 = $mb->getMockForAbstractClass();
-		$san2->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( function ( $rule ) {
+		$san2->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san2';
 		} );
-		$san2->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( function () {
+		$san2->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( static function () {
 			return 2;
 		} );
 		$san2->expects( $this->any() )->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
@@ -157,10 +157,10 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 		} );
 
 		$san3 = $mb->getMockForAbstractClass();
-		$san3->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( function ( $rule ) {
+		$san3->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san3';
 		} );
-		$san3->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( function () {
+		$san3->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( static function () {
 			return 2;
 		} );
 		$san3->expects( $this->any() )->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
@@ -169,7 +169,7 @@ class SanitizerTest extends \PHPUnit\Framework\TestCase {
 		} );
 
 		$sanX = $mb->getMockForAbstractClass();
-		$sanX->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( function ( $rule ) {
+		$sanX->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san2';
 		} );
 		$sanX->expects( $this->never() )->method( 'getIndex' );

@@ -77,7 +77,7 @@ class SupportsAtRuleSanitizer extends RuleSanitizer {
 			&$supportsConditionBlock,
 			new BlockMatcher( Token::T_LEFT_PAREN, new CheckedMatcher(
 				$anythingPlus,
-				function ( ComponentValueList $list, GrammarMatch $match, array $options )
+				static function ( ComponentValueList $list, GrammarMatch $match, array $options )
 					use ( $declarationSanitizer )
 				{
 					$cvlist = new ComponentValueList( $match->getValues() );

@@ -122,7 +122,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public static function provideConstructor() {
-		$iae = function ( $msg ) {
+		$iae = static function ( $msg ) {
 			return new InvalidArgumentException( $msg );
 		};
 

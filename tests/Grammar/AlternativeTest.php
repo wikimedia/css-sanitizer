@@ -35,10 +35,10 @@ class AlternativeTest extends MatcherTestBase {
 		$matchers = [];
 		foreach ( $rets as $ret ) {
 			$matcher = $this->getMockBuilder( Matcher::class )
-				->setMethods( [ 'generateMatches' ] )
+				->onlyMethods( [ 'generateMatches' ] )
 				->getMockForAbstractClass();
 			$matcher->expects( $this->once() )->method( 'generateMatches' )
-				->willReturnCallback( function ( $values, $i, $options ) use ( $ret ) {
+				->willReturnCallback( static function ( $values, $i, $options ) use ( $ret ) {
 					foreach ( $ret as $v ) {
 						yield new GrammarMatch( $values, $i, $v - $i );
 					}

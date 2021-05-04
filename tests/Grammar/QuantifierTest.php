@@ -169,7 +169,7 @@ class QuantifierTest extends MatcherTestBase {
 	public function testEmptyMatch() {
 		$list = new ComponentValueList();
 		$matcher = $this->getMockBuilder( Matcher::class )
-			->setMethods( [ 'generateMatches' ] )
+			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();
 		$matcher->expects( $this->once() )->method( 'generateMatches' )
 			->willReturn( new \ArrayIterator( [ new GrammarMatch( $list, 1, 0 ) ] ) );

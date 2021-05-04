@@ -35,7 +35,7 @@ class FunctionMatcher extends Matcher {
 	 */
 	public function __construct( $name, Matcher $matcher ) {
 		if ( is_string( $name ) ) {
-			$this->nameCheck = function ( $s ) use ( $name ) {
+			$this->nameCheck = static function ( $s ) use ( $name ) {
 				return !strcasecmp( $s, $name );
 			};
 		} elseif ( is_callable( $name ) || $name === null ) {

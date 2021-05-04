@@ -115,7 +115,7 @@ class MatcherTest extends MatcherTestBase {
 	 */
 	public function testMatch( $list, $options, $ret, $expectStart, $expect ) {
 		$matcher = $this->getMockBuilder( Matcher::class )
-			->setMethods( [ 'generateMatches' ] )
+			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();
 		$matcher->expects( $this->exactly( 2 ) )->method( 'generateMatches' )
 			->willReturnCallback(

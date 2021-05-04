@@ -1330,7 +1330,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		// @codeCoverageIgnoreEnd
 
 		$props = [];
-		$decibel = new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) {
+		$decibel = new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 			return !strcasecmp( $t->unit(), 'dB' );
 		} );
 
@@ -1402,7 +1402,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 				new KeywordMatcher( [ 'x-low', 'low', 'medium', 'high', 'x-high' ] ),
 				new Alternative( [
 					$matcherFactory->frequency(),
-					new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) {
+					new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 						return !strcasecmp( $t->unit(), 'st' );
 					} ),
 					$matcherFactory->percentage()
@@ -1444,7 +1444,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		) );
 		$trackBreadth = new Alternative( [
 			$matcherFactory->lengthPercentage(),
-			new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) {
+			new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 				return $t->value() >= 0 && !strcasecmp( $t->unit(), 'fr' );
 			} ),
 			new KeywordMatcher( [ 'min-content', 'max-content', 'auto' ] )

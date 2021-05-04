@@ -100,7 +100,7 @@ class MatcherFactory {
 	 */
 	public function customIdent( array $exclude = [] ) {
 		$exclude = array_merge( [ 'initial', 'inherit', 'unset', 'default' ], $exclude );
-		return new TokenMatcher( Token::T_IDENT, function ( Token $t ) use ( $exclude ) {
+		return new TokenMatcher( Token::T_IDENT, static function ( Token $t ) use ( $exclude ) {
 			return !in_array( strtolower( $t->value() ), $exclude, true );
 		} );
 	}
@@ -228,7 +228,7 @@ class MatcherFactory {
 	 */
 	protected function rawInteger() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				// The spec says it must match /^[+-]\d+$/, but the tokenizer
 				// should have marked any other number token as a 'number'
 				// anyway so let's not bother checking.
@@ -391,7 +391,7 @@ class MatcherFactory {
 	 */
 	protected function zero() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				return $t->value() === 0 || $t->value() === 0.0;
 			} );
 		}
@@ -409,7 +409,7 @@ class MatcherFactory {
 
 			$this->cache[__METHOD__] = new Alternative( [
 				$this->zero(),
-				new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) use ( $unitsRe ) {
+				new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) use ( $unitsRe ) {
 					return preg_match( $unitsRe, $t->unit() );
 				} ),
 			] );
@@ -440,7 +440,7 @@ class MatcherFactory {
 
 			$this->cache[__METHOD__] = new Alternative( [
 				$this->zero(),
-				new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) use ( $unitsRe ) {
+				new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) use ( $unitsRe ) {
 					return preg_match( $unitsRe, $t->unit() );
 				} ),
 			] );
@@ -470,7 +470,7 @@ class MatcherFactory {
 			$unitsRe = '/^(' . implode( '|', self::$timeUnits ) . ')$/i';
 
 			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION,
-				function ( Token $t ) use ( $unitsRe ) {
+				static function ( Token $t ) use ( $unitsRe ) {
 					return preg_match( $unitsRe, $t->unit() );
 				}
 			);
@@ -500,7 +500,7 @@ class MatcherFactory {
 			$unitsRe = '/^(' . implode( '|', self::$frequencyUnits ) . ')$/i';
 
 			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION,
-				function ( Token $t ) use ( $unitsRe ) {
+				static function ( Token $t ) use ( $unitsRe ) {
 					return preg_match( $unitsRe, $t->unit() );
 				}
 			);
@@ -527,7 +527,7 @@ class MatcherFactory {
 	 */
 	public function resolution() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) {
+			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 				return preg_match( '/^(dpi|dpcm|dppx)$/i', $t->unit() );
 			} );
 		}
@@ -610,7 +610,7 @@ class MatcherFactory {
 					// Other keywords. Intentionally omitting the deprecated system colors.
 					'transparent', 'currentColor',
 				] ),
-				new TokenMatcher( Token::T_HASH, function ( Token $t ) {
+				new TokenMatcher( Token::T_HASH, static function ( Token $t ) {
 					return preg_match( '/^([0-9a-f]{3}|[0-9a-f]{6})$/i', $t->value() );
 				} ),
 			], $this->colorFuncs() ) );
@@ -754,10 +754,10 @@ class MatcherFactory {
 				];
 				$mfName = new KeywordMatcher( array_merge(
 					$rangeFeatures,
-					array_map( function ( $f ) {
+					array_map( static function ( $f ) {
 						return "min-$f";
 					}, $rangeFeatures ),
-					array_map( function ( $f ) {
+					array_map( static function ( $f ) {
 						return "max-$f";
 					}, $rangeFeatures ),
 					$discreteFeatures
@@ -775,7 +775,7 @@ class MatcherFactory {
 			}
 
 			$posInt = $this->calc(
-				new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+				new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 					return $t->typeFlag() === 'integer' && preg_match( '/^\+?\d+$/', $t->representation() );
 				} ),
 				'integer'
@@ -1083,7 +1083,7 @@ class MatcherFactory {
 	 */
 	public function cssID() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_HASH, function ( Token $t ) {
+			$this->cache[__METHOD__] = new TokenMatcher( Token::T_HASH, static function ( Token $t ) {
 				return $t->typeFlag() === 'id';
 			} );
 			$this->cache[__METHOD__]->setDefaultOptions( [ 'skip-whitespace' => false ] );
@@ -1238,25 +1238,25 @@ class MatcherFactory {
 			$nDash = new KeywordMatcher( [ 'n-' ] );
 			$plusQN = new Juxtaposition( [ $plusQ, $n ] );
 			$plusQNDash = new Juxtaposition( [ $plusQ, $nDash ] );
-			$nDimension = new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) {
+			$nDimension = new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 				return $t->typeFlag() === 'integer' && !strcasecmp( $t->unit(), 'n' );
 			} );
-			$nDashDimension = new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) {
+			$nDashDimension = new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 				return $t->typeFlag() === 'integer' && !strcasecmp( $t->unit(), 'n-' );
 			} );
-			$nDashDigitDimension = new TokenMatcher( Token::T_DIMENSION, function ( Token $t ) {
+			$nDashDigitDimension = new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 				return $t->typeFlag() === 'integer' && preg_match( '/^n-\d+$/i', $t->unit() );
 			} );
-			$nDashDigitIdent = new TokenMatcher( Token::T_IDENT, function ( Token $t ) {
+			$nDashDigitIdent = new TokenMatcher( Token::T_IDENT, static function ( Token $t ) {
 				return preg_match( '/^n-\d+$/i', $t->value() );
 			} );
-			$dashNDashDigitIdent = new TokenMatcher( Token::T_IDENT, function ( Token $t ) {
+			$dashNDashDigitIdent = new TokenMatcher( Token::T_IDENT, static function ( Token $t ) {
 				return preg_match( '/^-n-\d+$/i', $t->value() );
 			} );
-			$signedInt = new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+			$signedInt = new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				return $t->typeFlag() === 'integer' && preg_match( '/^[+-]/', $t->representation() );
 			} );
-			$signlessInt = new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+			$signlessInt = new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				return $t->typeFlag() === 'integer' && preg_match( '/^\d/', $t->representation() );
 			} );
 			$plusOrMinus = new DelimMatcher( [ '+', '-' ] );
@@ -1264,7 +1264,7 @@ class MatcherFactory {
 
 			$this->cache[__METHOD__] = new Alternative( [
 				new KeywordMatcher( [ 'odd', 'even' ] ),
-				new TokenMatcher( Token::T_NUMBER, function ( Token $t ) {
+				new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 					return $t->typeFlag() === 'integer';
 				} ),
 				$nDimension,

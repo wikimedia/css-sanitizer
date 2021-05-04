@@ -305,7 +305,7 @@ class Encoder {
 
 		// Pseudo-encoding that shifts non-ASCII bytes to the BMP private use area
 		if ( $encoding === 'x-user-defined' ) {
-			return preg_replace_callback( '/[\x80-\xff]/', function ( $m ) {
+			return preg_replace_callback( '/[\x80-\xff]/', static function ( $m ) {
 				return \UtfNormal\Utils::codepointToUtf8( 0xf700 + ord( $m[0] ) );
 			}, $text );
 		}

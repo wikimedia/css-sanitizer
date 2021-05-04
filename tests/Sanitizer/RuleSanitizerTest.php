@@ -21,7 +21,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 
 	protected function getSanitizer( $options = [] ) {
 		$mb = $this->getMockBuilder( RuleSanitizer::class )
-			->setMethods( [ 'doSanitize', 'handlesRule' ] );
+			->onlyMethods( [ 'doSanitize', 'handlesRule' ] );
 		$san = $mb->getMockForAbstractClass();
 		$san->method( 'handlesRule' )->willReturn( true );
 
@@ -34,7 +34,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 			case 'rules':
 				$method = 'sanitizeRuleBlock';
 				$arg = [ $mb->getMockForAbstractClass() ];
-				$arg[0]->method( 'handlesRule' )->willReturnCallback( function ( $rule ) {
+				$arg[0]->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 					return $rule instanceof AtRule && !strcasecmp( $rule->getName(), 'foo' );
 				} );
 				$arg[0]->method( 'doSanitize' )->willReturnArgument( 0 );
@@ -47,7 +47,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 		if ( $method ) {
 			$rm = new \ReflectionMethod( $san, $method );
 			$rm->setAccessible( true );
-			$san->method( 'doSanitize' )->willReturnCallback( function ( $rule ) use ( $rm, $san, $arg ) {
+			$san->method( 'doSanitize' )->willReturnCallback( static function ( $rule ) use ( $rm, $san, $arg ) {
 				$ret = clone $rule;
 				// @phan-suppress-next-line PhanPossiblyUndeclaredVariable $arg set when reaching this code
 				$rm->invoke( $san, $ret->getBlock(), $arg );

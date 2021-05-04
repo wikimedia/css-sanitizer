@@ -83,7 +83,7 @@ class FunctionMatcherTest extends MatcherTestBase {
 	}
 
 	public function testCallbackName() {
-		$m = TestingAccessWrapper::newFromObject( new FunctionMatcher( function ( $name ) {
+		$m = TestingAccessWrapper::newFromObject( new FunctionMatcher( static function ( $name ) {
 			return $name === 'Foo';
 		}, new TokenMatcher( Token::T_COMMA ) ) );
 

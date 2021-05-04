@@ -16,10 +16,10 @@ class CheckedMatcherTest extends MatcherTestBase {
 
 	public function testGenerateMatches() {
 		$matcher = $this->getMockBuilder( Matcher::class )
-			->setMethods( [ 'generateMatches' ] )
+			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();
 		$matcher->expects( $this->once() )->method( 'generateMatches' )
-			->willReturnCallback( function ( $values, $i, $options ) {
+			->willReturnCallback( static function ( $values, $i, $options ) {
 				for ( $i = 0; $i < 10; $i++ ) {
 					yield new GrammarMatch( $values, 0, $i );
 				}

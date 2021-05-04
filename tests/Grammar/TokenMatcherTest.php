@@ -44,7 +44,7 @@ class TokenMatcherTest extends MatcherTestBase {
 
 	public function testCallback() {
 		$m = TestingAccessWrapper::newFromObject(
-			new TokenMatcher( Token::T_IDENT, function ( Token $token ) {
+			new TokenMatcher( Token::T_IDENT, static function ( Token $token ) {
 				return $token->value() === strtolower( $token->value() );
 			} )
 		);
