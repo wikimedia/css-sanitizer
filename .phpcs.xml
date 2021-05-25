@@ -12,13 +12,11 @@
 		<exclude name="MediaWiki.WhiteSpace.SpaceBeforeSingleLineComment.NewLineComment" />
 		<exclude name="PSR2.Classes.PropertyDeclaration.Multiple" />
 	</rule>
-	<file>.</file>
-	<arg name="encoding" value="UTF-8"/>
-	<arg name="extensions" value="php"/>
 	<rule ref="MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures">
 		<severity>0</severity>
 	</rule>
-	<exclude-pattern>coverage</exclude-pattern>
-	<exclude-pattern>vendor</exclude-pattern>
-	<exclude-pattern>doc/html</exclude-pattern>
+	<file>.</file>
+	<arg name="encoding" value="UTF-8"/>
+	<arg name="extensions" value="php"/>
+	<exclude-pattern type="relative">^doc/html/*</exclude-pattern>
 </ruleset>
