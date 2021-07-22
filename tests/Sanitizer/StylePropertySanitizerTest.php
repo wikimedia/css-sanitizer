@@ -18,7 +18,7 @@ class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 
 	private static $sanitizer;
 
-	public static function tearDownAfterClass() : void {
+	public static function tearDownAfterClass(): void {
 		parent::tearDownAfterClass();
 		self::$sanitizer = null;
 	}
