@@ -170,6 +170,7 @@ class Parser {
 
 		// Drop @charset per the Editor's Draft
 		if ( isset( $list[0] ) && $list[0] instanceof AtRule &&
+			// @phan-suppress-next-line PhanNonClassMethodCall False positive
 			!strcasecmp( $list[0]->getName(), 'charset' )
 		) {
 			$list->remove( 0 );
@@ -328,6 +329,7 @@ class Parser {
 	 * @return RuleList
 	 */
 	protected function consumeRuleList( $topLevel ) {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		$list = new RuleList();
 		// @phan-suppress-next-line PhanInfiniteLoop
 		while ( true ) {
@@ -363,6 +365,7 @@ class Parser {
 			$this->consumeToken();
 		}
 
+		// @phan-suppress-next-line PhanPluginUnreachableCode Reached by break 2
 		return $list;
 	}
 
@@ -374,6 +377,7 @@ class Parser {
 	 * @return DeclarationOrAtRuleList|DeclarationList
 	 */
 	protected function consumeDeclarationOrAtRuleList( $allowAtRules = true ) {
+		// @phan-suppress-previous-line PhanPluginNeverReturnMethod
 		$list = $allowAtRules ? new DeclarationOrAtRuleList() : new DeclarationList();
 		// @phan-suppress-next-line PhanInfiniteLoop
 		while ( true ) {
@@ -436,6 +440,7 @@ class Parser {
 			$this->consumeToken();
 		}
 
+		// @phan-suppress-next-line PhanPluginUnreachableCode Reached by break 2
 		return $list;
 	}
 

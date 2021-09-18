@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use EmptyIterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 
 class MatcherTestMock extends Matcher {
@@ -24,6 +25,6 @@ class MatcherTestMock extends Matcher {
 
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
-		return [];
+		return new EmptyIterator();
 	}
 }

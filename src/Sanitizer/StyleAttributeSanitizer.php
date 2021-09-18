@@ -66,6 +66,7 @@ class StyleAttributeSanitizer extends Sanitizer {
 		$parser = Parser::newFromString( $string );
 		$declarations = $parser->parseDeclarationList();
 		$this->sanitizationErrors = array_merge( $this->sanitizationErrors, $parser->getParseErrors() );
+		// @phan-suppress-next-line PhanTypeMismatchReturnSuperType
 		return $this->sanitizeList( $this->propertySanitizer, $declarations );
 	}
 }

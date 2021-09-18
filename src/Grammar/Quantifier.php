@@ -146,11 +146,13 @@ class Quantifier extends Matcher {
 			if ( $this->commas ) {
 				$n = $nextFrom;
 				if ( isset( $values[$n] ) && $values[$n] instanceof Token &&
+					// @phan-suppress-next-line PhanNonClassMethodCall False positive
 					$values[$n]->type() === Token::T_WHITESPACE
 				) {
 					$n = $this->next( $values, $n, [ 'skip-whitespace' => true ] + $options );
 				}
 				if ( isset( $values[$n] ) && $values[$n] instanceof Token &&
+					// @phan-suppress-next-line PhanNonClassMethodCall False positive
 					$values[$n]->type() === Token::T_COMMA
 				) {
 					$nextFrom = $this->next( $values, $n, [ 'skip-whitespace' => true ] + $options );

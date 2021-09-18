@@ -166,7 +166,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 * Read a token from the data source
 	 * @see https://www.w3.org/TR/2014/CR-css-syntax-3-20140220/#consume-a-token
 	 * @return Token
-	 * @suppress PhanPluginDuplicateAdjacentStatement
+	 * @suppress PhanPluginDuplicateAdjacentStatement,PhanPluginDuplicateSwitchCaseLooseEquality
 	 */
 	public function consumeToken() {
 		$this->consumeCharacter();
@@ -498,6 +498,7 @@ class DataSourceTokenizer implements Tokenizer {
 			}
 		}
 
+		// @phan-suppress-next-line PhanPluginUnreachableCode Reached by break 2
 		return new Token( Token::T_STRING, $data );
 	}
 
@@ -559,7 +560,6 @@ class DataSourceTokenizer implements Tokenizer {
 						$this->consumeBadUrlRemnants();
 						return new Token( Token::T_BAD_URL, [ 'value' => '' ] + $data );
 					}
-					break; // @codeCoverageIgnore
 
 				case '"':
 				case '\'':
@@ -590,6 +590,7 @@ class DataSourceTokenizer implements Tokenizer {
 			}
 		}
 
+		// @phan-suppress-next-line PhanPluginUnreachableCode Reached by break 2
 		return new Token( Token::T_URL, $data );
 	}
 

@@ -30,6 +30,7 @@ class WhitespaceMatcher extends Matcher {
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$end = $start;
 		while ( isset( $values[$end] ) &&
+			// @phan-suppress-next-line PhanNonClassMethodCall False positive
 			$values[$end] instanceof Token && $values[$end]->type() === Token::T_WHITESPACE
 		) {
 			$end++;
@@ -47,6 +48,7 @@ class WhitespaceMatcher extends Matcher {
 		if ( $end === $start ) {
 			$start--;
 			if ( !$options['skip-whitespace'] || !isset( $values[$start] ) ||
+				// @phan-suppress-next-line PhanNonClassMethodCall False positive
 				!$values[$start] instanceof Token || $values[$start]->type() !== Token::T_WHITESPACE
 			) {
 				return;

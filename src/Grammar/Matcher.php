@@ -121,8 +121,9 @@ abstract class Matcher {
 			if ( $cv instanceof Token && $cv->type() === Token::T_WHITESPACE ) {
 				$significant = in_array( $cv, $significantWS, true );
 				if ( $significant !== $cv->significant() ) {
-					$list[$i] = $cv->copyWithSignificance( $significant );
-					$match->fixWhitespace( $cv, $list[$i] );
+					$newCv = $cv->copyWithSignificance( $significant );
+					$match->fixWhitespace( $cv, $newCv );
+					$list[$i] = $newCv;
 				}
 			} elseif ( $cv instanceof CSSFunction || $cv instanceof SimpleBlock ) {
 				self::markSignificantWhitespace(
@@ -166,6 +167,7 @@ abstract class Matcher {
 		do {
 			$i++;
 		} while ( $skipWS && $i < $l &&
+			// @phan-suppress-next-line PhanNonClassMethodCall False positive
 			$values[$i] instanceof Token && $values[$i]->type() === Token::T_WHITESPACE
 		);
 		return $i;

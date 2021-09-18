@@ -40,11 +40,13 @@ class StylesheetTest extends \PHPUnit\Framework\TestCase {
 		$this->assertSame( '', (string)$stylesheet );
 
 		$list->add( new AtRule( $atToken ) );
+		// @phan-suppress-next-line PhanNonClassMethodCall
 		$list[0]->getPrelude()->add( $ws );
 		$this->assertEquals( [ $atToken, $ws, $semicolon ], $stylesheet->toTokenArray() );
 		$this->assertEquals( [ $atToken, $ws, $semicolon ], $stylesheet->toComponentValueArray() );
 		$this->assertSame( Util::stringify( $stylesheet ), (string)$stylesheet );
 
+		// @phan-suppress-next-line PhanNonClassMethodCall
 		$list[0]->setBlock( $block );
 		$this->assertEquals( [ $atToken, $ws, $leftBrace, $rightBrace ], $stylesheet->toTokenArray() );
 		$this->assertEquals( [ $atToken, $ws, $block ], $stylesheet->toComponentValueArray() );
