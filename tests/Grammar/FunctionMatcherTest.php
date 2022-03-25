@@ -120,8 +120,6 @@ class FunctionMatcherTest extends MatcherTestBase {
 		$c = new Token( Token::T_COMMA );
 		$f1 = CSSFunction::newFromName( 'foo' );
 		$f1->getValue()->add( [ $ws, $c, $ws ] );
-		$func = new Token( Token::T_FUNCTION, 'Foo' );
-		$rp = new Token( Token::T_RIGHT_PAREN );
 
 		$list = new ComponentValueList( [ $f1 ] );
 		$ret = iterator_to_array( $m->generateMatches( $list, 0, [ 'skip-whitespace' => true ] ) );

@@ -10,7 +10,6 @@ use ArrayIterator;
 use UnexpectedValueException;
 use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
-use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\TestingAccessWrapper;
 
@@ -73,7 +72,6 @@ class QuantifierTest extends MatcherTestBase {
 		$ok = new Token( Token::T_IDENT, 'foo' );
 		$no = new Token( Token::T_SEMICOLON );
 		$c = new Token( Token::T_COMMA );
-		$block = SimpleBlock::newFromDelimiter( '{' );
 
 		return [
 			'"?" match' => [

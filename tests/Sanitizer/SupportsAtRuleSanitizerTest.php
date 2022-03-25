@@ -45,7 +45,7 @@ class SupportsAtRuleSanitizerTest extends RuleSanitizerTestBase {
 		$matcherFactory = MatcherFactory::singleton();
 		$this->expectException( TypeError::class );
 		// The exact TypeError message differs between php7 and php8 (nullables)
-		$this->expectExceptionMessage( 'Wikimedia\CSS\Sanitizer\PropertySanitizer' );
+		$this->expectExceptionMessage( PropertySanitizer::class );
 		// @phan-suppress-next-line PhanNoopNew
 		new SupportsAtRuleSanitizer( $matcherFactory, [
 			'declarationSanitizer' => new NamespaceAtRuleSanitizer( $matcherFactory ),

@@ -614,7 +614,6 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props = [];
 
 		$auto = new KeywordMatcher( 'auto' );
-		$normal = new KeywordMatcher( 'normal' );
 
 		$props['column-width'] = new Alternative( array_merge(
 			[ $matcherFactory->length(), $auto ],

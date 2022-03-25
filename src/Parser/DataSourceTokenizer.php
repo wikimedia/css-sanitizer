@@ -58,7 +58,7 @@ class DataSourceTokenizer implements Tokenizer {
 		// Perform transformations per the spec
 
 		// Any U+0000 or surrogate code point becomes U+FFFD
-		if ( $char === "\0" || $char >= "\u{D800}" && $char <= "\u{DFFF}" ) {
+		if ( $char === "\0" || ( $char >= "\u{D800}" && $char <= "\u{DFFF}" ) ) {
 			return Constants::UTF8_REPLACEMENT;
 		}
 

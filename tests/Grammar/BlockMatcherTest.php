@@ -61,8 +61,6 @@ class BlockMatcherTest extends MatcherTestBase {
 		$c = new Token( Token::T_COMMA );
 		$b1 = SimpleBlock::newFromDelimiter( Token::T_LEFT_BRACE );
 		$b1->getValue()->add( [ $ws, $c, $ws ] );
-		$lb = new Token( Token::T_LEFT_BRACE );
-		$rb = new Token( Token::T_RIGHT_BRACE );
 
 		$list = new ComponentValueList( [ $b1 ] );
 		$ret = iterator_to_array( $matcher->generateMatches( $list, 0, [ 'skip-whitespace' => true ] ) );

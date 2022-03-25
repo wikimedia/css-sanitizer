@@ -54,7 +54,6 @@ class AtRuleTest extends TestCase {
 		$colon = new Token( Token::T_COLON );
 		$ident = new Token( Token::T_IDENT, 'bar' );
 		$ws = new Token( Token::T_WHITESPACE );
-		$Iws = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
 		$leftBraceToken = new Token( Token::T_LEFT_BRACE );
 		$rightBraceToken = new Token( Token::T_RIGHT_BRACE );
 		$leftBracketToken = new Token( Token::T_LEFT_BRACKET );

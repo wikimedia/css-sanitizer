@@ -797,17 +797,17 @@ class ParserTest extends TestCase {
 
 		// Test "unexpected EOF" error suppression for functions
 		$parser = Parser::newFromString( 'foo(' . $overlimit . ')' );
-		$list = $parser->parseComponentValue();
+		$parser->parseComponentValue();
 		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 104 ] ], $parser->getParseErrors() );
 
 		// Test "unexpected EOF" error suppression for at-rules
 		$parser = Parser::newFromString( '@foo {' . $overlimit . '}' );
-		$list = $parser->parseRule();
+		$parser->parseRule();
 		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 107 ] ], $parser->getParseErrors() );
 
 		// Test "unexpected EOF" error suppression for qualified rules
 		$parser = Parser::newFromString( '.foo {' . $overlimit . '}' );
-		$list = $parser->parseRule();
+		$parser->parseRule();
 		$this->assertEquals( [ [ 'recursion-depth-exceeded', 1, 107 ] ], $parser->getParseErrors() );
 	}
 }

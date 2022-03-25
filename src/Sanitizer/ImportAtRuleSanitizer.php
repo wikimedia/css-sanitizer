@@ -80,8 +80,6 @@ class ImportAtRuleSanitizer extends RuleSanitizer {
 			}
 			return null;
 		}
-		$object = $this->fixPreludeWhitespace( $object, true );
-
-		return $object;
+		return $this->fixPreludeWhitespace( $object, true );
 	}
 }

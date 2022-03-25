@@ -25,7 +25,6 @@ class QualifiedRuleTest extends TestCase {
 
 	public function testClone() {
 		$identToken = new Token( Token::T_IDENT, [ 'value' => 'foobar', 'position' => [ 123, 42 ] ] );
-		$ws = new Token( Token::T_WHITESPACE );
 		$rule = new QualifiedRule( $identToken );
 
 		$rule2 = clone $rule;
@@ -38,7 +37,6 @@ class QualifiedRuleTest extends TestCase {
 	public function testBasics() {
 		$identToken = new Token( Token::T_IDENT, [ 'value' => 'foobar', 'position' => [ 123, 42 ] ] );
 		$ws = new Token( Token::T_WHITESPACE );
-		$Iws = new Token( Token::T_WHITESPACE, [ 'significant' => false ] );
 		$leftBraceToken = new Token( Token::T_LEFT_BRACE );
 		$rightBraceToken = new Token( Token::T_RIGHT_BRACE );
 		$leftBracketToken = new Token( Token::T_LEFT_BRACKET );

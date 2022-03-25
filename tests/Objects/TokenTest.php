@@ -476,7 +476,6 @@ class TokenTest extends TestCase {
 		$atToken = new Token( Token::T_DELIM, '@' );
 		$periodToken = new Token( Token::T_DELIM, '.' );
 		$plusToken = new Token( Token::T_DELIM, '+' );
-		$equalToken = new Token( Token::T_DELIM, '=' );
 		$starToken = new Token( Token::T_DELIM, '*' );
 		$slashToken = new Token( Token::T_DELIM, '/' );
 		$percentToken = new Token( Token::T_DELIM, '%' );

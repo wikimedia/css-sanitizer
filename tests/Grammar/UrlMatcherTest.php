@@ -50,7 +50,6 @@ class UrlMatcherTest extends MatcherTestBase {
 		$urlStr = new Token( Token::T_STRING, $url );
 		$urlTok = new Token( Token::T_URL, $url );
 		$ident = new Token( Token::T_IDENT, 'foo' );
-		$rp = new Token( Token::T_RIGHT_PAREN );
 		$func = CSSFunction::newFromName( 'func' );
 		$func->getValue()->add( [ $ident, $ident ] );
 		$urlFunc1 = CSSFunction::newFromName( 'url' );

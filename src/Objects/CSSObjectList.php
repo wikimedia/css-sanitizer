@@ -209,7 +209,7 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 		foreach ( $this->objects as $obj ) {
 			$pos = $obj->getPosition();
 			if ( $pos[0] >= 0 && (
-				!$ret || $pos[0] < $ret[0] || $pos[0] === $ret[0] && $pos[1] < $ret[1]
+				!$ret || $pos[0] < $ret[0] || ( $pos[0] === $ret[0] && $pos[1] < $ret[1] )
 			) ) {
 				$ret = $pos;
 			}
@@ -234,16 +234,17 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 	private function toTokenOrCVArray( $function ) {
 		$ret = [];
 		$l = count( $this->objects );
-		for ( $i = 0; $i < $l; $i++ ) {
-			// Manually looping and appending turns out to be noticably faster than array_merge.
-			foreach ( $this->objects[$i]->$function() as $v ) {
+		foreach ( $this->objects as $i => $iValue ) {
+			// Manually looping and appending turns out to be noticeably faster than array_merge.
+			foreach ( $iValue->$function() as $v ) {
 				$ret[] = $v;
 			}
-			$sep = $this->getSeparator( $this->objects[$i], $i + 1 < $l ? $this->objects[$i + 1] : null );
+			$sep = $this->getSeparator( $iValue, $i + 1 < $l ? $this->objects[$i + 1] : null );
 			foreach ( $sep as $v ) {
 				$ret[] = $v;
 			}
 		}
+
 		return $ret;
 	}
 

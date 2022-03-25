@@ -101,7 +101,7 @@ class SimpleBlock extends ComponentValue {
 			new Token( $this->startTokenType, [ 'position' => [ $this->line, $this->pos ] ] ),
 		];
 
-		// Manually looping and appending turns out to be noticably faster than array_merge.
+		// Manually looping and appending turns out to be noticeably faster than array_merge.
 		$tokens = $this->value->toTokenArray();
 		if ( $tokens && $this->startTokenType === Token::T_LEFT_BRACE ) {
 			if ( $tokens[0]->type() !== Token::T_WHITESPACE ) {

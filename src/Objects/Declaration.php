@@ -100,7 +100,7 @@ class Declaration implements DeclarationOrAtRule {
 			[ 'value' => $this->name, 'position' => [ $this->line, $this->pos ] ]
 		);
 		$ret[] = $v = new Token( Token::T_COLON );
-		// Manually looping and appending turns out to be noticably faster than array_merge.
+		// Manually looping and appending turns out to be noticeably faster than array_merge.
 		foreach ( $this->value->$function() as $v ) {
 			$ret[] = $v;
 		}

@@ -47,7 +47,6 @@ class AnythingMatcherTest extends MatcherTestBase {
 		$badString = new Token( Token::T_BAD_STRING );
 		$badUrl = new Token( Token::T_BAD_URL );
 		$bang = new Token( Token::T_DELIM, '!' );
-		$delim = new Token( Token::T_DELIM, '?' );
 		$semicolon = new Token( Token::T_SEMICOLON );
 
 		$block1 = SimpleBlock::newFromDelimiter( '{' );

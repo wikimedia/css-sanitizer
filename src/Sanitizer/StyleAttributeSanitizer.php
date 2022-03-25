@@ -43,9 +43,7 @@ class StyleAttributeSanitizer extends Sanitizer {
 		$propertySanitizer = new StylePropertySanitizer( $matcherFactory );
 
 		// StyleAttributeSanitizer brings it all together
-		$sanitizer = new StyleAttributeSanitizer( $propertySanitizer );
-
-		return $sanitizer;
+		return new StyleAttributeSanitizer( $propertySanitizer );
 	}
 
 	/** @inheritDoc */

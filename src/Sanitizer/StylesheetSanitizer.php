@@ -65,7 +65,7 @@ class StylesheetSanitizer extends Sanitizer {
 		$ruleSanitizers['@supports']->setRuleSanitizers( $ruleSanitizers );
 
 		// Now we can put together the StylesheetSanitizer
-		$sanitizer = new StylesheetSanitizer( $ruleSanitizers + [
+		return new StylesheetSanitizer( $ruleSanitizers + [
 			// Note there's intentionally no "@charset" sanitizer, as that at-rule
 			// was removed in the Editor's Draft in favor of special handling
 			// in the parser.
@@ -74,8 +74,6 @@ class StylesheetSanitizer extends Sanitizer {
 			] ),
 			'@namespace' => new NamespaceAtRuleSanitizer( $matcherFactory ),
 		] );
-
-		return $sanitizer;
 	}
 
 	/**

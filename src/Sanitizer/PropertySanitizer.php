@@ -69,7 +69,7 @@ class PropertySanitizer extends Sanitizer {
 	public function addKnownProperties( $props ) {
 		$dups = [];
 		foreach ( $props as $k => $v ) {
-			if ( isset( $this->knownProperties[$k] ) && $props[$k] !== $this->knownProperties[$k] ) {
+			if ( isset( $this->knownProperties[$k] ) && $v !== $this->knownProperties[$k] ) {
 				$dups[] = $k;
 			}
 		}

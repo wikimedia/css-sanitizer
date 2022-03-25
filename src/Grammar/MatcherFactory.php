@@ -1377,7 +1377,6 @@ class MatcherFactory {
 			// > somewhat odd definition when expressed in terms of CSS tokens.
 			// That's a bit of an understatement
 
-			$plus = new DelimMatcher( [ '+' ] );
 			$plusQ = Quantifier::optional( new DelimMatcher( [ '+' ] ) );
 			$n = new KeywordMatcher( [ 'n' ] );
 			$dashN = new KeywordMatcher( [ '-n' ] );

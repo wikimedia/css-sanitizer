@@ -75,7 +75,7 @@ class CSSFunction extends ComponentValue {
 			Token::T_FUNCTION,
 			[ 'value' => $this->name, 'position' => [ $this->line, $this->pos ] ]
 		);
-		// Manually looping and appending turns out to be noticably faster than array_merge.
+		// Manually looping and appending turns out to be noticeably faster than array_merge.
 		foreach ( $this->value->toTokenArray() as $v ) {
 			$ret[] = $v;
 		}
