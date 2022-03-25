@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use UnexpectedValueException;
 use Wikimedia\CSS\Parser\Parser;
 
 /**
@@ -32,7 +33,7 @@ class TokenList extends CSSObjectList {
 		$parser = Parser::newFromTokens( $this->objects );
 		$ret = $parser->parseComponentValueList();
 		if ( $parser->getParseErrors() ) {
-			$ex = new \UnexpectedValueException( 'TokenList cannot be converted to a ComponentValueList' );
+			$ex = new UnexpectedValueException( 'TokenList cannot be converted to a ComponentValueList' );
 			// @phan-suppress-next-line PhanUndeclaredProperty
 			$ex->parseErrors = $parser->getParseErrors();
 			throw $ex;

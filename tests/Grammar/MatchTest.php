@@ -7,13 +7,15 @@
 namespace Wikimedia\CSS\Grammar;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 
 /**
  * @covers \Wikimedia\CSS\Grammar\GrammarMatch
  */
-class MatchTest extends \PHPUnit\Framework\TestCase {
+class MatchTest extends TestCase {
 
 	public function testException() {
 		$this->expectException( InvalidArgumentException::class );
@@ -22,7 +24,7 @@ class MatchTest extends \PHPUnit\Framework\TestCase {
 			. '(found stdClass at index 0)'
 		);
 		// @phan-suppress-next-line PhanTypeMismatchArgument,PhanNoopNew
-		new GrammarMatch( new ComponentValueList(), 1, 2, null, [ new \stdClass ] );
+		new GrammarMatch( new ComponentValueList(), 1, 2, null, [ new stdClass ] );
 	}
 
 	public function testMatch() {

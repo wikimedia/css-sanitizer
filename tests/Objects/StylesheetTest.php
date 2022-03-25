@@ -6,12 +6,13 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Util;
 
 /**
  * @covers \Wikimedia\CSS\Objects\Stylesheet
  */
-class StylesheetTest extends \PHPUnit\Framework\TestCase {
+class StylesheetTest extends TestCase {
 
 	public function testClone() {
 		$stylesheet = new Stylesheet( new RuleList() );

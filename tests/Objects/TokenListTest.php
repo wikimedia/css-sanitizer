@@ -6,10 +6,13 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
+
 /**
  * @covers \Wikimedia\CSS\Objects\TokenList
  */
-class TokenListTest extends \PHPUnit\Framework\TestCase {
+class TokenListTest extends TestCase {
 
 	public function testToTokenArray() {
 		$token1 = new Token( Token::T_IDENT, 'a' );
@@ -53,7 +56,7 @@ class TokenListTest extends \PHPUnit\Framework\TestCase {
 			try {
 				$list->toComponentValueArray();
 				$this->fail( "Expected exception not thrown for token type {$token->type()}" );
-			} catch ( \UnexpectedValueException $ex ) {
+			} catch ( UnexpectedValueException $ex ) {
 				$this->assertSame( 'TokenList cannot be converted to a ComponentValueList', $ex->getMessage() );
 				// @phan-suppress-next-line PhanUndeclaredProperty
 				$this->assertEquals( $errors, $ex->parseErrors );

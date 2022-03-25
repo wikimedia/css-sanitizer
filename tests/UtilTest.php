@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\RuleList;
 use Wikimedia\CSS\Objects\SimpleBlock;
@@ -15,7 +17,7 @@ use Wikimedia\CSS\Objects\TokenList;
 /**
  * @covers \Wikimedia\CSS\Util
  */
-class UtilTest extends \PHPUnit\Framework\TestCase {
+class UtilTest extends TestCase {
 
 	public function testAllInstanceOf() {
 		Util::assertAllInstanceOf( [], Token::class, 'Test' );
@@ -32,7 +34,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 				'Test'
 			);
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame(
 				'Test may only contain instances of Wikimedia\CSS\Objects\Token (found NULL at index 1)',
 				$ex->getMessage()
@@ -46,7 +48,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 				'Test'
 			);
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame(
 				'Test may only contain instances of Wikimedia\CSS\Objects\Token '
 					. '(found Wikimedia\CSS\Objects\SimpleBlock at index 1)',
@@ -71,7 +73,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 				'Test'
 			);
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame(
 				'Test may only contain instances of Wikimedia\CSS\Objects\Token (found NULL at index 1)',
 				$ex->getMessage()
@@ -86,7 +88,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 				'Test'
 			);
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame(
 				'Test may only contain instances of Wikimedia\CSS\Objects\Token '
 					. '(found Wikimedia\CSS\Objects\SimpleBlock at index 1)',
@@ -101,7 +103,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 				'Test'
 			);
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame(
 				'Test may only contain "whitespace" tokens (found "EOF" at index 1)',
 				$ex->getMessage()
@@ -130,7 +132,7 @@ class UtilTest extends \PHPUnit\Framework\TestCase {
 			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal
 			Util::findFirstNonWhitespace( new RuleList( [] ) );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'List must be TokenList or ComponentValueList', $ex->getMessage() );
 		}
 	}

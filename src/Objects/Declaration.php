@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Util;
 
 /**
@@ -33,7 +34,7 @@ class Declaration implements DeclarationOrAtRule {
 	 */
 	public function __construct( Token $token ) {
 		if ( $token->type() !== Token::T_IDENT ) {
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				"Declaration must begin with an ident token, got {$token->type()}"
 			);
 		}

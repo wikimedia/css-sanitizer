@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Grammar\Juxtaposition;
 use Wikimedia\CSS\Grammar\Matcher;
 use Wikimedia\CSS\Grammar\MatcherFactory;
@@ -70,7 +71,7 @@ class StyleRuleSanitizer extends RuleSanitizer {
 		if ( $options['hoistableComponentMatcher'] !== null &&
 			 !$options['hoistableComponentMatcher'] instanceof Matcher
 		) {
-			throw new \InvalidArgumentException( 'hoistableComponentMatcher must be a Matcher' );
+			throw new InvalidArgumentException( 'hoistableComponentMatcher must be a Matcher' );
 		}
 
 		$matcherFactory = MatcherFactory::singleton();

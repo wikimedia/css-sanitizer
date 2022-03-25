@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use Iterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Util;
@@ -49,7 +50,7 @@ class Juxtaposition extends Matcher {
 		do {
 			/** @var $lastMatch GrammarMatch */
 			/** @var $lastEnd int */
-			/** @var $iter \Iterator<GrammarMatch> */
+			/** @var $iter Iterator<GrammarMatch> */
 			/** @var $needEmpty bool */
 			list( $lastMatch, $lastEnd, $iter, $needEmpty ) = $stack[count( $stack ) - 1];
 

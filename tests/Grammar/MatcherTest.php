@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use ArrayIterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
@@ -196,7 +197,7 @@ class MatcherTest extends MatcherTestBase {
 		] );
 
 		$matcher = $this->getMockForAbstractClass( Matcher::class );
-		$matcher->method( 'generateMatches' )->willReturn( new \ArrayIterator( [
+		$matcher->method( 'generateMatches' )->willReturn( new ArrayIterator( [
 			new GrammarMatch( $testList, 1, 6, null, [
 				new GrammarMatch( $testList, 2, 1, 'significantWhitespace' ),
 				new GrammarMatch( $testList, 2, 2, 'not-significantWhitespace' ),

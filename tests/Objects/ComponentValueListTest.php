@@ -6,17 +6,20 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Wikimedia\CSS\Objects\ComponentValueList
  */
-class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
+class ComponentValueListTest extends TestCase {
 
 	/**
 	 * @dataProvider provideBadTokens
 	 * @param Token $token
 	 */
 	public function testConstructorBadTokens( $token ) {
-		$this->expectException( \InvalidArgumentException::class );
+		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage(
 			ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
 		);
@@ -29,7 +32,7 @@ class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
 	 * @param Token $token
 	 */
 	public function testAddBadToken( $token ) {
-		$this->expectException( \InvalidArgumentException::class );
+		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage(
 			ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
 		);
@@ -42,7 +45,7 @@ class ComponentValueListTest extends \PHPUnit\Framework\TestCase {
 	 * @param Token $token
 	 */
 	public function testSetBadToken( $token ) {
-		$this->expectException( \InvalidArgumentException::class );
+		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage(
 			ComponentValueList::class . " may not contain tokens of type \"{$token->type()}\"."
 		);

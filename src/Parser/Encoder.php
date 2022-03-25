@@ -6,8 +6,14 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use RuntimeException;
+use UtfNormal\Constants;
+use UtfNormal\Utils;
+use Wikimedia\AtEase\AtEase;
+
 /**
  * Character set conversion for CSS
+ *
  * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#input-byte-stream
  */
 class Encoder {
@@ -313,13 +319,13 @@ class Encoder {
 	protected static function doConvert( $encoding, $text ) {
 		// Pseudo-encoding that just outputs one replacement character
 		if ( $encoding === 'replacement' ) {
-			return \UtfNormal\Constants::UTF8_REPLACEMENT;
+			return Constants::UTF8_REPLACEMENT;
 		}
 
 		// Pseudo-encoding that shifts non-ASCII bytes to the BMP private use area
 		if ( $encoding === 'x-user-defined' ) {
 			return preg_replace_callback( '/[\x80-\xff]/', static function ( $m ) {
-				return \UtfNormal\Utils::codepointToUtf8( 0xf700 + ord( $m[0] ) );
+				return Utils::codepointToUtf8( 0xf700 + ord( $m[0] ) );
 			}, $text );
 		}
 
@@ -328,15 +334,15 @@ class Encoder {
 		// some encodings mbstring doesn't support.
 		if ( in_array( $encoding, mb_list_encodings(), true ) ) {
 			$old = mb_substitute_character();
-			mb_substitute_character( \UtfNormal\Constants::UNICODE_REPLACEMENT );
+			mb_substitute_character( Constants::UNICODE_REPLACEMENT );
 			$text = mb_convert_encoding( $text, 'UTF-8', $encoding );
 			mb_substitute_character( $old );
 			return $text;
 		}
 
-		$ret = \Wikimedia\AtEase\AtEase::quietCall( 'iconv', $encoding, 'UTF-8', $text );
+		$ret = AtEase::quietCall( 'iconv', $encoding, 'UTF-8', $text );
 		if ( $ret === false ) {
-			throw new \RuntimeException( "Cannot convert '$text' from $encoding" );
+			throw new RuntimeException( "Cannot convert '$text' from $encoding" );
 		}
 		return $ret;
 	}

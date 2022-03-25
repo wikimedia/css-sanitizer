@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Util;
 
 /**
@@ -28,7 +29,7 @@ class SimpleBlock extends ComponentValue {
 	public function __construct( Token $token ) {
 		$this->endTokenType = static::matchingDelimiter( $token->type() );
 		if ( $this->endTokenType === null ) {
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				'A SimpleBlock is delimited by either {}, [], or ().'
 			);
 		}

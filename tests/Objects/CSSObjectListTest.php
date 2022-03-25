@@ -7,12 +7,14 @@
 namespace Wikimedia\CSS\Objects;
 
 use InvalidArgumentException;
+use OutOfBoundsException;
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Util;
 
 /**
  * @covers \Wikimedia\CSS\Objects\CSSObjectList
  */
-class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
+class CSSObjectListTest extends TestCase {
 
 	public function testException() {
 		$item = new TestCSSObjectListItem( 1 );
@@ -48,13 +50,13 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		try {
 			$list->add( $value1, -1 );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Index is out of range.', $ex->getMessage() );
 		}
 		try {
 			$list->add( $value1, 4 );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Index is out of range.', $ex->getMessage() );
 		}
 
@@ -127,13 +129,13 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		try {
 			$list->remove( -1 );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Index is out of range.', $ex->getMessage() );
 		}
 		try {
 			$list->remove( 5 );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Index is out of range.', $ex->getMessage() );
 		}
 
@@ -221,14 +223,14 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		try {
 			$list->seek( -1 );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Offset is out of range.', $ex->getMessage() );
 		}
 		$this->assertSame( $key, $list->key() );
 		try {
 			$list->seek( 5 );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Offset is out of range.', $ex->getMessage() );
 		}
 		$this->assertSame( $key, $list->key() );
@@ -269,25 +271,25 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		try {
 			$dummy = $list[-1];
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Offset is out of range.', $ex->getMessage() );
 		}
 		try {
 			$dummy = $list[5];
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Offset is out of range.', $ex->getMessage() );
 		}
 		try {
 			$dummy = $list['foo'];
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'Offset must be an integer.', $ex->getMessage() );
 		}
 		try {
 			$dummy = $list[1.2];
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'Offset must be an integer.', $ex->getMessage() );
 		}
 
@@ -300,25 +302,25 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		try {
 			$list[-1] = $value6;
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Offset is out of range.', $ex->getMessage() );
 		}
 		try {
 			$list[5] = $value6;
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Offset is out of range.', $ex->getMessage() );
 		}
 		try {
 			$list['foo'] = $value6;
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'Offset must be an integer.', $ex->getMessage() );
 		}
 		try {
 			$list[1.2] = $value6;
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'Offset must be an integer.', $ex->getMessage() );
 		}
 
@@ -342,7 +344,7 @@ class CSSObjectListTest extends \PHPUnit\Framework\TestCase {
 		try {
 			unset( $list[1] );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \OutOfBoundsException $ex ) {
+		} catch ( OutOfBoundsException $ex ) {
 			$this->assertSame( 'Cannot leave holes in the list.', $ex->getMessage() );
 		}
 		$this->assertSame( [ $value1, $value4, $value3 ], iterator_to_array( $list ) );

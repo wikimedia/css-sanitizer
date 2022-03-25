@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use InvalidArgumentException;
+
 /**
  * Represent a list of CSS declarations
  */
@@ -24,7 +26,7 @@ class ComponentValueList extends CSSObjectList {
 				case Token::T_LEFT_BRACKET:
 				case Token::T_LEFT_PAREN:
 				case Token::T_LEFT_BRACE:
-					throw new \InvalidArgumentException(
+					throw new InvalidArgumentException(
 						static::class . " may not contain tokens of type \"$type\"."
 					);
 			}

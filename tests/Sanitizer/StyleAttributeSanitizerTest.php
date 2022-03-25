@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Grammar\MatcherFactory;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;
@@ -13,7 +14,7 @@ use Wikimedia\CSS\Parser\Parser;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\StyleAttributeSanitizer
  */
-class StyleAttributeSanitizerTest extends \PHPUnit\Framework\TestCase {
+class StyleAttributeSanitizerTest extends TestCase {
 
 	protected function getSanitizer() {
 		return new StyleAttributeSanitizer(

@@ -7,11 +7,13 @@
 namespace Wikimedia\CSS\Parser;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use UtfNormal\Utils;
 
 /**
  * @covers \Wikimedia\CSS\Parser\StringDataSource
  */
-class StringDataSourceTest extends \PHPUnit\Framework\TestCase {
+class StringDataSourceTest extends TestCase {
 
 	/**
 	 * @dataProvider provideUtf8Detection
@@ -76,14 +78,14 @@ class StringDataSourceTest extends \PHPUnit\Framework\TestCase {
 		$source = new StringDataSource(
 			"\x00\x7f\xc2\x80\xdf\xbf\xe0\xa0\x80\xef\xbf\xbf\xf0\x90\x80\x80\xf4\x8f\xbf\xbf"
 		);
-		$this->assertSame( 0, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		$this->assertSame( 0x7f, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		$this->assertSame( 0x80, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		$this->assertSame( 0x7ff, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		$this->assertSame( 0x800, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		$this->assertSame( 0xffff, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		$this->assertSame( 0x10000, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		$this->assertSame( 0x10ffff, \UtfNormal\Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0x7f, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0x80, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0x7ff, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0x800, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0xffff, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0x10000, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0x10ffff, Utils::utf8ToCodepoint( $source->readCharacter() ) );
 		$this->assertSame( DataSource::EOF, $source->readCharacter() );
 	}
 }

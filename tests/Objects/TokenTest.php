@@ -6,14 +6,17 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Objects\Token
  * @covers \Wikimedia\CSS\Objects\ComponentValue
  */
-class TokenTest extends \PHPUnit\Framework\TestCase {
+class TokenTest extends TestCase {
 
 	protected static function nt( $type, $value, $repr, $typeFlag, $unit = '' ) {
 		$hackRepr = $repr !== null && (float)$value !== (float)$repr;
@@ -50,12 +53,13 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 
 	/**
 	 * @dataProvider provideConstructor
+	 *
 	 * @param string $type
 	 * @param array|string|null $value
-	 * @param array|\Exception $expect Expectation overrides
+	 * @param array|Exception $expect Expectation overrides
 	 */
 	public function testConstructor( $type, $value, $expect = [] ) {
-		if ( $expect instanceof \Exception ) {
+		if ( $expect instanceof Exception ) {
 			$this->expectException( get_class( $expect ) );
 			$this->expectExceptionMessage( $expect->getMessage() );
 		} else {
@@ -85,7 +89,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 			$token = new Token( $type, $value );
 		}
 
-		if ( !$expect instanceof \Exception ) {
+		if ( !$expect instanceof Exception ) {
 			// Convert some properties to their accessors
 			$expect['getPosition'] = $expect['position'];
 			unset( $expect['position'], $expect['start'], $expect['end'] );
@@ -393,7 +397,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 	public function testStringificationError() {
 		$t = new Token( Token::T_WHITESPACE );
 		TestingAccessWrapper::newFromObject( $t )->type = 'bogus';
-		$this->expectException( \UnexpectedValueException::class );
+		$this->expectException( UnexpectedValueException::class );
 		$this->expectExceptionMessage( 'Unknown token type "bogus".' );
 		$t->__toString();
 	}
@@ -405,7 +409,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase {
 	 */
 	public function testToComponentValueArray( $token, $ok ) {
 		if ( !$ok ) {
-			$this->expectException( \UnexpectedValueException::class );
+			$this->expectException( UnexpectedValueException::class );
 			$this->expectExceptionMessage(
 				"Token type \"{$token->type()}\" is not valid in a ComponentValueList."
 			);

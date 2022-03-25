@@ -7,6 +7,7 @@
 namespace Wikimedia\CSS\Grammar;
 
 use Closure;
+use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 
@@ -41,7 +42,7 @@ class FunctionMatcher extends Matcher {
 		} elseif ( is_callable( $name ) || $name === null ) {
 			$this->nameCheck = $name;
 		} else {
-			throw new \InvalidArgumentException( '$name must be a string, callable, or null' );
+			throw new InvalidArgumentException( '$name must be a string, callable, or null' );
 		}
 		$this->matcher = $matcher;
 	}

@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use ReflectionMethod;
 use Wikimedia\CSS\Grammar\AnythingMatcher;
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\ComponentValue;
@@ -45,7 +46,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 				break;
 		}
 		if ( $method ) {
-			$rm = new \ReflectionMethod( $san, $method );
+			$rm = new ReflectionMethod( $san, $method );
 			$rm->setAccessible( true );
 			$san->method( 'doSanitize' )->willReturnCallback( static function ( $rule ) use ( $rm, $san, $arg ) {
 				$ret = clone $rule;

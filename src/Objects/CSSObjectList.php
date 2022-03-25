@@ -6,12 +6,17 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use ArrayAccess;
+use Countable;
+use InvalidArgumentException;
+use OutOfBoundsException;
+use SeekableIterator;
 use Wikimedia\CSS\Util;
 
 /**
  * Represent a list of CSS objects
  */
-class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSObject {
+class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObject {
 
 	/** @var string The specific class of object contained */
 	protected static $objectType;
@@ -53,7 +58,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 			static::testObjects( $objects );
 		} else {
 			if ( !$objects instanceof static::$objectType ) {
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					static::class . ' may only contain instances of ' . static::$objectType . '.'
 				);
 			}
@@ -64,7 +69,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 		if ( $index === null ) {
 			$index = count( $this->objects );
 		} elseif ( $index < 0 || $index > count( $this->objects ) ) {
-			throw new \OutOfBoundsException( 'Index is out of range.' );
+			throw new OutOfBoundsException( 'Index is out of range.' );
 		}
 
 		array_splice( $this->objects, $index, 0, $objects );
@@ -80,7 +85,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	 */
 	public function remove( $index ) {
 		if ( $index < 0 || $index >= count( $this->objects ) ) {
-			throw new \OutOfBoundsException( 'Index is out of range.' );
+			throw new OutOfBoundsException( 'Index is out of range.' );
 		}
 		$ret = $this->objects[$index];
 		array_splice( $this->objects, $index, 1 );
@@ -123,7 +128,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	/** @inheritDoc */
 	public function seek( $offset ) {
 		if ( $offset < 0 || $offset >= count( $this->objects ) ) {
-			throw new \OutOfBoundsException( 'Offset is out of range.' );
+			throw new OutOfBoundsException( 'Offset is out of range.' );
 		}
 		$this->offset = $offset;
 	}
@@ -163,10 +168,10 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	/** @inheritDoc */
 	public function offsetGet( $offset ) {
 		if ( !is_numeric( $offset ) || (float)(int)$offset !== (float)$offset ) {
-			throw new \InvalidArgumentException( 'Offset must be an integer.' );
+			throw new InvalidArgumentException( 'Offset must be an integer.' );
 		}
 		if ( $offset < 0 || $offset > count( $this->objects ) ) {
-			throw new \OutOfBoundsException( 'Offset is out of range.' );
+			throw new OutOfBoundsException( 'Offset is out of range.' );
 		}
 		return $this->objects[$offset];
 	}
@@ -174,16 +179,16 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	/** @inheritDoc */
 	public function offsetSet( $offset, $value ) {
 		if ( !$value instanceof static::$objectType ) {
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				static::class . ' may only contain instances of ' . static::$objectType . '.'
 			);
 		}
 		static::testObjects( [ $value ] );
 		if ( !is_numeric( $offset ) || (float)(int)$offset !== (float)$offset ) {
-			throw new \InvalidArgumentException( 'Offset must be an integer.' );
+			throw new InvalidArgumentException( 'Offset must be an integer.' );
 		}
 		if ( $offset < 0 || $offset > count( $this->objects ) ) {
-			throw new \OutOfBoundsException( 'Offset is out of range.' );
+			throw new OutOfBoundsException( 'Offset is out of range.' );
 		}
 		$this->objects[$offset] = $value;
 	}
@@ -191,7 +196,7 @@ class CSSObjectList implements \Countable, \SeekableIterator, \ArrayAccess, CSSO
 	/** @inheritDoc */
 	public function offsetUnset( $offset ) {
 		if ( isset( $this->objects[$offset] ) && $offset !== count( $this->objects ) - 1 ) {
-			throw new \OutOfBoundsException( 'Cannot leave holes in the list.' );
+			throw new OutOfBoundsException( 'Cannot leave holes in the list.' );
 		}
 		unset( $this->objects[$offset] );
 	}

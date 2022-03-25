@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
@@ -19,7 +20,7 @@ use Wikimedia\TestingAccessWrapper;
 class AnythingMatcherTest extends MatcherTestBase {
 
 	public function testException() {
-		$this->expectException( \InvalidArgumentException::class );
+		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Invalid quantifier' );
 		// @phan-suppress-next-line PhanNoopNew
 		new AnythingMatcher( [ 'quantifier' => '#' ] );

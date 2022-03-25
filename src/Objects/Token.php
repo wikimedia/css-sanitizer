@@ -6,6 +6,9 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use InvalidArgumentException;
+use UnexpectedValueException;
+
 /**
  * Represent a CSS token
  */
@@ -80,11 +83,11 @@ class Token extends ComponentValue {
 
 		if ( isset( $value['position'] ) ) {
 			if ( !is_array( $value['position'] ) || count( $value['position'] ) !== 2 ) {
-				throw new \InvalidArgumentException( 'Position must be an array of two integers' );
+				throw new InvalidArgumentException( 'Position must be an array of two integers' );
 			}
 			list( $this->line, $this->pos ) = $value['position'];
 			if ( !is_int( $this->line ) || !is_int( $this->pos ) ) {
-				throw new \InvalidArgumentException( 'Position must be an array of two integers' );
+				throw new InvalidArgumentException( 'Position must be an array of two integers' );
 			}
 		}
 		if ( isset( $value['significant'] ) ) {
@@ -99,20 +102,20 @@ class Token extends ComponentValue {
 			case self::T_STRING:
 			case self::T_URL:
 				if ( !isset( $value['value'] ) ) {
-					throw new \InvalidArgumentException( "Token type $this->type requires a value" );
+					throw new InvalidArgumentException( "Token type $this->type requires a value" );
 				}
 				$this->value = (string)$value['value'];
 				break;
 
 			case self::T_HASH:
 				if ( !isset( $value['value'] ) ) {
-					throw new \InvalidArgumentException( "Token type $this->type requires a value" );
+					throw new InvalidArgumentException( "Token type $this->type requires a value" );
 				}
 				if ( !isset( $value['typeFlag'] ) ) {
-					throw new \InvalidArgumentException( "Token type $this->type requires a typeFlag" );
+					throw new InvalidArgumentException( "Token type $this->type requires a typeFlag" );
 				}
 				if ( !in_array( $value['typeFlag'], [ 'id', 'unrestricted' ], true ) ) {
-					throw new \InvalidArgumentException( "Invalid type flag for Token type $this->type" );
+					throw new InvalidArgumentException( "Invalid type flag for Token type $this->type" );
 				}
 				$this->value = (string)$value['value'];
 				$this->typeFlag = $value['typeFlag'];
@@ -120,11 +123,11 @@ class Token extends ComponentValue {
 
 			case self::T_DELIM:
 				if ( !isset( $value['value'] ) ) {
-					throw new \InvalidArgumentException( "Token type $this->type requires a value" );
+					throw new InvalidArgumentException( "Token type $this->type requires a value" );
 				}
 				$this->value = (string)$value['value'];
 				if ( mb_strlen( $this->value, 'UTF-8' ) !== 1 ) {
-					throw new \InvalidArgumentException(
+					throw new InvalidArgumentException(
 						"Value for Token type $this->type must be a single character"
 					);
 				}
@@ -136,32 +139,32 @@ class Token extends ComponentValue {
 				if ( !isset( $value['value'] ) ||
 					!is_numeric( $value['value'] ) || !is_finite( $value['value'] )
 				) {
-					throw new \InvalidArgumentException( "Token type $this->type requires a numeric value" );
+					throw new InvalidArgumentException( "Token type $this->type requires a numeric value" );
 				}
 				if ( !isset( $value['typeFlag'] ) ) {
-					throw new \InvalidArgumentException( "Token type $this->type requires a typeFlag" );
+					throw new InvalidArgumentException( "Token type $this->type requires a typeFlag" );
 				}
 				$this->typeFlag = $value['typeFlag'];
 				if ( $this->typeFlag === 'integer' ) {
 					$this->value = (int)$value['value'];
 					if ( (float)$this->value !== (float)$value['value'] ) {
-						throw new \InvalidArgumentException(
+						throw new InvalidArgumentException(
 							"typeFlag is 'integer', but value supplied is not an integer"
 						);
 					}
 				} elseif ( $this->typeFlag === 'number' ) {
 					$this->value = (float)$value['value'];
 				} else {
-					throw new \InvalidArgumentException( "Invalid type flag for Token type $this->type" );
+					throw new InvalidArgumentException( "Invalid type flag for Token type $this->type" );
 				}
 
 				if ( isset( $value['representation'] ) ) {
 					if ( !is_numeric( $value['representation'] ) ) {
-						throw new \InvalidArgumentException( 'Representation must be numeric' );
+						throw new InvalidArgumentException( 'Representation must be numeric' );
 					}
 					$this->representation = $value['representation'];
 					if ( (float)$this->representation !== (float)$this->value ) {
-						throw new \InvalidArgumentException(
+						throw new InvalidArgumentException(
 							"Representation \"$this->representation\" does not match value \"$this->value\""
 						);
 					}
@@ -169,7 +172,7 @@ class Token extends ComponentValue {
 
 				if ( $type === self::T_DIMENSION ) {
 					if ( !isset( $value['unit'] ) ) {
-						throw new \InvalidArgumentException( "Token type $this->type requires a unit" );
+						throw new InvalidArgumentException( "Token type $this->type requires a unit" );
 					}
 					$this->unit = $value['unit'];
 				}
@@ -197,13 +200,13 @@ class Token extends ComponentValue {
 				if ( isset( $value['typeFlag'] ) && $value['typeFlag'] !== '' ) {
 					$this->typeFlag = $value['typeFlag'];
 					if ( $this->typeFlag !== 'recursion-depth-exceeded' ) {
-						throw new \InvalidArgumentException( "Invalid type flag for Token type $this->type" );
+						throw new InvalidArgumentException( "Invalid type flag for Token type $this->type" );
 					}
 				}
 				break;
 
 			default:
-				throw new \InvalidArgumentException( "Unknown token type \"$this->type\"." );
+				throw new InvalidArgumentException( "Unknown token type \"$this->type\"." );
 		}
 	}
 
@@ -287,7 +290,7 @@ class Token extends ComponentValue {
 			case self::T_LEFT_BRACKET:
 			case self::T_LEFT_PAREN:
 			case self::T_LEFT_BRACE:
-				throw new \UnexpectedValueException(
+				throw new UnexpectedValueException(
 					"Token type \"$this->type\" is not valid in a ComponentValueList."
 				);
 
@@ -459,7 +462,7 @@ class Token extends ComponentValue {
 				return '';
 
 			default:
-				throw new \UnexpectedValueException( "Unknown token type \"$this->type\"." );
+				throw new UnexpectedValueException( "Unknown token type \"$this->type\"." );
 		}
 	}
 

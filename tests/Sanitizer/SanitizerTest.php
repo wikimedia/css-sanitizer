@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\RuleList;
@@ -16,7 +17,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\Sanitizer
  */
-class SanitizerTest extends \PHPUnit\Framework\TestCase {
+class SanitizerTest extends TestCase {
 
 	public function testErrors() {
 		$sanitizer = TestingAccessWrapper::newFromObject(

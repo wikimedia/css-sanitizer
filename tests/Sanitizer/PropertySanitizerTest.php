@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Grammar\AnythingMatcher;
 use Wikimedia\CSS\Grammar\KeywordMatcher;
 use Wikimedia\CSS\Grammar\NothingMatcher;
@@ -16,7 +18,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\PropertySanitizer
  */
-class PropertySanitizerTest extends \PHPUnit\Framework\TestCase {
+class PropertySanitizerTest extends TestCase {
 
 	public function testGettersSetters() {
 		$m1 = new AnythingMatcher;
@@ -37,7 +39,7 @@ class PropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 		try {
 			$san->addKnownProperties( [ 'bar' => clone $m1 ] );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'Duplicate definitions for properties: bar', $ex->getMessage() );
 		}
 
@@ -45,14 +47,14 @@ class PropertySanitizerTest extends \PHPUnit\Framework\TestCase {
 			// @phan-suppress-next-line PhanTypeMismatchArgument The mismatch is tested here
 			$san->setKnownProperties( [ 'bar' => null ] );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'Value for \'bar\' is not a Matcher', $ex->getMessage() );
 		}
 
 		try {
 			$san->setKnownProperties( [ 'Bar' => $m1 ] );
 			$this->fail( 'Expected exception not thrown' );
-		} catch ( \InvalidArgumentException $ex ) {
+		} catch ( InvalidArgumentException $ex ) {
 			$this->assertSame( 'Property name \'Bar\' must be lowercased', $ex->getMessage() );
 		}
 	}

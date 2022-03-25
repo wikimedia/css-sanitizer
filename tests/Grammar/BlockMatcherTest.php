@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
@@ -17,7 +18,7 @@ use Wikimedia\TestingAccessWrapper;
 class BlockMatcherTest extends MatcherTestBase {
 
 	public function testException() {
-		$this->expectException( \InvalidArgumentException::class );
+		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'A block is delimited by either {}, [], or ().' );
 		// @phan-suppress-next-line PhanNoopNew
 		new BlockMatcher( Token::T_RIGHT_BRACE, new TokenMatcher( Token::T_COMMA ) );

@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Grammar\TestMatcherFactory;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Util;
@@ -14,7 +15,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\StylePropertySanitizer
  */
-class StylePropertySanitizerTest extends \PHPUnit\Framework\TestCase {
+class StylePropertySanitizerTest extends TestCase {
 
 	/** @var StylePropertySanitizer|null */
 	private static $sanitizer;

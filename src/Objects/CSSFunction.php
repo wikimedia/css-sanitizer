@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Util;
 
 /**
@@ -24,7 +25,7 @@ class CSSFunction extends ComponentValue {
 	 */
 	public function __construct( Token $token ) {
 		if ( $token->type() !== Token::T_FUNCTION ) {
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				"CSS function must begin with a function token, got {$token->type()}"
 			);
 		}

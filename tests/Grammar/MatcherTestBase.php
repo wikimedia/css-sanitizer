@@ -7,10 +7,11 @@
 namespace Wikimedia\CSS\Grammar;
 
 use Iterator;
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\TestingAccessWrapper;
 
-class MatcherTestBase extends \PHPUnit\Framework\TestCase {
+class MatcherTestBase extends TestCase {
 
 	/**
 	 * Strip the tokens from a GrammarMatch

@@ -6,6 +6,9 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use ArrayIterator;
+use EmptyIterator;
+use Iterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Util;
 
@@ -58,17 +61,17 @@ class UnorderedGroup extends Matcher {
 			[
 				new GrammarMatch( $values, $start, 0 ),
 				$this->matchers,
-				new \ArrayIterator( $this->matchers ),
+				new ArrayIterator( $this->matchers ),
 				null,
-				new \EmptyIterator
+				new EmptyIterator
 			]
 		];
 		do {
 			/** @var $lastMatch GrammarMatch */
 			/** @var $matchers Matcher[] */
-			/** @var $matcherIter \Iterator<Matcher> */
+			/** @var $matcherIter Iterator<Matcher> */
 			/** @var $curMatcher Matcher|null */
-			/** @var $iter \Iterator<GrammarMatch> */
+			/** @var $iter Iterator<GrammarMatch> */
 			list( $lastMatch, $matchers, $matcherIter, $curMatcher, $iter ) = $stack[count( $stack ) - 1];
 
 			// If the top of the stack has more matches, process the next one.
@@ -79,7 +82,7 @@ class UnorderedGroup extends Matcher {
 				// If we have unused matchers to try after this one, do so.
 				// Otherwise yield and continue with the current one.
 				if ( $matchers ) {
-					$stack[] = [ $match, $matchers, new \ArrayIterator( $matchers ), null, new \EmptyIterator ];
+					$stack[] = [ $match, $matchers, new ArrayIterator( $matchers ), null, new EmptyIterator ];
 				} else {
 					$newMatch = $this->makeMatch( $values, $start, $match->getNext(), $match, $stack );
 					$mid = $newMatch->getUniqueID();

@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use EmptyIterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 
 /**
@@ -14,6 +15,6 @@ use Wikimedia\CSS\Objects\ComponentValueList;
 class NothingMatcher extends Matcher {
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
-		return new \EmptyIterator;
+		return new EmptyIterator;
 	}
 }

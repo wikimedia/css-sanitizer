@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Util;
 
 /**
@@ -27,7 +28,7 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 	 */
 	public function __construct( Token $token ) {
 		if ( $token->type() !== Token::T_AT_KEYWORD ) {
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				"At rule must begin with an at-keyword token, got {$token->type()}"
 			);
 		}
@@ -83,7 +84,7 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 	 */
 	public function setBlock( SimpleBlock $block = null ) {
 		if ( $block->getStartTokenType() !== Token::T_LEFT_BRACE ) {
-			throw new \InvalidArgumentException( 'At-rule block must be delimited by {}' );
+			throw new InvalidArgumentException( 'At-rule block must be delimited by {}' );
 		}
 		$this->block = $block;
 	}

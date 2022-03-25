@@ -6,10 +6,12 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Wikimedia\CSS\Objects\DeclarationList
  */
-class DeclarationListTest extends \PHPUnit\Framework\TestCase {
+class DeclarationListTest extends TestCase {
 
 	public function testToTokenArray() {
 		$token1 = new Token( Token::T_IDENT, 'a' );

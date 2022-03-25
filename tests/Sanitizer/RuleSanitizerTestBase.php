@@ -6,11 +6,13 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use BadMethodCallException;
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Util;
 
-abstract class RuleSanitizerTestBase extends \PHPUnit\Framework\TestCase {
+abstract class RuleSanitizerTestBase extends TestCase {
 
 	/**
 	 * Fetch the sanitizer to be tested
@@ -23,7 +25,7 @@ abstract class RuleSanitizerTestBase extends \PHPUnit\Framework\TestCase {
 	 * @return array Array of parameter arrays for self::testRules()
 	 */
 	public static function provideRules() {
-		throw new \BadMethodCallException( static::class . ' must override ' . __METHOD__ );
+		throw new BadMethodCallException( static::class . ' must override ' . __METHOD__ );
 	}
 
 	/** Test */

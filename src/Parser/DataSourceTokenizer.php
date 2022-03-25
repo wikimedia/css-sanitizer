@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use InvalidArgumentException;
+use UnexpectedValueException;
 use UtfNormal\Constants;
 use UtfNormal\Utils;
 use Wikimedia\CSS\Objects\Token;
@@ -101,7 +103,7 @@ class DataSourceTokenizer implements Tokenizer {
 	protected function reconsumeCharacter() {
 		// @codeCoverageIgnoreStart
 		if ( !is_string( $this->currentCharacter ) ) {
-			throw new \UnexpectedValueException( "[$this->line:$this->pos] Can't reconsume" );
+			throw new UnexpectedValueException( "[$this->line:$this->pos] Can't reconsume" );
 		}
 		// @codeCoverageIgnoreEnd
 
@@ -157,7 +159,7 @@ class DataSourceTokenizer implements Tokenizer {
 			}
 			if ( count( $position ) !== 2 || !is_int( $position[0] ) || !is_int( $position[1] ) ) {
 				// @codeCoverageIgnoreStart
-				throw new \InvalidArgumentException( 'Invalid position' );
+				throw new InvalidArgumentException( 'Invalid position' );
 				// @codeCoverageIgnoreEnd
 			}
 			$err = [ $tag, $position[0], $position[1] ];
@@ -429,7 +431,7 @@ class DataSourceTokenizer implements Tokenizer {
 						$data['value'] .= $this->consumeEscape();
 					} else {
 						// @codeCoverageIgnoreStart
-						throw new \UnexpectedValueException( "[$this->line:$this->pos] Unexpected state" );
+						throw new UnexpectedValueException( "[$this->line:$this->pos] Unexpected state" );
 						// @codeCoverageIgnoreEnd
 					}
 					break;

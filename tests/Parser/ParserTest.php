@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Wikimedia\CSS\Objects\AtRule;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
@@ -23,7 +25,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Parser\Parser
  */
-class ParserTest extends \PHPUnit\Framework\TestCase {
+class ParserTest extends TestCase {
 
 	public function testConstructors() {
 		$parser = Parser::newFromString( 'foobar', [ 'options' ] );
@@ -766,7 +768,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 	}
 
 	public function testDepthLimit() {
-		$l = ( new \ReflectionClass( Parser::class ) )->getConstant( 'CV_DEPTH_LIMIT' );
+		$l = ( new ReflectionClass( Parser::class ) )->getConstant( 'CV_DEPTH_LIMIT' );
 
 		// Make sure it's not exceeded by non-nested CVs.
 		$parser = Parser::newFromString( str_repeat( 'x ', $l ) );

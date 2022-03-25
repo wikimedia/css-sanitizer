@@ -7,6 +7,7 @@
 namespace Wikimedia\CSS\Parser;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Objects\TokenList;
@@ -14,7 +15,7 @@ use Wikimedia\CSS\Objects\TokenList;
 /**
  * @covers \Wikimedia\CSS\Parser\TokenListTokenizer
  */
-class TokenListTokenizerTest extends \PHPUnit\Framework\TestCase {
+class TokenListTokenizerTest extends TestCase {
 
 	public function testTokenizer() {
 		$T = Token::T_WHITESPACE;

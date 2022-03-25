@@ -6,13 +6,14 @@
 
 namespace Wikimedia\CSS;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Sanitizer\StylesheetSanitizer;
 
 /**
  * @coversNothing
  */
-class MinificationTest extends \PHPUnit\Framework\TestCase {
+class MinificationTest extends TestCase {
 
 	/**
 	 * @dataProvider provideStylesheets

@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;
@@ -15,7 +16,7 @@ use Wikimedia\TestingAccessWrapper;
 /**
  * @covers \Wikimedia\CSS\Grammar\MatcherFactory
  */
-class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
+class MatcherFactoryTest extends TestCase {
 
 	public function testSingleton() {
 		TestingAccessWrapper::newFromClass( MatcherFactory::class )->instance = null;

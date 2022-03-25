@@ -6,13 +6,14 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\TestingAccessWrapper;
 
 /**
  * @covers \Wikimedia\CSS\Parser\DataSourceTokenizer
  */
-class DataSourceTokenizerTest extends \PHPUnit\Framework\TestCase {
+class DataSourceTokenizerTest extends TestCase {
 
 	public function testCharacterNormalization() {
 		$t = TestingAccessWrapper::newFromObject(

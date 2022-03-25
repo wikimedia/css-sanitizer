@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\Token;
@@ -28,7 +29,7 @@ class UrlMatcher extends FunctionMatcher {
 		if ( isset( $options['modifierMatcher'] ) ) {
 			$modifierMatcher = $options['modifierMatcher'];
 			if ( !$modifierMatcher instanceof Matcher ) {
-				throw new \InvalidArgumentException( 'modifierMatcher must be a Matcher' );
+				throw new InvalidArgumentException( 'modifierMatcher must be a Matcher' );
 			}
 		} else {
 			$modifierMatcher = new NothingMatcher;

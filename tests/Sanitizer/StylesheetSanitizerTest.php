@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Grammar\MatcherFactory;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Parser\Parser;
@@ -13,7 +14,7 @@ use Wikimedia\CSS\Parser\Parser;
 /**
  * @covers \Wikimedia\CSS\Sanitizer\StylesheetSanitizer
  */
-class StylesheetSanitizerTest extends \PHPUnit\Framework\TestCase {
+class StylesheetSanitizerTest extends TestCase {
 
 	protected function getSanitizer() {
 		$matcherFactory = MatcherFactory::singleton();

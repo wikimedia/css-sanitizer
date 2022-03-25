@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use Iterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\SimpleBlock;
@@ -232,7 +233,7 @@ abstract class Matcher {
 	 * @param int $start Starting position in $values
 	 * @param array $options See self::$defaultOptions.
 	 *  Always use the options passed in, don't use $this->defaultOptions yourself.
-	 * @return \Iterator<GrammarMatch> Iterates over the set of GrammarMatch
+	 * @return Iterator<GrammarMatch> Iterates over the set of GrammarMatch
 	 *  objects defining all the ways this matcher can match.
 	 */
 	abstract protected function generateMatches( ComponentValueList $values, $start, array $options );

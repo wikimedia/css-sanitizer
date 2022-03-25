@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use Iterator;
+use UnexpectedValueException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\Token;
 
@@ -107,7 +109,7 @@ class Quantifier extends Matcher {
 		];
 		do {
 			/** @var $lastMatch GrammarMatch */
-			/** @var $iter \Iterator<GrammarMatch> */
+			/** @var $iter Iterator<GrammarMatch> */
 			list( $lastMatch, $iter ) = $stack[count( $stack ) - 1];
 
 			// If the top of the stack has no more matches, pop it, maybe
@@ -133,7 +135,7 @@ class Quantifier extends Matcher {
 
 			// Quantifiers don't work well when the quantified thing can be empty.
 			if ( $match->getLength() === 0 ) {
-				throw new \UnexpectedValueException( 'Empty match in quantifier!' );
+				throw new UnexpectedValueException( 'Empty match in quantifier!' );
 			}
 
 			$nextFrom = $match->getNext();

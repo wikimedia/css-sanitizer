@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Grammar;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 
@@ -33,7 +34,7 @@ class BlockMatcher extends Matcher {
 	 */
 	public function __construct( $blockType, Matcher $matcher ) {
 		if ( SimpleBlock::matchingDelimiter( $blockType ) === null ) {
-			throw new \InvalidArgumentException(
+			throw new InvalidArgumentException(
 				'A block is delimited by either {}, [], or ().'
 			);
 		}

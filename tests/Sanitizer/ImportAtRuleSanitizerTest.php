@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Sanitizer;
 
+use TypeError;
 use Wikimedia\CSS\Grammar\TestMatcherFactory;
 
 /**
@@ -28,7 +29,7 @@ class ImportAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	public function testException() {
 		$matcherFactory = TestMatcherFactory::singleton();
-		$this->expectException( \TypeError::class );
+		$this->expectException( TypeError::class );
 		// The exact TypeError message differs between php7 and php8 (nullables)
 		$this->expectExceptionMessage( 'Wikimedia\CSS\Sanitizer\PropertySanitizer' );
 		// @phan-suppress-next-line PhanNoopNew

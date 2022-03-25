@@ -6,24 +6,29 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
+
 /**
  * @covers \Wikimedia\CSS\Parser\Encoder
  */
-class EncoderTest extends \PHPUnit\Framework\TestCase {
+class EncoderTest extends TestCase {
 
 	/**
 	 * @dataProvider provideConversion
+	 *
 	 * @param string $text
-	 * @param string|\Exception $expect
+	 * @param string|Exception $expect
 	 * @param array $encodings
 	 */
 	public function testConversion( $text, $expect, $encodings = [] ) {
-		if ( $expect instanceof \Exception ) {
+		if ( $expect instanceof Exception ) {
 			$this->expectException( get_class( $expect ) );
 			$this->expectExceptionMessage( $expect->getMessage() );
 		}
 		$output = Encoder::convert( $text, $encodings );
-		if ( !$expect instanceof \Exception ) {
+		if ( !$expect instanceof Exception ) {
 			$this->assertSame( $expect, $output );
 		}
 	}
@@ -104,7 +109,7 @@ class EncoderTest extends \PHPUnit\Framework\TestCase {
 			],
 			'iconv fail' => [
 				$txt,
-				new \RuntimeException( "Cannot convert '$txt' from Windows-874" )
+				new RuntimeException( "Cannot convert '$txt' from Windows-874" )
 			],
 		];
 	}

@@ -6,6 +6,9 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use InvalidArgumentException;
+use UnexpectedValueException;
+
 /**
  * Read data for the CSS parser
  */
@@ -31,7 +34,7 @@ class StringDataSource implements DataSource {
 		$this->len = strlen( $this->string );
 
 		if ( !mb_check_encoding( $this->string, 'UTF-8' ) ) {
-			throw new \InvalidArgumentException( '$string is not valid UTF-8' );
+			throw new InvalidArgumentException( '$string is not valid UTF-8' );
 		}
 	}
 
@@ -66,7 +69,7 @@ class StringDataSource implements DataSource {
 			// WTF? Should never get here because it should have failed
 			// validation in the constructor.
 			// @codeCoverageIgnoreStart
-			throw new \UnexpectedValueException(
+			throw new UnexpectedValueException(
 				sprintf( 'Unexpected byte %02X in string at position %d.', $cc, $this->pos )
 			);
 			// @codeCoverageIgnoreEnd

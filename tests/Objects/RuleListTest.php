@@ -6,10 +6,12 @@
 
 namespace Wikimedia\CSS\Objects;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Wikimedia\CSS\Objects\RuleList
  */
-class RuleListTest extends \PHPUnit\Framework\TestCase {
+class RuleListTest extends TestCase {
 
 	public function testToTokenArray() {
 		$tok1 = new Token( Token::T_AT_KEYWORD, 'a' );

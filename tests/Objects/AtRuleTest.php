@@ -7,13 +7,14 @@
 namespace Wikimedia\CSS\Objects;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Wikimedia\CSS\Util;
 
 /**
  * @covers \Wikimedia\CSS\Objects\AtRule
  * @covers \Wikimedia\CSS\Objects\Rule
  */
-class AtRuleTest extends \PHPUnit\Framework\TestCase {
+class AtRuleTest extends TestCase {
 
 	public function testException() {
 		$this->expectException( InvalidArgumentException::class );

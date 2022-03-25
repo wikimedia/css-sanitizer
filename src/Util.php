@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Objects\ComponentValue;
 use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\CSSObject;
@@ -22,13 +23,13 @@ class Util {
 	 * @param array $array
 	 * @param string $class
 	 * @param string $what Describe the array being checked
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
 	public static function assertAllInstanceOf( array $array, $class, $what ) {
 		foreach ( $array as $k => $v ) {
 			if ( !$v instanceof $class ) {
 				$vtype = is_object( $v ) ? get_class( $v ) : gettype( $v );
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					"$what may only contain instances of $class" .
 						" (found $vtype at index $k)"
 				);
@@ -41,19 +42,19 @@ class Util {
 	 * @param Token[] $array
 	 * @param string $type
 	 * @param string $what Describe the array being checked
-	 * @throws \InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
 	public static function assertAllTokensOfType( array $array, $type, $what ) {
 		foreach ( $array as $k => $v ) {
 			if ( !$v instanceof Token ) {
 				$vtype = is_object( $v ) ? get_class( $v ) : gettype( $v );
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					"$what may only contain instances of " . Token::class .
 						" (found $vtype at index $k)"
 				);
 			}
 			if ( $v->type() !== $type ) {
-				throw new \InvalidArgumentException(
+				throw new InvalidArgumentException(
 					"$what may only contain \"$type\" tokens" .
 						" (found \"{$v->type()}\" at index $k)"
 				);
@@ -68,7 +69,7 @@ class Util {
 	 */
 	public static function findFirstNonWhitespace( $list ) {
 		if ( !$list instanceof TokenList && !$list instanceof ComponentValueList ) {
-			throw new \InvalidArgumentException( 'List must be TokenList or ComponentValueList' );
+			throw new InvalidArgumentException( 'List must be TokenList or ComponentValueList' );
 		}
 		foreach ( $list as $v ) {
 			if ( !$v instanceof Token || $v->type() !== Token::T_WHITESPACE ) {

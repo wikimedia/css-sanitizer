@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use InvalidArgumentException;
 use Wikimedia\CSS\Objects\Token;
 use Wikimedia\CSS\Objects\TokenList;
 use Wikimedia\CSS\Util;
@@ -32,7 +33,7 @@ class TokenListTokenizer implements Tokenizer {
 			Util::assertAllInstanceOf( $tokens, Token::class, '$tokens' );
 			$this->tokens = $tokens;
 		} else {
-			throw new \InvalidArgumentException( '$tokens must be a TokenList or an array of tokens' );
+			throw new InvalidArgumentException( '$tokens must be a TokenList or an array of tokens' );
 		}
 
 		if ( $eof && $eof->type() === Token::T_EOF ) {
