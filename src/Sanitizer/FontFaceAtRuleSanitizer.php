@@ -64,7 +64,6 @@ class FontFaceAtRuleSanitizer extends RuleSanitizer {
 	 * @return array
 	 */
 	public static function fontMatchData( MatcherFactory $matcherFactory ) {
-		$featureValueName = $matcherFactory->ident();
 		$ret = [
 			'familyName' => new Alternative( [
 				$matcherFactory->string(),

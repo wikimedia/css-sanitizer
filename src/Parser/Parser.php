@@ -21,14 +21,14 @@ use Wikimedia\CSS\Objects\Stylesheet;
 use Wikimedia\CSS\Objects\Token;
 
 // Note: While reading the code below, you might find that my calls to
-// consumeToken() don't match what the spec says and I don't ever "reconsume" a
+// consumeToken() don't match what the spec says, and I don't ever "reconsume" a
 // token. It turns out that the spec is overcomplicated and confused with
 // respect to the "current input token" and the "next input token". It turns
 // out things are pretty simple: every "consume an X" is called with the
 // current input token being the first token of X, and returns with the current
 // input token being the last token of X (or EOF if X ends at EOF).
 
-// Also of note is that, since our Tokenizer can only return a stream of tokens
+// Also, of note is that, since our Tokenizer can only return a stream of tokens
 // rather than a stream of component values, the consume functions here only
 // consider tokens. ComponentValueList::toTokenArray() may be used to convert a
 // list of component values to a list of tokens if necessary.
@@ -154,7 +154,7 @@ class Parser {
 	 * @param array $data Extra data about the error.
 	 */
 	protected function parseError( $tag, Token $token, array $data = [] ) {
-		list( $line, $pos ) = $token->getPosition();
+		[ $line, $pos ] = $token->getPosition();
 		$this->parseErrors[] = array_merge( [ $tag, $line, $pos ], $data );
 	}
 
@@ -213,11 +213,12 @@ class Parser {
 		// 4.
 		if ( $this->currentToken->type() === Token::T_EOF ) {
 			return $rule;
-		} else {
-			// "return a syntax error"?
-			$this->parseError( 'expected-eof', $this->currentToken );
-			return null;
 		}
+
+		// "return a syntax error"?
+		$this->parseError( 'expected-eof', $this->currentToken );
+
+		return null;
 	}
 
 	/**
@@ -290,11 +291,12 @@ class Parser {
 		// 5.
 		if ( $this->currentToken->type() === Token::T_EOF ) {
 			return $value;
-		} else {
-			// "return a syntax error"?
-			$this->parseError( 'expected-eof', $this->currentToken );
-			return null;
 		}
+
+		// "return a syntax error"?
+		$this->parseError( 'expected-eof', $this->currentToken );
+
+		return null;
 	}
 
 	/**
@@ -393,7 +395,7 @@ class Parser {
 	 * Consume a list of declarations and at-rules
 	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-list-of-declarations
 	 * @param bool $allowAtRules Whether to allow at-rules. This flag is not in
-	 *  the spec, and is used to implement the non-spec self::parseDeclarationList().
+	 *  the spec and is used to implement the non-spec self::parseDeclarationList().
 	 * @return DeclarationOrAtRuleList|DeclarationList
 	 */
 	protected function consumeDeclarationOrAtRuleList( $allowAtRules = true ) {
@@ -498,8 +500,11 @@ class Parser {
 		// @phan-suppress-next-line PhanSuspiciousValueComparison False positive about $l1 is -1
 		$v1 = $l1 >= 0 ? $value[$l1] : null;
 		$v2 = $l2 >= 0 ? $value[$l2] : null;
-		if ( $v1 instanceof Token && $v1->type() === Token::T_DELIM && $v1->value() === '!' &&
-			$v2 instanceof Token && $v2->type() === Token::T_IDENT &&
+		if ( $v1 instanceof Token &&
+			$v1->type() === Token::T_DELIM &&
+			$v1->value() === '!' &&
+			$v2 instanceof Token &&
+			$v2->type() === Token::T_IDENT &&
 			!strcasecmp( $v2->value(), 'important' )
 		) {
 			// This removes the "!" and "important" (5), and also any whitespace between/after (6)
@@ -602,7 +607,7 @@ class Parser {
 			$this->parseError( 'recursion-depth-exceeded', $this->currentToken );
 			// There's no way to safely recover from this without more recursion.
 			// So just eat the rest of the input, then return a
-			// specially-flagged EOF so we can avoid 100 "unexpected EOF"
+			// specially-flagged EOF, so we can avoid 100 "unexpected EOF"
 			// errors.
 			$position = $this->currentToken->getPosition();
 			while ( $this->currentToken->type() !== Token::T_EOF ) {

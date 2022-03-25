@@ -50,7 +50,7 @@ class TokenListTest extends TestCase {
 				[ $lbrace, [ [ 'unexpected-eof-in-block', -1, -1 ] ] ],
 				[ $lbracket, [ [ 'unexpected-eof-in-block', -1, -1 ] ] ],
 				[ $func, [ [ 'unexpected-eof-in-function', -1, -1 ] ] ],
-			] as list( $token, $errors )
+			] as [ $token, $errors ]
 		) {
 			$list = new TokenList( [ $token ] );
 			try {

@@ -49,7 +49,7 @@ class DeclarationTest extends TestCase {
 		$declaration = new Declaration( $identToken );
 		$this->assertSame( [ 123, 42 ], $declaration->getPosition() );
 		$this->assertSame( 'foobar', $declaration->getName() );
-		$this->assertSame( false, $declaration->getImportant() );
+		$this->assertFalse( $declaration->getImportant() );
 		$this->assertInstanceOf( ComponentValueList::class, $declaration->getValue() );
 		$this->assertCount( 0, $declaration->getValue() );
 
@@ -66,7 +66,7 @@ class DeclarationTest extends TestCase {
 		$this->assertSame( Util::stringify( $declaration ), (string)$declaration );
 
 		$declaration->setImportant( true );
-		$this->assertSame( true, $declaration->getImportant() );
+		$this->assertTrue( $declaration->getImportant() );
 
 		$this->assertEquals(
 			[ $identToken, $colonToken, $funcToken, $rp, $ws, $bangToken, $importantToken ],

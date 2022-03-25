@@ -38,7 +38,7 @@ class Util {
 	}
 
 	/**
-	 * Check that a set of tokens are all of the same type
+	 * Check that a set of tokens are all the same type
 	 * @param Token[] $array
 	 * @param string $type
 	 * @param string $what Describe the array being checked

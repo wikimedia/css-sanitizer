@@ -57,7 +57,7 @@ abstract class Sanitizer {
 	 * @param array $data Extra data about the error.
 	 */
 	protected function sanitizationError( $tag, CSSObject $object, array $data = [] ) {
-		list( $line, $pos ) = $object->getPosition();
+		[ $line, $pos ] = $object->getPosition();
 		$this->sanitizationErrors[] = array_merge( [ $tag, $line, $pos ], $data );
 	}
 
@@ -116,7 +116,7 @@ abstract class Sanitizer {
 				if ( $sanitizer->handlesRule( $rule ) ) {
 					$indexes = $sanitizer->getIndex();
 					if ( is_array( $indexes ) ) {
-						list( $testIndex, $setIndex ) = $indexes;
+						[ $testIndex, $setIndex ] = $indexes;
 					} else {
 						$testIndex = $setIndex = $indexes;
 					}

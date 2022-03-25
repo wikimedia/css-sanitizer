@@ -1472,7 +1472,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['grid-column-gap'] = $align['column-gap'];
 		$props['grid-gap'] = $align['gap'];
 
-		// Also these are copied from the alignment module. Copying is ok as long as
+		// Also, these are copied from the alignment module. Copying is ok as long as
 		// it's the identical object.
 		$props['row-gap'] = $align['row-gap'];
 		$props['column-gap'] = $align['column-gap'];

@@ -38,7 +38,7 @@ class Juxtaposition extends Matcher {
 		$used = [];
 
 		// Match each of our matchers in turn, pushing each one onto a stack as
-		// we process it and popping a match once its exhausted.
+		// we process it and popping a match once it's exhausted.
 		$stack = [
 			[
 				new GrammarMatch( $values, $start, 0 ),
@@ -48,11 +48,10 @@ class Juxtaposition extends Matcher {
 			]
 		];
 		do {
-			/** @var $lastMatch GrammarMatch */
 			/** @var $lastEnd int */
 			/** @var $iter Iterator<GrammarMatch> */
 			/** @var $needEmpty bool */
-			list( $lastMatch, $lastEnd, $iter, $needEmpty ) = $stack[count( $stack ) - 1];
+			[ , $lastEnd, $iter, $needEmpty ] = $stack[count( $stack ) - 1];
 
 			// If the top of the stack has no more matches, pop it and loop.
 			if ( !$iter->valid() ) {
@@ -86,19 +85,17 @@ class Juxtaposition extends Matcher {
 			if ( $this->commas ) {
 				if ( $match->getLength() === 0 ) {
 					$thisEnd = $lastEnd;
+				} elseif ( isset( $values[$nextFrom] ) && $values[$nextFrom] instanceof Token &&
+					// @phan-suppress-next-line PhanNonClassMethodCall False positive
+					$values[$nextFrom]->type() === Token::T_COMMA
+				) {
+					$nextFrom = $this->next( $values, $nextFrom, $options );
 				} else {
-					if ( isset( $values[$nextFrom] ) && $values[$nextFrom] instanceof Token &&
-						// @phan-suppress-next-line PhanNonClassMethodCall False positive
-						$values[$nextFrom]->type() === Token::T_COMMA
-					) {
-						$nextFrom = $this->next( $values, $nextFrom, $options );
-					} else {
-						$needEmpty = true;
-					}
+					$needEmpty = true;
 				}
 			}
 
-			// If we ran out of Matchers, yield the final position. Otherwise
+			// If we ran out of Matchers, yield the final position. Otherwise,
 			// push the next matcher onto the stack.
 			if ( count( $stack ) >= count( $this->matchers ) ) {
 				$newMatch = $this->makeMatch( $values, $start, $thisEnd, $match, $stack );

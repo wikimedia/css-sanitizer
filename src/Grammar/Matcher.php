@@ -82,7 +82,7 @@ abstract class Matcher {
 		$start = $this->next( $values, -1, $options );
 		$l = count( $values );
 		foreach ( $this->generateMatches( $values, $start, $options ) as $match ) {
-			if ( $match->getNext() === $l || $options['nonterminal'] ) {
+			if ( $options['nonterminal'] || $match->getNext() === $l ) {
 				if ( $options['mark-significance'] ) {
 					$significantWS = self::collectSignificantWhitespace( $match );
 					self::markSignificantWhitespace( $values, $match, $significantWS, $match->getNext() );
@@ -225,7 +225,7 @@ abstract class Matcher {
 	 * applies a matcher for `IDENT`. The `*` matcher would call the `IDENT`
 	 * matcher's generateMatches() method directly.
 	 *
-	 * Most Matchers implement this method as a generator so as to not build up
+	 * Most Matchers implement this method as a generator to not build up
 	 * the full set of results when it's reasonably likely the caller is going
 	 * to terminate early.
 	 *

@@ -21,7 +21,7 @@ abstract class Rule implements CSSObject {
 	 * @param Token $token Token starting the rule
 	 */
 	public function __construct( Token $token ) {
-		list( $this->line, $this->pos ) = $token->getPosition();
+		[ $this->line, $this->pos ] = $token->getPosition();
 	}
 
 	/**

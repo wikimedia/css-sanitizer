@@ -168,43 +168,43 @@ class SanitizerTest extends TestCase {
 			->onlyMethods( [ 'handlesRule', 'getIndex', 'doSanitize' ] );
 
 		$san1 = $mb->getMockForAbstractClass();
-		$san1->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
+		$san1->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san1';
 		} );
-		$san1->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( static function () {
+		$san1->method( 'getIndex' )->willReturnCallback( static function () {
 			return [ 1, 2 ];
 		} );
-		$san1->expects( $this->any() )->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
+		$san1->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
 			$this->assertSame( 'san1', $rule->getName() );
 			return $rule;
 		} );
 
 		$san2 = $mb->getMockForAbstractClass();
-		$san2->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
+		$san2->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san2';
 		} );
-		$san2->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( static function () {
+		$san2->method( 'getIndex' )->willReturnCallback( static function () {
 			return 2;
 		} );
-		$san2->expects( $this->any() )->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
+		$san2->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
 			$this->assertSame( 'san2', $rule->getName() );
 			return $rule;
 		} );
 
 		$san3 = $mb->getMockForAbstractClass();
-		$san3->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
+		$san3->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san3';
 		} );
-		$san3->expects( $this->any() )->method( 'getIndex' )->willReturnCallback( static function () {
+		$san3->method( 'getIndex' )->willReturnCallback( static function () {
 			return 2;
 		} );
-		$san3->expects( $this->any() )->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
+		$san3->method( 'doSanitize' )->willReturnCallback( function ( $rule ) {
 			$this->assertSame( 'san3', $rule->getName() );
 			return null;
 		} );
 
 		$sanX = $mb->getMockForAbstractClass();
-		$sanX->expects( $this->any() )->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
+		$sanX->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san2';
 		} );
 		$sanX->expects( $this->never() )->method( 'getIndex' );

@@ -154,7 +154,7 @@ class StyleRuleSanitizer extends RuleSanitizer {
 					$valueList = new ComponentValueList( $selectorOrWs->getValues() );
 					$hoistMatch = $this->hoistableMatcher ? $this->hoistableMatcher->matchAgainst( $valueList ) : null;
 					if ( $hoistMatch ) {
-						list( $prefix, $ws, $postfix ) = $hoistMatch->getCapturedMatches();
+						[ $prefix, , $postfix ] = $hoistMatch->getCapturedMatches();
 						$prelude->add( $prefix->getValues() );
 						$prelude->add( $space );
 						$prelude->add( $this->prependSelectors );

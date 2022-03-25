@@ -85,7 +85,7 @@ class Token extends ComponentValue {
 			if ( !is_array( $value['position'] ) || count( $value['position'] ) !== 2 ) {
 				throw new InvalidArgumentException( 'Position must be an array of two integers' );
 			}
-			list( $this->line, $this->pos ) = $value['position'];
+			[ $this->line, $this->pos ] = $value['position'];
 			if ( !is_int( $this->line ) || !is_int( $this->pos ) ) {
 				throw new InvalidArgumentException( 'Position must be an array of two integers' );
 			}
@@ -369,16 +369,16 @@ class Token extends ComponentValue {
 			case self::T_HASH:
 				if ( $this->typeFlag === 'id' ) {
 					return '#' . self::escapeIdent( $this->value );
-				} else {
-					return '#' . preg_replace_callback(
-						'/
-							[^a-zA-Z0-9_\-\x{80}-\x{10ffff}]   # Characters that are never allowed
-							| [\p{Z}\p{Cc}\p{Cf}\p{Co}\p{Cs}]  # To be safe, control characters and whitespace
-						/ux',
-						[ __CLASS__, 'escapePregCallback' ],
-						$this->value
-					);
 				}
+
+				return '#' . preg_replace_callback(
+					'/
+						[^a-zA-Z0-9_\-\x{80}-\x{10ffff}]   # Characters that are never allowed
+						| [\p{Z}\p{Cc}\p{Cf}\p{Co}\p{Cs}]  # To be safe, control characters and whitespace
+					/ux',
+					[ __CLASS__, 'escapePregCallback' ],
+					$this->value
+				);
 
 			case self::T_STRING:
 				// We could try to decide whether single or double quote is
@@ -530,8 +530,8 @@ class Token extends ComponentValue {
 	 * Allow for marking the 'U' T_IDENT beginning a <urange>, to later avoid
 	 * serializing it with extraneous comments.
 	 * @internal
-	 * @see Wikimedia\CSS\Util::stringify()
-	 * @see Wikimedia\CSS\Matcher\UrangeMatcher
+	 * @see \Wikimedia\CSS\Util::stringify()
+	 * @see \Wikimedia\CSS\Grammar\UrangeMatcher
 	 * @param int|null $hack Set the hack value
 	 * @return int Current/old hack value
 	 */

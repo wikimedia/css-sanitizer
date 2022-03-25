@@ -72,7 +72,7 @@ class UnorderedGroup extends Matcher {
 			/** @var $matcherIter Iterator<Matcher> */
 			/** @var $curMatcher Matcher|null */
 			/** @var $iter Iterator<GrammarMatch> */
-			list( $lastMatch, $matchers, $matcherIter, $curMatcher, $iter ) = $stack[count( $stack ) - 1];
+			[ $lastMatch, $matchers, $matcherIter, $curMatcher, $iter ] = $stack[count( $stack ) - 1];
 
 			// If the top of the stack has more matches, process the next one.
 			if ( $iter->valid() ) {
@@ -80,7 +80,7 @@ class UnorderedGroup extends Matcher {
 				$iter->next();
 
 				// If we have unused matchers to try after this one, do so.
-				// Otherwise yield and continue with the current one.
+				// Otherwise, yield and continue with the current one.
 				if ( $matchers ) {
 					$stack[] = [ $match, $matchers, new ArrayIterator( $matchers ), null, new EmptyIterator ];
 				} else {
@@ -95,7 +95,7 @@ class UnorderedGroup extends Matcher {
 			}
 
 			// We ran out of matches for the current top of the stack. Pop it,
-			// and put $curMatcher back into $matchers so it can be tried again
+			// and put $curMatcher back into $matchers, so it can be tried again
 			// at a later position.
 			array_pop( $stack );
 			if ( $curMatcher ) {
@@ -113,14 +113,12 @@ class UnorderedGroup extends Matcher {
 				unset( $matchers[$matcherIter->key()] );
 				$iter = $curMatcher->generateMatches( $values, $fromPos, $options );
 				$stack[] = [ $lastMatch, $matchers, $matcherIter, $curMatcher, $iter ];
-			} else {
-				if ( $stack && !$this->all ) {
-					$newMatch = $this->makeMatch( $values, $start, $fromPos, $lastMatch, $stack );
-					$mid = $newMatch->getUniqueID();
-					if ( !isset( $used[$mid] ) ) {
-						$used[$mid] = 1;
-						yield $newMatch;
-					}
+			} elseif ( $stack && !$this->all ) {
+				$newMatch = $this->makeMatch( $values, $start, $fromPos, $lastMatch, $stack );
+				$mid = $newMatch->getUniqueID();
+				if ( !isset( $used[$mid] ) ) {
+					$used[$mid] = 1;
+					yield $newMatch;
 				}
 			}
 		} while ( $stack );

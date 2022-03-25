@@ -20,7 +20,7 @@ use Wikimedia\CSS\Objects\Token;
  */
 class UrangeMatcher extends Matcher {
 	/** @var Matcher Syntax matcher */
-	private $matcher = null;
+	private $matcher;
 
 	public function __construct() {
 		$u = new KeywordMatcher( [ 'u' ] );

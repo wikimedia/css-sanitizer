@@ -67,7 +67,7 @@ abstract class RuleSanitizerTestBase extends TestCase {
 		$index = $this->getSanitizer()->getIndex();
 		if ( is_array( $index ) ) {
 			$this->assertCount( 2, $index );
-			list( $i1, $i2 ) = $index;
+			[ $i1, $i2 ] = $index;
 			$this->assertIsInt( $i1, '$index[0]' );
 			$this->assertIsInt( $i2, '$index[1]' );
 		} else {

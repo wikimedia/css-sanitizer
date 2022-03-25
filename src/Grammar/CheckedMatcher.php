@@ -13,7 +13,7 @@ use Wikimedia\CSS\Objects\ComponentValueList;
  */
 class CheckedMatcher extends Matcher {
 	/** @var Matcher */
-	private $matcher = null;
+	private $matcher;
 
 	/** @var callable */
 	protected $check;

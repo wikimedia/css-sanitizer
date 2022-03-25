@@ -110,7 +110,7 @@ class Quantifier extends Matcher {
 		do {
 			/** @var $lastMatch GrammarMatch */
 			/** @var $iter Iterator<GrammarMatch> */
-			list( $lastMatch, $iter ) = $stack[count( $stack ) - 1];
+			[ $lastMatch, $iter ] = $stack[count( $stack ) - 1];
 
 			// If the top of the stack has no more matches, pop it, maybe
 			// yield the last matched position, and loop.
@@ -167,7 +167,7 @@ class Quantifier extends Matcher {
 			}
 
 			// If there can be more matches, push another one onto the stack
-			// and try it. Otherwise yield and continue with the current match.
+			// and try it. Otherwise, yield and continue with the current match.
 			if ( $canBeMore ) {
 				$stack[] = [ $match, $this->matcher->generateMatches( $values, $nextFrom, $options ) ];
 			} else {

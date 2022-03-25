@@ -30,7 +30,7 @@ class CSSFunction extends ComponentValue {
 			);
 		}
 
-		list( $this->line, $this->pos ) = $token->getPosition();
+		[ $this->line, $this->pos ] = $token->getPosition();
 		$this->name = $token->value();
 		$this->value = new ComponentValueList();
 	}
@@ -49,7 +49,7 @@ class CSSFunction extends ComponentValue {
 	}
 
 	/**
-	 * Return the functions's name
+	 * Return the function's name
 	 * @return string
 	 */
 	public function getName() {

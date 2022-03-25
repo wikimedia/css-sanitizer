@@ -26,7 +26,6 @@ class StylesheetTest extends TestCase {
 	public function testBasics() {
 		$atToken = new Token( Token::T_AT_KEYWORD, 'foobar' );
 		$ws = new Token( Token::T_WHITESPACE );
-		$ows = $ws->copyWithSignificance( false );
 		$semicolon = new Token( Token::T_SEMICOLON );
 		$leftBrace = new Token( Token::T_LEFT_BRACE );
 		$rightBrace = new Token( Token::T_RIGHT_BRACE );

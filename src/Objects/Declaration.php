@@ -39,7 +39,7 @@ class Declaration implements DeclarationOrAtRule {
 			);
 		}
 
-		list( $this->line, $this->pos ) = $token->getPosition();
+		[ $this->line, $this->pos ] = $token->getPosition();
 		$this->name = $token->value();
 		$this->value = new ComponentValueList();
 	}

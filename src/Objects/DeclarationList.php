@@ -22,8 +22,8 @@ class DeclarationList extends CSSObjectList {
 				new Token( Token::T_SEMICOLON ),
 				new Token( Token::T_WHITESPACE, [ 'significant' => false ] ),
 			];
-		} else {
-			return [ new Token( Token::T_SEMICOLON, [ 'significant' => false ] ) ];
 		}
+
+		return [ new Token( Token::T_SEMICOLON, [ 'significant' => false ] ) ];
 	}
 }

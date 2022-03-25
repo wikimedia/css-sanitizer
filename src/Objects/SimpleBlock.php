@@ -34,7 +34,7 @@ class SimpleBlock extends ComponentValue {
 			);
 		}
 
-		list( $this->line, $this->pos ) = $token->getPosition();
+		[ $this->line, $this->pos ] = $token->getPosition();
 		$this->startTokenType = $token->type();
 		$this->value = new ComponentValueList();
 	}

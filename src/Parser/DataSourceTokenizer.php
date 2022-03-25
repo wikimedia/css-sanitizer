@@ -97,7 +97,7 @@ class DataSourceTokenizer implements Tokenizer {
 	/**
 	 * Reconsume the next character
 	 *
-	 * In more normal terms, this pushes a character back onto the data source
+	 * In more normal terms, this pushes a character back onto the data source,
 	 * so it will be read again for the next call to self::consumeCharacter().
 	 */
 	protected function reconsumeCharacter() {
@@ -197,7 +197,7 @@ class DataSourceTokenizer implements Tokenizer {
 				return $this->consumeStringToken( $this->currentCharacter, $pos );
 
 			case '#':
-				list( $next, $next2, $next3 ) = $this->lookAhead();
+				[ $next, $next2, $next3 ] = $this->lookAhead();
 				if ( self::isNameCharacter( $this->nextCharacter ) ||
 					self::isValidEscape( $next, $next2 )
 				) {
@@ -217,7 +217,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 			case '+':
 			case '.':
-				list( $next, $next2, $next3 ) = $this->lookAhead();
+				[ $next, $next2, ] = $this->lookAhead();
 				if ( self::wouldStartNumber( $this->currentCharacter, $next, $next2 ) ) {
 					$this->reconsumeCharacter();
 					return $this->consumeNumericToken( $pos );
@@ -229,7 +229,7 @@ class DataSourceTokenizer implements Tokenizer {
 				return new Token( Token::T_COMMA, $pos );
 
 			case '-':
-				list( $next, $next2, $next3 ) = $this->lookAhead();
+				[ $next, $next2, ] = $this->lookAhead();
 				if ( self::wouldStartNumber( $this->currentCharacter, $next, $next2 ) ) {
 					$this->reconsumeCharacter();
 					return $this->consumeNumericToken( $pos );
@@ -275,7 +275,7 @@ class DataSourceTokenizer implements Tokenizer {
 				return new Token( Token::T_SEMICOLON, $pos );
 
 			case '<':
-				list( $next, $next2, $next3 ) = $this->lookAhead();
+				[ $next, $next2, $next3 ] = $this->lookAhead();
 				if ( $next === '!' && $next2 === '-' && $next3 === '-' ) {
 					$this->consumeCharacter();
 					$this->consumeCharacter();
@@ -286,7 +286,7 @@ class DataSourceTokenizer implements Tokenizer {
 				return new Token( Token::T_DELIM, $pos + [ 'value' => $this->currentCharacter ] );
 
 			case '@':
-				list( $next, $next2, $next3 ) = $this->lookAhead();
+				[ $next, $next2, $next3 ] = $this->lookAhead();
 				if ( self::wouldStartIdentifier( $next, $next2, $next3 ) ) {
 					return new Token( Token::T_AT_KEYWORD, $pos + [ 'value' => $this->consumeName() ] );
 				}
@@ -347,9 +347,9 @@ class DataSourceTokenizer implements Tokenizer {
 	 * @return Token
 	 */
 	protected function consumeNumericToken( array $data ) {
-		list( $data['representation'], $data['value'], $data['typeFlag'] ) = $this->consumeNumber();
+		[ $data['representation'], $data['value'], $data['typeFlag'] ] = $this->consumeNumber();
 
-		list( $next, $next2, $next3 ) = $this->lookAhead();
+		[ $next, $next2, $next3 ] = $this->lookAhead();
 		if ( self::wouldStartIdentifier( $next, $next2, $next3 ) ) {
 			return new Token( Token::T_DIMENSION, $data + [ 'unit' => $this->consumeName() ] );
 		} elseif ( $this->nextCharacter === '%' ) {
@@ -374,7 +374,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 			if ( !strcasecmp( $name, 'url' ) ) {
 				while ( true ) {
-					list( $next, $next2 ) = $this->lookAhead();
+					[ $next, $next2 ] = $this->lookAhead();
 					if ( !self::isWhitespace( $next ) || !self::isWhitespace( $next2 ) ) {
 						break;
 					}
@@ -778,7 +778,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 		// 4.
 		if ( $this->nextCharacter === '.' ) {
-			list( $next, $next2, $next3 ) = $this->lookAhead();
+			[ $next, $next2, ] = $this->lookAhead();
 			if ( self::isDigit( $next2 ) ) {
 				// 4.1.
 				$this->consumeCharacter();
@@ -797,7 +797,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 		// 5.
 		if ( $this->nextCharacter === 'e' || $this->nextCharacter === 'E' ) {
-			list( $next, $next2, $next3 ) = $this->lookAhead();
+			[ $next, $next2, $next3 ] = $this->lookAhead();
 			$ok = false;
 			if ( ( $next2 === '+' || $next2 === '-' ) && self::isDigit( $next3 ) ) {
 				$ok = true;

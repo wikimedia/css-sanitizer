@@ -181,7 +181,7 @@ class MatcherTest extends MatcherTestBase {
 		$ws = new Token( Token::T_WHITESPACE );
 		$Iws = $ws->copyWithSignificance( false );
 
-		// Test list. The whitespaces need to be cloned or it'll get confused.
+		// Test list. The whitespaces need to be cloned, or it'll get confused.
 		$testBlock = SimpleBlock::newFromDelimiter( '[' );
 		$testBlock->getValue()->add( [ clone $ws , $tok, clone $ws , clone $ws , $tok, $Iws ] );
 		$testList = new ComponentValueList( [

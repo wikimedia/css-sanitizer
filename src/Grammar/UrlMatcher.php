@@ -12,7 +12,7 @@ use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\Token;
 
 /**
- * Matcher that matches a CSSFunction for a url or a T_URL token
+ * Matcher that matches a CSSFunction for a URL or a T_URL token
  */
 class UrlMatcher extends FunctionMatcher {
 	/** @var callable|null */
@@ -75,7 +75,7 @@ class UrlMatcher extends FunctionMatcher {
 			$modifiers = [];
 			foreach ( $match->getCapturedMatches() as $submatch ) {
 				$cvs = $submatch->getValues();
-				if ( $submatch->getName() === 'url' && $cvs[0] instanceof Token ) {
+				if ( $cvs[0] instanceof Token && $submatch->getName() === 'url' ) {
 					$url = $cvs[0]->value();
 				} elseif ( $submatch->getName() === 'modifier' ) {
 					if ( $cvs[0] instanceof CSSFunction ) {

@@ -196,24 +196,24 @@ class MatcherFactory {
 				&$calcValue,
 				Quantifier::star( new Juxtaposition( [ $ows, new DelimMatcher( '*' ), $ows, &$calcValue ] ) )
 			] );
+		} elseif ( $typeMatcher === $this->rawNumber() ) {
+			$calcProduct = new Juxtaposition( [
+				&$calcValue,
+				Quantifier::star(
+					new Juxtaposition( [ $ows, new DelimMatcher( [ '*', '/' ] ), $ows, &$calcValue ] )
+				),
+			] );
 		} else {
-			if ( $typeMatcher === $this->rawNumber() ) {
-				$calcProduct = new Juxtaposition( [
-					&$calcValue,
-					Quantifier::star(
-						new Juxtaposition( [ $ows, new DelimMatcher( [ '*', '/' ] ), $ows, &$calcValue ] )
-					),
-				] );
-			} else {
-				$calcNumValue = $this->calcInternal( $this->rawNumber(), 'number' )[1];
-				$calcProduct = new Juxtaposition( [
-					&$calcValue,
-					Quantifier::star( new Alternative( [
+			$calcNumValue = $this->calcInternal( $this->rawNumber(), 'number' )[1];
+			$calcProduct = new Juxtaposition( [
+				&$calcValue,
+				Quantifier::star(
+					new Alternative( [
 						new Juxtaposition( [ $ows, new DelimMatcher( '*' ), $ows, &$calcValue ] ),
 						new Juxtaposition( [ $ows, new DelimMatcher( '/' ), $ows, $calcNumValue, ] ),
-					] ) ),
-				] );
-			}
+					] )
+				),
+			] );
 		}
 
 		$calcSum = new Juxtaposition( [
@@ -367,7 +367,7 @@ class MatcherFactory {
 	}
 
 	/**
-	 * Matcher for a angle-percentage value
+	 * Matcher for an angle-percentage value
 	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#typedef-angle-percentage
 	 * @return Matcher
 	 */
@@ -990,7 +990,7 @@ class MatcherFactory {
 				$cvlist = new ComponentValueList( $match->getValues() );
 				$parser = Parser::newFromTokens( $cvlist->toTokenArray() );
 				$declaration = $parser->parseDeclaration();
-				if ( $parser->getParseErrors() || !$declaration ) {
+				if ( !$declaration || $parser->getParseErrors() ) {
 					return false;
 				}
 				if ( !$declarationSanitizer ) {
