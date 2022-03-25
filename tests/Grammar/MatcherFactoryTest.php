@@ -507,7 +507,8 @@ class MatcherFactoryTest extends \PHPUnit\Framework\TestCase {
 			[ 'cssMediaQuery', '(width < = 700px)', false ],
 			[ 'cssMediaQuery', '(width > 700px)' ],
 			[ 'cssMediaQuery', '(width = 700px)' ],
-			[ 'cssMediaQuery', '(width 700px)' ], // Crazy, but allowed
+			// Crazy, but allowed
+			[ 'cssMediaQuery', '(width 700px)' ],
 			[ 'cssMediaQuery', 'print and (min-resolution: 118dpcm)' ],
 			[ 'cssMediaQuery', '((width>100px) and (height>800px)) or ((width>800px) and (height>100px))' ],
 			[ 'cssMediaQuery', 'not screen' ],

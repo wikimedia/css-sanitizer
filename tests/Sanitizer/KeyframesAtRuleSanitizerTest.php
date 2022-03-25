@@ -15,6 +15,7 @@ class KeyframesAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return KeyframesAtRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		$matcherFactory = MatcherFactory::singleton();

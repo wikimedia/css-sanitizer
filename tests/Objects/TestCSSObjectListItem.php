@@ -7,8 +7,10 @@
 namespace Wikimedia\CSS\Objects;
 
 class TestCSSObjectListItem implements CSSObject {
+	/** @var string */
 	private $id;
 
+	/** @var int[] */
 	public $position = [ -1, -1 ];
 
 	/**

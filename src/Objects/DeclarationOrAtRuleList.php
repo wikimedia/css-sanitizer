@@ -10,6 +10,9 @@ namespace Wikimedia\CSS\Objects;
  * Represent a list of CSS declarations and at-rules
  */
 class DeclarationOrAtRuleList extends CSSObjectList {
+	/**
+	 * @var string
+	 */
 	protected static $objectType = DeclarationOrAtRule::class;
 
 	/** @inheritDoc */

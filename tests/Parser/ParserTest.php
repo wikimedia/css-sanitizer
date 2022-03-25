@@ -123,7 +123,9 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 							'block' => self::mk( new SimpleBlock( new Token( '{', [ 'position' => [ 4, 17 ] ] ) ), [
 								'value' => new ComponentValueList( [
 									new Token( 'whitespace', [ 'position' => [ 4, 18 ] ] ),
-									new Token( 'hash', [ 'position' => [ 5, 6 ], 'value' => 'foo', 'typeFlag' => 'id' ] ),
+									new Token( 'hash', [
+										'position' => [ 5, 6 ], 'value' => 'foo', 'typeFlag' => 'id'
+									] ),
 									new Token( 'whitespace', [ 'position' => [ 5, 10 ] ] ),
 									new Token( 'delim', [ 'position' => [ 5, 11 ], 'value' => '.' ] ),
 									new Token( 'ident', [ 'position' => [ 5, 12 ], 'value' => 'bar' ] ),
@@ -141,7 +143,10 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 											new Token( 'colon', [ 'position' => [ 7, 13 ] ] ),
 											new Token( 'whitespace', [ 'position' => [ 7, 14 ] ] ),
 											new Token( 'number', [
-												'position' => [ 7, 15 ], 'value' => 0, 'typeFlag' => 'integer', 'representation' => '0'
+												'position' => [ 7, 15 ],
+												'value' => 0,
+												'typeFlag' => 'integer',
+												'representation' => '0'
 											] ),
 											new Token( 'whitespace', [ 'position' => [ 7, 16 ] ] ),
 											new Token( 'delim', [ 'position' => [ 7, 17 ], 'value' => '!' ] ),
@@ -221,7 +226,9 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 							'block' => self::mk( new SimpleBlock( new Token( '{', [ 'position' => [ 4, 17 ] ] ) ), [
 								'value' => new ComponentValueList( [
 									new Token( 'whitespace', [ 'position' => [ 4, 18 ] ] ),
-									new Token( 'hash', [ 'position' => [ 5, 6 ], 'value' => 'foo', 'typeFlag' => 'id' ] ),
+									new Token( 'hash', [
+										'position' => [ 5, 6 ], 'value' => 'foo', 'typeFlag' => 'id'
+									] ),
 									new Token( 'whitespace', [ 'position' => [ 5, 10 ] ] ),
 									new Token( 'delim', [ 'position' => [ 5, 11 ], 'value' => '.' ] ),
 									new Token( 'ident', [ 'position' => [ 5, 12 ], 'value' => 'bar' ] ),
@@ -239,7 +246,10 @@ class ParserTest extends \PHPUnit\Framework\TestCase {
 											new Token( 'colon', [ 'position' => [ 7, 13 ] ] ),
 											new Token( 'whitespace', [ 'position' => [ 7, 14 ] ] ),
 											new Token( 'number', [
-												'position' => [ 7, 15 ], 'value' => 0, 'typeFlag' => 'integer', 'representation' => '0'
+												'position' => [ 7, 15 ],
+												'value' => 0,
+												'typeFlag' => 'integer',
+												'representation' => '0'
 											] ),
 											new Token( 'whitespace', [ 'position' => [ 7, 16 ] ] ),
 											new Token( 'delim', [ 'position' => [ 7, 17 ], 'value' => '!' ] ),

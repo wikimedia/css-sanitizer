@@ -15,6 +15,7 @@ class PageAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return PageAtRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		$matcherFactory = MatcherFactory::singleton();

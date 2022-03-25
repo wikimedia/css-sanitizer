@@ -13,8 +13,11 @@ use Wikimedia\CSS\Util;
  */
 class Declaration implements DeclarationOrAtRule {
 
-	/** @var int Line and position in the input where this declaration starts */
-	protected $line = -1, $pos = -1;
+	/** @var int Line in the input where this declaration starts */
+	protected $line = -1;
+
+	/** @var int Position in the input where this declaration starts */
+	protected $pos = -1;
 
 	/** @var string */
 	protected $name;

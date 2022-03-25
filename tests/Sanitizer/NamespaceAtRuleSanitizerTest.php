@@ -15,6 +15,7 @@ class NamespaceAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return NamespaceAtRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		return new NamespaceAtRuleSanitizer( TestMatcherFactory::singleton() );

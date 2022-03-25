@@ -10,6 +10,9 @@ namespace Wikimedia\CSS\Objects;
  * Represent a list of CSS declarations
  */
 class ComponentValueList extends CSSObjectList {
+	/**
+	 * @var string
+	 */
 	protected static $objectType = ComponentValue::class;
 
 	/** @inheritDoc */

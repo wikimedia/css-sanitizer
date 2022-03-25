@@ -12,6 +12,9 @@ use Wikimedia\CSS\Parser\Parser;
  * Represent a list of CSS tokens
  */
 class TokenList extends CSSObjectList {
+	/**
+	 * @var string
+	 */
 	protected static $objectType = Token::class;
 
 	/** @var Token[] The objects contained */

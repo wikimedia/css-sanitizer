@@ -15,6 +15,7 @@ class MarginAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return MarginAtRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		return new MarginAtRuleSanitizer(

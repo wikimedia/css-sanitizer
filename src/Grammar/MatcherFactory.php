@@ -860,7 +860,8 @@ class MatcherFactory {
 				new Juxtaposition( [ $posInt, new DelimMatcher( '/' ), $posInt ] ),
 			] );
 
-			$mediaInParens = new NothingMatcher(); // temporary
+			// temporary
+			$mediaInParens = new NothingMatcher();
 			$mediaNot = new Juxtaposition( [ new KeywordMatcher( 'not' ), &$mediaInParens ] );
 			$mediaAnd = new Juxtaposition( [ new KeywordMatcher( 'and' ), &$mediaInParens ] );
 			$mediaOr = new Juxtaposition( [ new KeywordMatcher( 'or' ), &$mediaInParens ] );
@@ -879,12 +880,18 @@ class MatcherFactory {
 				new Juxtaposition( [ &$mediaInParens, Quantifier::star( $mediaAnd ) ] ),
 			] );
 			$mediaFeature = new BlockMatcher( Token::T_LEFT_PAREN, new Alternative( [
-				new Juxtaposition( [ $mfName, new TokenMatcher( Token::T_COLON ), $mfValue ] ), // <mf-plain>
-				$mfName, // <mf-boolean>
-				new Juxtaposition( [ $mfName, $ltgteq, $mfValue ] ), // <mf-range>, 1st alternative
-				new Juxtaposition( [ $mfValue, $ltgteq, $mfName ] ), // <mf-range>, 2nd alternative
-				new Juxtaposition( [ $mfValue, $lteq, $mfName, $lteq, $mfValue ] ), // <mf-range>, 3rd alt
-				new Juxtaposition( [ $mfValue, $gteq, $mfName, $gteq, $mfValue ] ), // <mf-range>, 4th alt
+				// <mf-plain>
+				new Juxtaposition( [ $mfName, new TokenMatcher( Token::T_COLON ), $mfValue ] ),
+				// <mf-boolean>
+				$mfName,
+				// <mf-range>, 1st alternative
+				new Juxtaposition( [ $mfName, $ltgteq, $mfValue ] ),
+				// <mf-range>, 2nd alternative
+				new Juxtaposition( [ $mfValue, $ltgteq, $mfName ] ),
+				// <mf-range>, 3rd alt
+				new Juxtaposition( [ $mfValue, $lteq, $mfName, $lteq, $mfValue ] ),
+				// <mf-range>, 4th alt
+				new Juxtaposition( [ $mfValue, $gteq, $mfName, $gteq, $mfValue ] ),
 			] ) );
 			$mediaInParens = new Alternative( [
 				new BlockMatcher( Token::T_LEFT_PAREN, $mediaCondition ),
@@ -945,7 +952,8 @@ class MatcherFactory {
 			] );
 		}
 
-		$supportsConditionBlock = new NothingMatcher(); // temp
+		// temp
+		$supportsConditionBlock = new NothingMatcher();
 		$supportsConditionInParens = new Alternative( [
 			&$supportsConditionBlock,
 			new BlockMatcher( Token::T_LEFT_PAREN, $this->cssDeclaration( $declarationSanitizer ) ),

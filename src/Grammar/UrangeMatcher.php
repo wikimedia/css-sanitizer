@@ -49,7 +49,8 @@ class UrangeMatcher extends Matcher {
 			// <urange> is basically defined as a series of tokens that happens to have a certain string
 			// representation. So stringify and regex it to see if it actually matches.
 			$v = trim( $match->__toString(), "\n\t " );
-			$v = strtr( $v, [ '/**/' => '' ] ); // Strip interpolated comments
+			// Strip interpolated comments
+			$v = strtr( $v, [ '/**/' => '' ] );
 			$l = strlen( $v );
 			if ( preg_match( '/^u\+([0-9a-f]{1,6})-([0-9a-f]{1,6})$/iD', $v, $m ) ) {
 				$ustart = intval( $m[1], 16 );
@@ -67,8 +68,20 @@ class UrangeMatcher extends Matcher {
 					$tstart = new Token( Token::T_NUMBER, [ 'value' => $ustart, 'typeFlag' => 'integer' ] );
 					$tend = new Token( Token::T_NUMBER, [ 'value' => $uend, 'typeFlag' => 'integer' ] );
 					$matches = [
-						new GrammarMatch( new ComponentValueList( $tstart->toComponentValueArray() ), 0, 1, 'start', [] ),
-						new GrammarMatch( new ComponentValueList( $tend->toComponentValueArray() ), 0, 1, 'end', [] ),
+						new GrammarMatch(
+							new ComponentValueList( $tstart->toComponentValueArray() ),
+							0,
+							1,
+							'start',
+							[]
+						),
+						new GrammarMatch(
+							new ComponentValueList( $tend->toComponentValueArray() ),
+							0,
+							1,
+							'end',
+							[]
+						),
 					];
 				}
 

@@ -19,7 +19,10 @@ class Quantifier extends Matcher {
 	protected $matcher;
 
 	/** @var int */
-	protected $min, $max;
+	protected $min;
+
+	/** @var int */
+	protected $max;
 
 	/** @var bool Whether matches are comma-separated */
 	protected $commas;

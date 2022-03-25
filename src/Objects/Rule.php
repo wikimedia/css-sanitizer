@@ -11,8 +11,11 @@ namespace Wikimedia\CSS\Objects;
  */
 abstract class Rule implements CSSObject {
 
-	/** @var int Line and position in the input where this rule starts */
-	protected $line = -1, $pos = -1;
+	/** @var int Line in the input where this rule starts */
+	protected $line = -1;
+
+	/** @var int Position in the input where this rule starts */
+	protected $pos = -1;
 
 	/**
 	 * @param Token $token Token starting the rule

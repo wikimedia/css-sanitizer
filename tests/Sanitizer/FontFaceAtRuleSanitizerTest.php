@@ -15,6 +15,7 @@ class FontFaceAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return FontFaceAtRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		return new FontFaceAtRuleSanitizer( TestMatcherFactory::singleton() );

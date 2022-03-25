@@ -14,7 +14,10 @@ use Wikimedia\CSS\Util;
 class SimpleBlock extends ComponentValue {
 
 	/** @var string */
-	protected $startTokenType, $endTokenType;
+	protected $startTokenType;
+
+	/** @var string */
+	protected $endTokenType;
 
 	/** @var ComponentValueList */
 	protected $value;

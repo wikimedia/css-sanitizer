@@ -52,11 +52,23 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 				$ex = [];
 			} elseif ( $i === $v ) {
 				$ex = [
-					new GrammarMatch( $list, $i - 1, 1, null, [ new GrammarMatch( $list, $i - 1, 1, 'significantWhitespace' ) ] )
+					new GrammarMatch(
+						$list,
+						$i - 1,
+						1,
+						null,
+						[ new GrammarMatch( $list, $i - 1, 1, 'significantWhitespace' ) ]
+					)
 				];
 			} else {
 				$ex = [
-					new GrammarMatch( $list, $i, $v - $i, null, [ new GrammarMatch( $list, $i, 1, 'significantWhitespace' ) ] )
+					new GrammarMatch(
+						$list,
+						$i,
+						$v - $i,
+						null,
+						[ new GrammarMatch( $list, $i, 1, 'significantWhitespace' ) ]
+					)
 				];
 			}
 			$this->assertEquals(
@@ -73,7 +85,13 @@ class WhitespaceMatcherTest extends MatcherTestBase {
 				$ex = [];
 			} else {
 				$ex = [
-					new GrammarMatch( $list, $i, $v - $i, null, [ new GrammarMatch( $list, $i, 1, 'significantWhitespace' ) ] )
+					new GrammarMatch(
+						$list,
+						$i,
+						$v - $i,
+						null,
+						[ new GrammarMatch( $list, $i, 1, 'significantWhitespace' ) ]
+					)
 				];
 			}
 			$this->assertEquals(

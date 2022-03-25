@@ -7,8 +7,10 @@
 namespace Wikimedia\CSS\Objects;
 
 class TestCSSObjectList extends CSSObjectList {
+	/** @var string */
 	protected static $objectType = TestCSSObjectListItem::class;
 
+	/** @var Token[]|int */
 	public $separator = null;
 
 	/** @inheritDoc */

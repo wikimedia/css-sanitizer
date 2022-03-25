@@ -6,6 +6,8 @@
 
 namespace Wikimedia\CSS\Parser;
 
+use UtfNormal\Constants;
+use UtfNormal\Utils;
 use Wikimedia\CSS\Objects\Token;
 
 /**
@@ -19,8 +21,11 @@ class DataSourceTokenizer implements Tokenizer {
 	/** @var DataSource */
 	protected $source;
 
-	/** @var int position in the input */
-	protected $line = 1, $pos = 0;
+	/** @var int line in the input */
+	protected $line = 1;
+
+	/** @var int position in the line in the input */
+	protected $pos = 0;
 
 	/** @var string|null|object The most recently consumed character */
 	protected $currentCharacter = null;
@@ -52,7 +57,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 		// Any U+0000 or surrogate code point becomes U+FFFD
 		if ( $char === "\0" || $char >= "\u{D800}" && $char <= "\u{DFFF}" ) {
-			return \UtfNormal\Constants::UTF8_REPLACEMENT;
+			return Constants::UTF8_REPLACEMENT;
 		}
 
 		// Any U+000D, U+000C, or pair of U+000D + U+000A becomes U+000A
@@ -555,8 +560,8 @@ class DataSourceTokenizer implements Tokenizer {
 		// Every non-ASCII character is a name start character, so we can just
 		// check the first byte.
 		$char = ord( $char );
-		return $char >= 0x41 && $char <= 0x5a ||
-			$char >= 0x61 && $char <= 0x7a ||
+		return ( $char >= 0x41 && $char <= 0x5a ) ||
+			( $char >= 0x61 && $char <= 0x7a ) ||
 			$char >= 0x80 || $char === 0x5f;
 	}
 
@@ -570,9 +575,9 @@ class DataSourceTokenizer implements Tokenizer {
 		// Every non-ASCII character is a name character, so we can just check
 		// the first byte.
 		$char = ord( $char );
-		return $char >= 0x41 && $char <= 0x5a ||
-			$char >= 0x61 && $char <= 0x7a ||
-			$char >= 0x30 && $char <= 0x39 ||
+		return ( $char >= 0x41 && $char <= 0x5a ) ||
+			( $char >= 0x61 && $char <= 0x7a ) ||
+			( $char >= 0x30 && $char <= 0x39 ) ||
 			$char >= 0x80 || $char === 0x5f || $char === 0x2d;
 	}
 
@@ -586,9 +591,9 @@ class DataSourceTokenizer implements Tokenizer {
 		// No non-ASCII character is non-printable, so we can just check the
 		// first byte.
 		$char = ord( $char );
-		return $char >= 0x00 && $char <= 0x08 ||
+		return ( $char >= 0x00 && $char <= 0x08 ) ||
 			$char === 0x0b ||
-			$char >= 0x0e && $char <= 0x1f ||
+			( $char >= 0x0e && $char <= 0x1f ) ||
 			$char === 0x7f;
 	}
 
@@ -615,9 +620,9 @@ class DataSourceTokenizer implements Tokenizer {
 		// No non-ASCII character is a hex digit, so we can just check the
 		// first byte.
 		$char = ord( $char );
-		return $char >= 0x30 && $char <= 0x39 ||
-			$char >= 0x41 && $char <= 0x46 ||
-			$char >= 0x61 && $char <= 0x66;
+		return ( $char >= 0x30 && $char <= 0x39 ) ||
+			( $char >= 0x41 && $char <= 0x46 ) ||
+			( $char >= 0x61 && $char <= 0x66 );
 	}
 
 	/**
@@ -663,7 +668,7 @@ class DataSourceTokenizer implements Tokenizer {
 	protected static function wouldStartNumber( $char1, $char2, $char3 ) {
 		if ( $char1 === '+' || $char1 === '-' ) {
 			return self::isDigit( $char2 ) ||
-				$char2 === '.' && self::isDigit( $char3 );
+				( $char2 === '.' && self::isDigit( $char3 ) );
 		} elseif ( $char1 === '.' ) {
 			return self::isDigit( $char2 );
 		// @codeCoverageIgnoreStart
@@ -699,15 +704,15 @@ class DataSourceTokenizer implements Tokenizer {
 			}
 
 			$num = intval( $num, 16 );
-			if ( $num === 0 || $num >= 0xd800 && $num <= 0xdfff || $num > 0x10ffff ) {
-				return \UtfNormal\Constants::UTF8_REPLACEMENT;
+			if ( $num === 0 || ( $num >= 0xd800 && $num <= 0xdfff ) || $num > 0x10ffff ) {
+				return Constants::UTF8_REPLACEMENT;
 			}
-			return \UtfNormal\Utils::codepointToUtf8( $num );
+			return Utils::codepointToUtf8( $num );
 		}
 
 		if ( $this->currentCharacter === DataSource::EOF ) {
 			$this->parseError( 'bad-escape', $position );
-			return \UtfNormal\Constants::UTF8_REPLACEMENT;
+			return Constants::UTF8_REPLACEMENT;
 		}
 
 		return $this->currentCharacter;

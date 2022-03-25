@@ -145,7 +145,8 @@ class StylePropertySanitizer extends PropertySanitizer {
 			new KeywordMatcher( [ 'normal', 'none' ] ),
 			Quantifier::plus( new Alternative( [
 				$matcherFactory->string(),
-				$matcherFactory->image(), // Replaces <url> per https://www.w3.org/TR/css-images-3/#placement
+				// Replaces <url> per https://www.w3.org/TR/css-images-3/#placement
+				$matcherFactory->image(),
 				new FunctionMatcher( 'counter', new Juxtaposition( [
 					$matcherFactory->ident(),
 					Quantifier::optional( $props['list-style-type'] ),
@@ -173,7 +174,8 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['counter-increment'] = $props['counter-reset'];
 		$props['list-style-image'] = new Alternative( [
 			$none,
-			$matcherFactory->image() // Replaces <url> per https://www.w3.org/TR/css-images-3/#placement
+			// Replaces <url> per https://www.w3.org/TR/css-images-3/#placement
+			$matcherFactory->image()
 		] );
 		$props['list-style-position'] = new KeywordMatcher( [ 'inside', 'outside' ] );
 		$props['list-style'] = UnorderedGroup::someOf( [
@@ -209,11 +211,13 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$displayOutside = new KeywordMatcher( [ 'block', 'inline', 'run-in' ] );
 
 		$props['display'] = new Alternative( [
-			UnorderedGroup::someOf( [ // <display-outside> || <display-inside>
+			// <display-outside> || <display-inside>
+			UnorderedGroup::someOf( [
 				$displayOutside,
 				new KeywordMatcher( [ 'flow', 'flow-root', 'table', 'flex', 'grid', 'ruby' ] ),
 			] ),
-			UnorderedGroup::allOf( [ // <display-listitem>
+			// <display-listitem>
+			UnorderedGroup::allOf( [
 				Quantifier::optional( $displayOutside ),
 				Quantifier::optional( new KeywordMatcher( [ 'flow', 'flow-root' ] ) ),
 				new KeywordMatcher( 'list-item' ),
@@ -1683,7 +1687,8 @@ class StylePropertySanitizer extends PropertySanitizer {
 			$matcherFactory->image(),
 		] );
 		$props['mask-border-mode'] = new KeywordMatcher( [ 'luminance', 'alpha' ] );
-		$props['mask-border-slice'] = new Juxtaposition( [ // Different from border-image-slice, sigh
+		// Different from border-image-slice, sigh
+		$props['mask-border-slice'] = new Juxtaposition( [
 			Quantifier::count( $matcherFactory->numberPercentage(), 1, 4 ),
 			Quantifier::optional( new KeywordMatcher( 'fill' ) ),
 		] );

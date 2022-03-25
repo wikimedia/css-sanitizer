@@ -15,6 +15,7 @@ class ImportAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return ImportAtRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		$matcherFactory = TestMatcherFactory::singleton();
@@ -22,8 +23,7 @@ class ImportAtRuleSanitizerTest extends RuleSanitizerTestBase {
 		if ( !empty( $options['declarationSanitizer'] ) ) {
 			$options['declarationSanitizer'] = $propSan;
 		}
-		$san = new ImportAtRuleSanitizer( $matcherFactory, $options );
-		return $san;
+		return new ImportAtRuleSanitizer( $matcherFactory, $options );
 	}
 
 	public function testException() {

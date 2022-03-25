@@ -10,6 +10,7 @@ use EmptyIterator;
 use Wikimedia\CSS\Objects\ComponentValueList;
 
 class MatcherTestMock extends Matcher {
+	/** @var array */
 	public $args;
 
 	/**

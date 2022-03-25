@@ -44,8 +44,12 @@ use Wikimedia\CSS\Objects\Token;
  *  - Parser::parseDeclarationList() to parse an inline style attribute
  */
 class Parser {
-	/** Maximum depth of nested ComponentValues */
-	private const CV_DEPTH_LIMIT = 100; // Arbitrary number that seems like it should be enough
+	/**
+	 * Maximum depth of nested ComponentValues
+	 *
+	 * Arbitrary number that seems like it should be enough
+	 */
+	private const CV_DEPTH_LIMIT = 100;
 
 	/** @var Tokenizer */
 	protected $tokenizer;
@@ -160,7 +164,8 @@ class Parser {
 	 * @return Stylesheet
 	 */
 	public function parseStylesheet() {
-		$this->consumeToken(); // Move to the first token
+		// Move to the first token
+		$this->consumeToken();
 		$list = $this->consumeRuleList( true );
 
 		return new Stylesheet( $list );
@@ -172,7 +177,8 @@ class Parser {
 	 * @return RuleList
 	 */
 	public function parseRuleList() {
-		$this->consumeToken(); // Move to the first token
+		// Move to the first token
+		$this->consumeToken();
 		return $this->consumeRuleList( false );
 	}
 
@@ -187,7 +193,8 @@ class Parser {
 
 		// 2.
 		if ( $this->currentToken->type() === Token::T_EOF ) {
-			$this->parseError( 'unexpected-eof', $this->currentToken ); // "return a syntax error"?
+			// "return a syntax error"?
+			$this->parseError( 'unexpected-eof', $this->currentToken );
 			return null;
 		}
 
@@ -207,7 +214,8 @@ class Parser {
 		if ( $this->currentToken->type() === Token::T_EOF ) {
 			return $rule;
 		} else {
-			$this->parseError( 'expected-eof', $this->currentToken ); // "return a syntax error"?
+			// "return a syntax error"?
+			$this->parseError( 'expected-eof', $this->currentToken );
 			return null;
 		}
 	}
@@ -223,16 +231,14 @@ class Parser {
 
 		// 2.
 		if ( $this->currentToken->type() !== Token::T_IDENT ) {
-			$this->parseError( 'expected-ident', $this->currentToken ); // "return a syntax error"?
+			// "return a syntax error"?
+			$this->parseError( 'expected-ident', $this->currentToken );
 			return null;
 		}
 
 		// 3.
-		$declaration = $this->consumeDeclaration();
-
 		// Declarations always run to EOF, no need to check.
-
-		return $declaration;
+		return $this->consumeDeclaration();
 	}
 
 	/**
@@ -242,7 +248,8 @@ class Parser {
 	 * @return DeclarationList
 	 */
 	public function parseDeclarationList() {
-		$this->consumeToken(); // Move to the first token
+		// Move to the first token
+		$this->consumeToken();
 		return $this->consumeDeclarationOrAtRuleList( false );
 	}
 
@@ -253,7 +260,8 @@ class Parser {
 	 * @return DeclarationOrAtRuleList
 	 */
 	public function parseDeclarationOrAtRuleList() {
-		$this->consumeToken(); // Move to the first token
+		// Move to the first token
+		$this->consumeToken();
 		return $this->consumeDeclarationOrAtRuleList();
 	}
 
@@ -268,7 +276,8 @@ class Parser {
 
 		// 2.
 		if ( $this->currentToken->type() === Token::T_EOF ) {
-			$this->parseError( 'unexpected-eof', $this->currentToken ); // "return a syntax error"?
+			// "return a syntax error"?
+			$this->parseError( 'unexpected-eof', $this->currentToken );
 			return null;
 		}
 
@@ -282,7 +291,8 @@ class Parser {
 		if ( $this->currentToken->type() === Token::T_EOF ) {
 			return $value;
 		} else {
-			$this->parseError( 'expected-eof', $this->currentToken ); // "return a syntax error"?
+			// "return a syntax error"?
+			$this->parseError( 'expected-eof', $this->currentToken );
 			return null;
 		}
 	}
@@ -295,7 +305,8 @@ class Parser {
 	public function parseComponentValueList() {
 		$list = new ComponentValueList();
 		while ( true ) {
-			$this->consumeToken(); // Move to the first/next token
+			// Move to the first/next token
+			$this->consumeToken();
 			$value = $this->consumeComponentValue();
 			if ( $value instanceof Token && $value->type() === Token::T_EOF ) {
 				break;
@@ -316,7 +327,8 @@ class Parser {
 		do {
 			$list = new ComponentValueList();
 			while ( true ) {
-				$this->consumeToken(); // Move to the first/next token
+				// Move to the first/next token
+				$this->consumeToken();
 				$value = $this->consumeComponentValue();
 				if ( $value instanceof Token &&
 					( $value->type() === Token::T_EOF || $value->type() === Token::T_COMMA )
@@ -352,11 +364,10 @@ class Parser {
 
 				case Token::T_CDO:
 				case Token::T_CDC:
-					if ( $topLevel ) {
-						// Do nothing
-					} else {
+					if ( !$topLevel ) {
 						$rule = $this->consumeQualifiedRule();
 					}
+					// Else, do nothing
 					break;
 
 				case Token::T_AT_KEYWORD:
@@ -423,7 +434,8 @@ class Parser {
 					);
 					$tokens = ( new ComponentValueList( $cvs ) )->toTokenArray();
 					$parser = static::newFromTokens( $tokens, $this->currentToken );
-					$parser->consumeToken(); // Load that first token
+					// Load that first token
+					$parser->consumeToken();
 					$declaration = $parser->consumeDeclaration();
 					// Propagate any errors
 					$this->parseErrors = array_merge( $this->parseErrors, $parser->parseErrors );

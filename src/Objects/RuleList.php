@@ -10,6 +10,9 @@ namespace Wikimedia\CSS\Objects;
  * Represent a list of CSS rules
  */
 class RuleList extends CSSObjectList {
+	/**
+	 * @var string
+	 */
 	protected static $objectType = Rule::class;
 
 	/** @inheritDoc */

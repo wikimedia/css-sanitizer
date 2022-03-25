@@ -19,6 +19,7 @@ class StyleRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return StyleRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		return new StyleRuleSanitizer(

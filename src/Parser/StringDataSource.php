@@ -15,7 +15,10 @@ class StringDataSource implements DataSource {
 	protected $string;
 
 	/** @var int */
-	protected $len = 0, $pos = 0;
+	protected $len = 0;
+
+	/** @var int */
+	protected $pos = 0;
 
 	/** @var string[] */
 	protected $putBack = [];
@@ -48,7 +51,7 @@ class StringDataSource implements DataSource {
 		$c = $this->string[$p];
 		$cc = ord( $this->string[$p] );
 		if ( $cc <= 0x7f ) {
-			$this->pos += 1;
+			$this->pos++;
 			return $c;
 		} elseif ( ( $cc & 0xe0 ) === 0xc0 ) {
 			$this->pos += 2;

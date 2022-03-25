@@ -10,6 +10,9 @@ namespace Wikimedia\CSS\Objects;
  * Represent a list of declarations
  */
 class DeclarationList extends CSSObjectList {
+	/**
+	 * @var string
+	 */
 	protected static $objectType = Declaration::class;
 
 	/** @inheritDoc */

@@ -16,6 +16,7 @@ class MediaAtRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	/**
 	 * @param array $options
+	 * @return MediaAtRuleSanitizer
 	 */
 	protected function getSanitizer( $options = [] ) {
 		$matcherFactory = MatcherFactory::singleton();

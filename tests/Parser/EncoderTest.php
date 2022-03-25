@@ -30,6 +30,7 @@ class EncoderTest extends \PHPUnit\Framework\TestCase {
 
 	public static function provideConversion() {
 		$z = "\0";
+		$txt = "@charset \"windows-874\"; f\xffo";
 		return [
 			'Sanity check #1' => [ '@charset "iso-2022-cn";', '�' ],
 
@@ -102,7 +103,7 @@ class EncoderTest extends \PHPUnit\Framework\TestCase {
 				"@charset \"mac\"; fóo",
 			],
 			'iconv fail' => [
-				$txt = "@charset \"windows-874\"; f\xffo",
+				$txt,
 				new \RuntimeException( "Cannot convert '$txt' from Windows-874" )
 			],
 		];

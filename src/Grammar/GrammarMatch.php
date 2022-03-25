@@ -17,7 +17,10 @@ use Wikimedia\CSS\Util;
 class GrammarMatch {
 
 	/** @var int */
-	protected $start, $length;
+	protected $start;
+
+	/** @var int */
+	protected $length;
 
 	/** @var ComponentValue[] Matched ComponentValues */
 	protected $values;

@@ -96,9 +96,12 @@ class Encoder {
 		'iso_8859-8'            => 'ISO-8859-8',
 		'iso_8859-8:1988'       => 'ISO-8859-8',
 		'visual'                => 'ISO-8859-8',
-		'csiso88598i'           => 'ISO-8859-8', // ISO-8859-8-I?
-		'iso-8859-8-i'          => 'ISO-8859-8', // ISO-8859-8-I?
-		'logical'               => 'ISO-8859-8', // ISO-8859-8-I?
+		// ISO-8859-8-I?
+		'csiso88598i'           => 'ISO-8859-8',
+		// ISO-8859-8-I?
+		'iso-8859-8-i'          => 'ISO-8859-8',
+		// ISO-8859-8-I?
+		'logical'               => 'ISO-8859-8',
 		'csisolatin6'           => 'ISO-8859-10',
 		'iso-8859-10'           => 'ISO-8859-10',
 		'iso-ir-157'            => 'ISO-8859-10',
@@ -188,15 +191,24 @@ class Encoder {
 		'x-cp1258'              => 'Windows-1258',
 		'x-mac-cyrillic'        => 'mac-cyrillic',
 		'x-mac-ukrainian'       => 'mac-cyrillic',
-		'chinese'               => 'GB18030', // GBK
-		'csgb2312'              => 'GB18030', // GBK
-		'csiso58gb231280'       => 'GB18030', // GBK
-		'gb2312'                => 'GB18030', // GBK
-		'gb_2312'               => 'GB18030', // GBK
-		'gb_2312-80'            => 'GB18030', // GBK
-		'gbk'                   => 'GB18030', // GBK
-		'iso-ir-58'             => 'GB18030', // GBK
-		'x-gbk'                 => 'GB18030', // GBK
+		// GBK
+		'chinese'               => 'GB18030',
+		// GBK
+		'csgb2312'              => 'GB18030',
+		// GBK
+		'csiso58gb231280'       => 'GB18030',
+		// GBK
+		'gb2312'                => 'GB18030',
+		// GBK
+		'gb_2312'               => 'GB18030',
+		// GBK
+		'gb_2312-80'            => 'GB18030',
+		// GBK
+		'gbk'                   => 'GB18030',
+		// GBK
+		'iso-ir-58'             => 'GB18030',
+		// GBK
+		'x-gbk'                 => 'GB18030',
 		'gb18030'               => 'GB18030',
 		'big5'                  => 'BIG-5',
 		'big5-hkscs'            => 'BIG-5',
