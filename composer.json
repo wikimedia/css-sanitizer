@@ -47,11 +47,11 @@
 		"phpunit": "phpunit $PHPUNIT_ARGS",
 		"coverage": "phpunit --coverage-html coverage $PHPUNIT_ARGS",
 		"test": [
-			"composer lint",
-			"composer phpcs",
-			"composer phpunit",
+			"@lint",
+			"@phpcs",
+			"@phpunit",
 			"minus-x check .",
-			"composer phan"
+			"@phan"
 		]
 	}
 }
