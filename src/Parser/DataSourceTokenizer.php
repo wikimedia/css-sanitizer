@@ -63,11 +63,13 @@ class DataSourceTokenizer implements Tokenizer {
 		}
 
 		// Any U+000D, U+000C, or pair of U+000D + U+000A becomes U+000A
-		if ( $char === "\f" ) { // U+000C
+		if ( $char === "\f" ) {
+			// U+000C
 			return "\n";
 		}
 
-		if ( $char === "\r" ) { // Either U+000D + U+000A or a lone U+000D
+		if ( $char === "\r" ) {
+			// Either U+000D + U+000A or a lone U+000D
 			$char2 = $this->source->readCharacter();
 			if ( $char2 !== "\n" ) {
 				$this->source->putBackCharacter( $char2 );
@@ -472,12 +474,16 @@ class DataSourceTokenizer implements Tokenizer {
 					$this->parseError( 'unclosed-url', $data );
 					break 2;
 
-				case ')': // @codeCoverageIgnore
+				// @codeCoverageIgnoreStart
+				case ')':
+				// @codeCoverageIgnoreEnd
 					break 2;
 
-				case "\n": // @codeCoverageIgnore
-				case "\t": // @codeCoverageIgnore
-				case ' ': // @codeCoverageIgnore
+				// @codeCoverageIgnoreStart
+				case "\n":
+				case "\t":
+				case ' ':
+				// @codeCoverageIgnoreEnd
 					while ( self::isWhitespace( $this->nextCharacter ) ) {
 						$this->consumeCharacter();
 					}
@@ -493,14 +499,18 @@ class DataSourceTokenizer implements Tokenizer {
 						return new Token( Token::T_BAD_URL, [ 'value' => '' ] + $data );
 					}
 
-				case '"': // @codeCoverageIgnore
-				case '\'': // @codeCoverageIgnore
-				case '(': // @codeCoverageIgnore
+				// @codeCoverageIgnoreStart
+				case '"':
+				case '\'':
+				case '(':
+				// @codeCoverageIgnoreEnd
 					$this->parseError( 'bad-character-in-url' );
 					$this->consumeBadUrlRemnants();
 					return new Token( Token::T_BAD_URL, [ 'value' => '' ] + $data );
 
-				case '\\': // @codeCoverageIgnore
+				// @codeCoverageIgnoreStart
+				case '\\':
+				// @codeCoverageIgnoreEnd
 					if ( self::isValidEscape( $this->currentCharacter, $this->nextCharacter ) ) {
 						$data['value'] .= $this->consumeEscape();
 					} else {
