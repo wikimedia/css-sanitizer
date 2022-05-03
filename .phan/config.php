@@ -9,14 +9,6 @@ $cfg['directory_list'] = [
 	'tests',
 	'vendor',
 ];
-$cfg['exclude_file_regex'] = '@^vendor/(' . implode( '|', [
-	'jakub-onderka/php-parallel-lint',
-	'jakub-onderka/php-console-highlighter',
-	'mediawiki/mediawiki-codesniffer',
-	'phan/phan',
-	'phpunit/php-code-coverage',
-	'squizlabs/php_codesniffer',
-] ) . ')/@';
 $cfg['exclude_analysis_directory_list'] = [ 'vendor/', 'coverage/', 'doc/' ];
 
 // By default mediawiki-phan-config ignores the 'use of deprecated <foo>' errors.
