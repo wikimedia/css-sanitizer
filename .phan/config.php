@@ -11,6 +11,12 @@ $cfg['directory_list'] = [
 ];
 $cfg['exclude_analysis_directory_list'] = [ 'vendor/', 'coverage/', 'doc/' ];
 
+// T311928 - ReturnTypeWillChange only exists in PHP >= 8.1; seen as a comment on PHP < 8.0
+$cfg['file_list'] = array_merge(
+	$cfg['file_list'],
+	class_exists( ReturnTypeWillChange::class ) ? [] : [ '.phan/stubs/ReturnTypeWillChange.php' ]
+);
+
 // By default mediawiki-phan-config ignores the 'use of deprecated <foo>' errors.
 // $cfg['suppress_issue_types'][] = '<some phan issue>';
 

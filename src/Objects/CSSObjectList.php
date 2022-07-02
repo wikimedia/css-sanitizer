@@ -116,17 +116,17 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 		$this->offset = 0;
 	}
 
-	// \Countable interface
+	// Countable interface
 
 	/** @inheritDoc */
-	public function count() {
+	public function count(): int {
 		return count( $this->objects );
 	}
 
-	// \SeekableIterator interface
+	// SeekableIterator interface
 
 	/** @inheritDoc */
-	public function seek( $offset ) {
+	public function seek( $offset ): void {
 		if ( $offset < 0 || $offset >= count( $this->objects ) ) {
 			throw new OutOfBoundsException( 'Offset is out of range.' );
 		}
@@ -134,39 +134,40 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 	}
 
 	/** @inheritDoc */
+	#[\ReturnTypeWillChange]
 	public function current() {
 		return $this->objects[$this->offset] ?? null;
 	}
 
 	/** @inheritDoc */
-	public function key() {
+	public function key(): int {
 		return $this->offset;
 	}
 
 	/** @inheritDoc */
-	public function next() {
+	public function next(): void {
 		$this->offset++;
 	}
 
 	/** @inheritDoc */
-	public function rewind() {
+	public function rewind(): void {
 		$this->offset = 0;
 	}
 
 	/** @inheritDoc */
-	public function valid() {
+	public function valid(): bool {
 		return isset( $this->objects[$this->offset] );
 	}
 
-	// \ArrayAccess interface
+	// ArrayAccess interface
 
 	/** @inheritDoc */
-	public function offsetExists( $offset ) {
+	public function offsetExists( $offset ): bool {
 		return isset( $this->objects[$offset] );
 	}
 
 	/** @inheritDoc */
-	public function offsetGet( $offset ) {
+	public function offsetGet( $offset ): CSSObject {
 		if ( !is_numeric( $offset ) || (float)(int)$offset !== (float)$offset ) {
 			throw new InvalidArgumentException( 'Offset must be an integer.' );
 		}
@@ -177,7 +178,7 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 	}
 
 	/** @inheritDoc */
-	public function offsetSet( $offset, $value ) {
+	public function offsetSet( $offset, $value ): void {
 		if ( !$value instanceof static::$objectType ) {
 			throw new InvalidArgumentException(
 				static::class . ' may only contain instances of ' . static::$objectType . '.'
@@ -194,7 +195,7 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 	}
 
 	/** @inheritDoc */
-	public function offsetUnset( $offset ) {
+	public function offsetUnset( $offset ): void {
 		if ( isset( $this->objects[$offset] ) && $offset !== count( $this->objects ) - 1 ) {
 			throw new OutOfBoundsException( 'Cannot leave holes in the list.' );
 		}
