@@ -82,7 +82,7 @@ class Util {
 	/**
 	 * Turn a CSSObject into a string
 	 * @param CSSObject|CSSObject[] $object
-	 * @param array $options Serialziation options:
+	 * @param array $options Serialization options:
 	 *  - minify: (bool) Skip comments and insignificant tokens
 	 * @return string
 	 */
