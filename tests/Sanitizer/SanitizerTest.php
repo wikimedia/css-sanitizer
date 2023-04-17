@@ -146,20 +146,25 @@ class SanitizerTest extends TestCase {
 		$sanitizer2 = $this->getMockBuilder( Sanitizer::class )
 			->onlyMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
 			->getMock();
+		// @phan-suppress-next-line PhanDeprecatedFunction
 		$sanitizer2->expects( $this->at( 0 ) )->method( 'doSanitize' )
 			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal False positive
 			->with( $this->identicalTo( $token1i ) )
 			->willReturn( $token1o );
+		// @phan-suppress-next-line PhanDeprecatedFunction
 		$sanitizer2->expects( $this->at( 1 ) )->method( 'doSanitize' )
 			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal False positive
 			->with( $this->identicalTo( $token2i ) )
 			->willReturn( $token2o );
+		// @phan-suppress-next-line PhanDeprecatedFunction
 		$sanitizer2->expects( $this->at( 2 ) )->method( 'doSanitize' )
 			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal False positive
 			->with( $this->identicalTo( $token3i ) )
 			->willReturn( $token3o );
+		// @phan-suppress-next-line PhanDeprecatedFunction
 		$sanitizer2->expects( $this->at( 3 ) )->method( 'getSanitizationErrors' )
 			->willReturn( [ [ 'foo', 42, 23 ] ] );
+		// @phan-suppress-next-line PhanDeprecatedFunction
 		$sanitizer2->expects( $this->at( 4 ) )->method( 'getSanitizationErrors' )
 			->willReturn( [] );
 
