@@ -17,6 +17,9 @@ $cfg['file_list'] = array_merge(
 	class_exists( ReturnTypeWillChange::class ) ? [] : [ '.phan/stubs/ReturnTypeWillChange.php' ]
 );
 
+// Makes phan crash, see T324207.
+$cfg['exclude_file_list'][] = 'tests/Objects/CSSObjectListTest.php';
+
 // By default mediawiki-phan-config ignores the 'use of deprecated <foo>' errors.
 // $cfg['suppress_issue_types'][] = '<some phan issue>';
 
