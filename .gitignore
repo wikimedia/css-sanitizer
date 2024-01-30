@@ -1,6 +1,7 @@
 # Editors
 *~
 .*.swp
+.idea
 
 # Composer
 /vendor

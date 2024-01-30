@@ -147,15 +147,11 @@ class SanitizerTest extends TestCase {
 			->onlyMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
 			->getMock();
 		$sanitizer2->expects( $this->exactly( 3 ) )->method( 'doSanitize' )
-			->withConsecutive(
-				[ $this->identicalTo( $token1i ) ],
-				[ $this->identicalTo( $token2i ) ],
-				[ $this->identicalTo( $token3i ) ]
-			)->willReturnOnConsecutiveCalls(
-				$token1o,
-				$token2o,
-				$token3o
-			);
+			->willReturnMap( [
+				[ $token1i, $token1o ],
+				[ $token2i, $token2o ],
+				[ $token3i, $token3o ],
+			] );
 		$sanitizer2->expects( $this->exactly( 1 ) )->method( 'getSanitizationErrors' )
 			->willReturn( [ [ 'foo', 42, 23 ] ] );
 
