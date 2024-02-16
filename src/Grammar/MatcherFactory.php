@@ -815,7 +815,7 @@ class MatcherFactory {
 				];
 				$discreteFeatures = [
 					'orientation', 'scan', 'grid', 'update', 'overflow-block', 'overflow-inline', 'color-gamut',
-					'pointer', 'hover', 'any-pointer', 'any-hover', 'scripting'
+					'pointer', 'hover', 'any-pointer', 'any-hover', 'scripting', 'prefers-color-scheme'
 				];
 				$mfName = new KeywordMatcher( array_merge(
 					$rangeFeatures,
@@ -857,6 +857,7 @@ class MatcherFactory {
 				$this->number(),
 				$this->dimension(),
 				$this->ident(),
+				new KeywordMatcher( [ 'light', 'dark' ] ),
 				new Juxtaposition( [ $posInt, new DelimMatcher( '/' ), $posInt ] ),
 			] );
 
