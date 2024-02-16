@@ -23,7 +23,6 @@
 		"php": ">=7.4.0",
 		"ext-mbstring": "*",
 		"ext-iconv": "*",
-		"wikimedia/at-ease": "^2.0.0",
 		"wikimedia/utfnormal": "^3.0.1 || ^4.0.0",
 		"wikimedia/scoped-callback": "3.0.0 || 4.0.0"
 	},

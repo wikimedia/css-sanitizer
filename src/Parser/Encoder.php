@@ -9,7 +9,6 @@ namespace Wikimedia\CSS\Parser;
 use RuntimeException;
 use UtfNormal\Constants;
 use UtfNormal\Utils;
-use Wikimedia\AtEase\AtEase;
 
 /**
  * Character set conversion for CSS
@@ -340,7 +339,8 @@ class Encoder {
 			return $text;
 		}
 
-		$ret = AtEase::quietCall( 'iconv', $encoding, 'UTF-8', $text );
+		// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$ret = @iconv( $encoding, 'UTF-8', $text );
 		if ( $ret === false ) {
 			throw new RuntimeException( "Cannot convert '$text' from $encoding" );
 		}
