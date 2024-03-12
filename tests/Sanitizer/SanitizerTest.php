@@ -152,7 +152,7 @@ class SanitizerTest extends TestCase {
 				[ $token2i, $token2o ],
 				[ $token3i, $token3o ],
 			] );
-		$sanitizer2->expects( $this->exactly( 1 ) )->method( 'getSanitizationErrors' )
+		$sanitizer2->expects( $this->once() )->method( 'getSanitizationErrors' )
 			->willReturn( [ [ 'foo', 42, 23 ] ] );
 
 		$list = new ComponentValueList( [ $token1i, $token2i, $token3i ] );

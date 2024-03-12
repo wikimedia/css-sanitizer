@@ -321,11 +321,12 @@ class ParserTest extends TestCase {
 				new RuleList( [
 					self::mk(
 						new AtRule( new Token( 'at-keyword', [ 'position' => [ 1, 1 ], 'value' => 'charset' ] ) ), [
-						'prelude' => new ComponentValueList( [
-							new Token( 'whitespace', [ 'position' => [ 1, 9 ] ] ),
-							new Token( 'string', [ 'position' => [ 1, 10 ], 'value' => 'foo' ] ),
-						] )
-					] ),
+							'prelude' => new ComponentValueList( [
+								new Token( 'whitespace', [ 'position' => [ 1, 9 ] ] ),
+								new Token( 'string', [ 'position' => [ 1, 10 ], 'value' => 'foo' ] ),
+							] )
+						]
+					),
 					new AtRule( new Token( 'at-keyword', [ 'position' => [ 1, 17 ], 'value' => 'bogus' ] ) ),
 				] )
 			],

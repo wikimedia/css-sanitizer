@@ -35,9 +35,9 @@ class DataSourceTokenizerTest extends TestCase {
 		$this->assertSame( DataSource::EOF, $t->nextChar() );
 
 		$mock = $this->getMockForAbstractClass( DataSource::class );
-		$mock->method( 'readCharacter' )->will( $this->onConsecutiveCalls(
+		$mock->method( 'readCharacter' )->willReturnOnConsecutiveCalls(
 			"\u{D7FF}", "\u{D800}", "\u{DFFF}", "\u{E000}", DataSource::EOF
-		) );
+		);
 		$mock->expects( $this->never() )->method( 'putBackCharacter' );
 		'@phan-var DataSource $mock';
 

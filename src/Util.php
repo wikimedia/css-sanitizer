@@ -119,6 +119,7 @@ class Util {
 		$prev = reset( $tokens );
 		$ret = (string)$prev;
 		$urangeHack = 0;
+		// @phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		while ( ( $token = next( $tokens ) ) !== false ) {
 			// Avoid serializing tokens that are part of a <urange> with extraneous comments
 			// by checking for a hack-flag in the type.

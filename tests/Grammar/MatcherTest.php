@@ -183,9 +183,9 @@ class MatcherTest extends MatcherTestBase {
 
 		// Test list. The whitespaces need to be cloned, or it'll get confused.
 		$testBlock = SimpleBlock::newFromDelimiter( '[' );
-		$testBlock->getValue()->add( [ clone $ws , $tok, clone $ws , clone $ws , $tok, $Iws ] );
+		$testBlock->getValue()->add( [ clone $ws, $tok, clone $ws, clone $ws, $tok, $Iws ] );
 		$testList = new ComponentValueList( [
-			clone $ws , $tok, clone $ws , clone $ws , $tok, clone $Iws , $testBlock, clone $ws
+			clone $ws, $tok, clone $ws, clone $ws, $tok, clone $Iws, $testBlock, clone $ws
 		] );
 		$origList = clone $testList;
 

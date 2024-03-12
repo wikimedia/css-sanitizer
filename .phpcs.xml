@@ -4,9 +4,6 @@
 		<exclude name="MediaWiki.Commenting.FunctionComment.ObjectTypeHintReturn" />
 		<exclude name="MediaWiki.Commenting.PropertyDocumentation.ObjectTypeHintVar" />
 	</rule>
-	<rule ref="MediaWiki.ControlStructures.AssignmentInControlStructures.AssignmentInControlStructures">
-		<severity>0</severity>
-	</rule>
 	<file>.</file>
 	<arg name="encoding" value="UTF-8"/>
 	<arg name="extensions" value="php"/>
