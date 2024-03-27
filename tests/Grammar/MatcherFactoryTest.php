@@ -352,6 +352,10 @@ class MatcherFactoryTest extends TestCase {
 			[ 'color', 'hsla(0,0,0%,0)', false ],
 			[ 'color', 'hsla(0,0%,0,0)', false ],
 			[ 'color', 'hsla(0,0%,0%,0%)', false ],
+			[ 'color', 'var(--color-test)' ],
+			[ 'color', 'attr(--color-test)', false ],
+			[ 'color', 'var(@color-test)', false ],
+			[ 'color', 'var(any-thing)', false ],
 
 			[ 'image', "url({$img})" ],
 			[ 'image', "url('{$img}')" ],

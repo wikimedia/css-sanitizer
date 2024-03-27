@@ -12,6 +12,7 @@ use Wikimedia\CSS\Objects\ComponentValueList;
 use Wikimedia\CSS\Objects\RuleList;
 use Wikimedia\CSS\Objects\SimpleBlock;
 use Wikimedia\CSS\Objects\Token;
+use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\TestingAccessWrapper;
 
 /**
@@ -228,5 +229,82 @@ class SanitizerTest extends TestCase {
 			[ 'misordered-rule', 2, 1 ],
 			[ 'unrecognized-rule', 7, 1 ],
 		], $san->getSanitizationErrors() );
+	}
+
+	/**
+	 * @dataProvider provideSecurity
+	 * @param string $input
+	 * @param ?string $output
+	 * @param array $errors
+	 */
+	public function testSecurity( string $input, ?string $output, array $errors = [] ) {
+		$san = StylesheetSanitizer::newDefault();
+		$sheet = Parser::newFromString( $input )->parseStylesheet();
+		$ret = $san->sanitize( $sheet );
+		$this->assertSame( $errors, $san->getSanitizationErrors() );
+		if ( $output === null ) {
+			$this->assertNull( $ret );
+		} else {
+			$this->assertNotNull( $ret );
+			$this->assertSame( $output, (string)$ret );
+
+			$sheet2 = Parser::newFromString( $output )->parseStylesheet();
+			$ret2 = $san->sanitize( $sheet2 );
+			$this->assertSame( $output, (string)$ret2 );
+		}
+	}
+
+	public static function provideSecurity() {
+		// These examples are from
+		// https://www.w3.org/TR/css-variables-1/
+		// and confirm that custom property *definitions* are stripped
+		// from the CSS, even though custom property *uses* are permitted
+		// (in color-related attributes at least).
+		yield 'Example 5: Basic usage (section 2)' => [
+			<<<INPUT
+			:root { --color: blue; }
+			div { --color: green; }
+			#alert { --color: red; }
+			* { color: var(--color); }
+			INPUT,
+			<<<OUTPUT
+			:root {} div {} #alert {} * { color:var(--color); }
+			OUTPUT,
+			[
+				[ 'unrecognized-property', 1, 9 ],
+				[ 'unrecognized-property', 2, 7 ],
+				[ 'unrecognized-property', 3, 10 ],
+			],
+		];
+		yield 'Shorthand properties (section 3.2)' => [
+			<<<INPUT
+			* { background: var(--custom); }
+			INPUT,
+			<<<OUTPUT
+			* { background:var(--custom); }
+			OUTPUT,
+			[
+			],
+		];
+		yield 'Example 16: A Billion Laughs (section 3.3)' => [
+			<<<INPUT
+			.foo {
+			  --prop1: lol;
+			  --prop2: var(--prop1) var(--prop1);
+			  --prop3: var(--prop2) var(--prop2);
+			  --prop4: var(--prop3) var(--prop3);
+			  /* etc */
+			}
+			INPUT,
+			<<<OUTPUT
+			.foo {}
+			OUTPUT,
+			[
+				[ 'unrecognized-property', 2, 3 ],
+				[ 'unrecognized-property', 3, 3 ],
+				[ 'unrecognized-property', 4, 3 ],
+				[ 'unrecognized-property', 5, 3 ],
+			],
+		];
 	}
 }

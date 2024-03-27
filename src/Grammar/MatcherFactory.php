@@ -13,7 +13,9 @@ use Wikimedia\CSS\Sanitizer\PropertySanitizer;
 
 /**
  * Factory for predefined Grammar matchers
- * @note For security, the attr() and var() functions are not supported.
+ * @note For security, the attr() and var() functions are not supported,
+ * although as a limited exception var() is allowed for color attributes
+ * in `::colorFuncs()`.
  */
 class MatcherFactory {
 	/** @var MatcherFactory|null */
@@ -591,6 +593,7 @@ class MatcherFactory {
 				] ) ),
 				new FunctionMatcher( 'hsl', new Juxtaposition( [ $n, $p, $p ], true ) ),
 				new FunctionMatcher( 'hsla', new Juxtaposition( [ $n, $p, $p, $n ], true ) ),
+				new FunctionMatcher( 'var', new CustomPropertyMatcher() ),
 			];
 		}
 		return $this->cache[__METHOD__];
