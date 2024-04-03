@@ -100,6 +100,13 @@ Running tests
     composer install --prefer-dist
     composer test
 
+Releasing a new version
+-----------------------
+
+This package uses `wikimedia/update-history` and its conventions.
+
+See https://www.mediawiki.org/wiki/UpdateHistory for details.
+
 History
 -------
 
@@ -112,6 +119,7 @@ We required a CSS sanitizer with several properties:
 
 We could not find a library that fit these requirements, so we created one.
 
+Additional release history is in [`HISTORY.md`](./HISTORY.md).
 
 ---
 [Latest Stable Version]: https://poser.pugx.org/wikimedia/css-sanitizer/v/stable.svg

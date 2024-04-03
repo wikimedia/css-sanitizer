@@ -33,7 +33,8 @@
 		"php-parallel-lint/php-console-highlighter": "1.0.0",
 		"php-parallel-lint/php-parallel-lint": "1.3.2",
 		"phpunit/phpunit": "9.6.16",
-		"wikimedia/testing-access-wrapper": "~2.0.0"
+		"wikimedia/testing-access-wrapper": "~2.0.0",
+		"wikimedia/update-history": "^1.0.1"
 	},
 	"scripts": {
 		"lint": "parallel-lint . --exclude vendor",
@@ -43,6 +44,7 @@
 			"minus-x fix .",
 			"phpcbf"
 		],
+		"update-history": "update-history patch",
 		"phpunit": "phpunit $PHPUNIT_ARGS",
 		"coverage": "phpunit --coverage-html coverage $PHPUNIT_ARGS",
 		"test": [
