@@ -1,6 +1,6 @@
 # Release History
 
-## css-sanitizer x.x.x (not yet released)
+## css-sanitizer 5.2.0 (2024-04-03)
 * Add support for CSS custom properties in color attributes
 * [build] Bump dependencies
 
