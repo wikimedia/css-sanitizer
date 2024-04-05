@@ -396,7 +396,9 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['border-right-color'] = $matcherFactory->color();
 		$props['border-bottom-color'] = $matcherFactory->color();
 		$props['border-left-color'] = $matcherFactory->color();
-		$props['border-color'] = Quantifier::count( $matcherFactory->color(), 1, 4 );
+		// Because this property allows concatenation of color values, don't
+		// allow var(...) expressions here out of an abundance of caution.
+		$props['border-color'] = Quantifier::count( $matcherFactory->safeColor(), 1, 4 );
 		$props['border-top-style'] = $lineStyle;
 		$props['border-right-style'] = $lineStyle;
 		$props['border-bottom-style'] = $lineStyle;

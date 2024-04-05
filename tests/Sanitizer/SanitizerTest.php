@@ -255,6 +255,36 @@ class SanitizerTest extends TestCase {
 	}
 
 	public static function provideSecurity() {
+		// A single custom property is allowed for `background`, but not
+		// a concatenated series of them.
+		yield 'Background' => [
+			<<<INPUT
+			* {
+			  background: var(--foo);
+			  background: var(--foo) var(--bar);
+			}
+			INPUT,
+			<<<OUTPUT
+			* { background:var(--foo); }
+			OUTPUT,
+			[
+				[ 'bad-value-for-property', 3, 15, 'background' ],
+			],
+		];
+		// `border-color` actually allows concatenated color values, so
+		// we disallow custom properties here.
+		yield 'Border' => [
+			<<<INPUT
+			.safe { border-color: red green blue white; }
+			.unsafe { border-color: var(--red) var(--green) var(--blue) var(--white); }
+			INPUT,
+			<<<OUTPUT
+			.safe { border-color:red green blue white; } .unsafe {}
+			OUTPUT,
+			[
+				[ 'bad-value-for-property', 2, 25, 'border-color' ],
+			],
+		];
 		// These examples are from
 		// https://www.w3.org/TR/css-variables-1/
 		// and confirm that custom property *definitions* are stripped

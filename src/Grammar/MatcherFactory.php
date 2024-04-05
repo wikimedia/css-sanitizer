@@ -593,18 +593,24 @@ class MatcherFactory {
 				] ) ),
 				new FunctionMatcher( 'hsl', new Juxtaposition( [ $n, $p, $p ], true ) ),
 				new FunctionMatcher( 'hsla', new Juxtaposition( [ $n, $p, $p, $n ], true ) ),
-				new FunctionMatcher( 'var', new CustomPropertyMatcher() ),
 			];
 		}
 		return $this->cache[__METHOD__];
 	}
 
 	/**
-	 * Matcher for a color value
-	 * @see https://www.w3.org/TR/2018/REC-css-color-3-20180619/#colorunits
+	 * Matcher for a color value, *not* including a custom property reference.
+	 *
+	 * Because custom properties can lead to unexpected behavior (generally
+	 * a bad thing for security) when concatenated together, this matcher
+	 * should be used for CSS rules which allow value concatenation.
+	 * For example, `border-color` allows up to 4 `var(...)` expressions to
+	 * potentially be concatenated.
+	 *
+	 * @see https://www.w3.org/TR/css-variables-1/#custom-property
 	 * @return Matcher
 	 */
-	public function color() {
+	public function safeColor() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$this->cache[__METHOD__] = new Alternative( array_merge( [
 				new KeywordMatcher( [
@@ -654,6 +660,23 @@ class MatcherFactory {
 					return preg_match( '/^([0-9a-f]{3}|[0-9a-f]{6})$/i', $t->value() );
 				} ),
 			], $this->colorFuncs() ) );
+		}
+		return $this->cache[__METHOD__];
+	}
+
+	/**
+	 * Matcher for a color value, including a possible custom property
+	 * reference.
+	 *
+	 * @see https://www.w3.org/TR/2018/REC-css-color-3-20180619/#colorunits
+	 * @return Matcher
+	 */
+	public function color() {
+		if ( !isset( $this->cache[__METHOD__] ) ) {
+			$this->cache[__METHOD__] = new Alternative( [
+				$this->safeColor(),
+				new FunctionMatcher( 'var', new CustomPropertyMatcher() ),
+			] );
 		}
 		return $this->cache[__METHOD__];
 	}
