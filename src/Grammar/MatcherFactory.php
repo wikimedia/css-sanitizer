@@ -279,6 +279,15 @@ class MatcherFactory {
 	}
 
 	/**
+	 * @return TokenMatcher
+	 */
+	public function colorHex(): TokenMatcher {
+		return new TokenMatcher( Token::T_HASH, static function ( Token $t ) {
+			return preg_match( '/^([0-9a-f]{3}|[0-9a-f]{6})$/i', $t->value() );
+		} );
+	}
+
+	/**
 	 * Matcher for an integer value
 	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#integers
 	 * @return Matcher
@@ -613,52 +622,8 @@ class MatcherFactory {
 	public function safeColor() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$this->cache[__METHOD__] = new Alternative( array_merge( [
-				new KeywordMatcher( [
-					// Basic colors
-					'aqua', 'black', 'blue', 'fuchsia', 'gray', 'green',
-					'lime', 'maroon', 'navy', 'olive', 'purple', 'red',
-					'silver', 'teal', 'white', 'yellow',
-					// Extended colors
-					'aliceblue', 'antiquewhite', 'aquamarine', 'azure',
-					'beige', 'bisque', 'blanchedalmond', 'blueviolet', 'brown',
-					'burlywood', 'cadetblue', 'chartreuse', 'chocolate',
-					'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan',
-					'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray',
-					'darkgreen', 'darkgrey', 'darkkhaki', 'darkmagenta',
-					'darkolivegreen', 'darkorange', 'darkorchid', 'darkred',
-					'darksalmon', 'darkseagreen', 'darkslateblue',
-					'darkslategray', 'darkslategrey', 'darkturquoise',
-					'darkviolet', 'deeppink', 'deepskyblue', 'dimgray',
-					'dimgrey', 'dodgerblue', 'firebrick', 'floralwhite',
-					'forestgreen', 'gainsboro', 'ghostwhite', 'gold',
-					'goldenrod', 'greenyellow', 'grey', 'honeydew', 'hotpink',
-					'indianred', 'indigo', 'ivory', 'khaki', 'lavender',
-					'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue',
-					'lightcoral', 'lightcyan', 'lightgoldenrodyellow',
-					'lightgray', 'lightgreen', 'lightgrey', 'lightpink',
-					'lightsalmon', 'lightseagreen', 'lightskyblue',
-					'lightslategray', 'lightslategrey', 'lightsteelblue',
-					'lightyellow', 'limegreen', 'linen', 'magenta',
-					'mediumaquamarine', 'mediumblue', 'mediumorchid',
-					'mediumpurple', 'mediumseagreen', 'mediumslateblue',
-					'mediumspringgreen', 'mediumturquoise', 'mediumvioletred',
-					'midnightblue', 'mintcream', 'mistyrose', 'moccasin',
-					'navajowhite', 'oldlace', 'olivedrab', 'orange',
-					'orangered', 'orchid', 'palegoldenrod', 'palegreen',
-					'paleturquoise', 'palevioletred', 'papayawhip',
-					'peachpuff', 'peru', 'pink', 'plum', 'powderblue',
-					'rosybrown', 'royalblue', 'saddlebrown', 'salmon',
-					'sandybrown', 'seagreen', 'seashell', 'sienna', 'skyblue',
-					'slateblue', 'slategray', 'slategrey', 'snow',
-					'springgreen', 'steelblue', 'tan', 'thistle', 'tomato',
-					'turquoise', 'violet', 'wheat', 'whitesmoke',
-					'yellowgreen',
-					// Other keywords. Intentionally omitting the deprecated system colors.
-					'transparent', 'currentColor',
-				] ),
-				new TokenMatcher( Token::T_HASH, static function ( Token $t ) {
-					return preg_match( '/^([0-9a-f]{3}|[0-9a-f]{6})$/i', $t->value() );
-				} ),
+				$this->colorWords(),
+				$this->colorHex(),
 			], $this->colorFuncs() ) );
 		}
 		return $this->cache[__METHOD__];
@@ -675,7 +640,13 @@ class MatcherFactory {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$this->cache[__METHOD__] = new Alternative( [
 				$this->safeColor(),
-				new FunctionMatcher( 'var', new CustomPropertyMatcher() ),
+				new FunctionMatcher( 'var', new Juxtaposition( [
+						new CustomPropertyMatcher(),
+						Quantifier::optional( new Alternative( [
+							$this->colorWords(),
+							$this->colorHex(),
+						] ) ),
+				], true ) ),
 			] );
 		}
 		return $this->cache[__METHOD__];
@@ -1493,6 +1464,55 @@ class MatcherFactory {
 			$this->cache[__METHOD__]->setDefaultOptions( [ 'skip-whitespace' => false ] );
 		}
 		return $this->cache[__METHOD__];
+	}
+
+	/**
+	 * @return KeywordMatcher
+	 */
+	public function colorWords(): KeywordMatcher {
+		return new KeywordMatcher( [
+			// Basic colors
+			'aqua', 'black', 'blue', 'fuchsia', 'gray', 'green',
+			'lime', 'maroon', 'navy', 'olive', 'purple', 'red',
+			'silver', 'teal', 'white', 'yellow',
+			// Extended colors
+			'aliceblue', 'antiquewhite', 'aquamarine', 'azure',
+			'beige', 'bisque', 'blanchedalmond', 'blueviolet', 'brown',
+			'burlywood', 'cadetblue', 'chartreuse', 'chocolate',
+			'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan',
+			'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray',
+			'darkgreen', 'darkgrey', 'darkkhaki', 'darkmagenta',
+			'darkolivegreen', 'darkorange', 'darkorchid', 'darkred',
+			'darksalmon', 'darkseagreen', 'darkslateblue',
+			'darkslategray', 'darkslategrey', 'darkturquoise',
+			'darkviolet', 'deeppink', 'deepskyblue', 'dimgray',
+			'dimgrey', 'dodgerblue', 'firebrick', 'floralwhite',
+			'forestgreen', 'gainsboro', 'ghostwhite', 'gold',
+			'goldenrod', 'greenyellow', 'grey', 'honeydew', 'hotpink',
+			'indianred', 'indigo', 'ivory', 'khaki', 'lavender',
+			'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue',
+			'lightcoral', 'lightcyan', 'lightgoldenrodyellow',
+			'lightgray', 'lightgreen', 'lightgrey', 'lightpink',
+			'lightsalmon', 'lightseagreen', 'lightskyblue',
+			'lightslategray', 'lightslategrey', 'lightsteelblue',
+			'lightyellow', 'limegreen', 'linen', 'magenta',
+			'mediumaquamarine', 'mediumblue', 'mediumorchid',
+			'mediumpurple', 'mediumseagreen', 'mediumslateblue',
+			'mediumspringgreen', 'mediumturquoise', 'mediumvioletred',
+			'midnightblue', 'mintcream', 'mistyrose', 'moccasin',
+			'navajowhite', 'oldlace', 'olivedrab', 'orange',
+			'orangered', 'orchid', 'palegoldenrod', 'palegreen',
+			'paleturquoise', 'palevioletred', 'papayawhip',
+			'peachpuff', 'peru', 'pink', 'plum', 'powderblue',
+			'rosybrown', 'royalblue', 'saddlebrown', 'salmon',
+			'sandybrown', 'seagreen', 'seashell', 'sienna', 'skyblue',
+			'slateblue', 'slategray', 'slategrey', 'snow',
+			'springgreen', 'steelblue', 'tan', 'thistle', 'tomato',
+			'turquoise', 'violet', 'wheat', 'whitesmoke',
+			'yellowgreen',
+			// Other keywords. Intentionally omitting the deprecated system colors.
+			'transparent', 'currentColor',
+		] );
 	}
 
 	/** @} */
