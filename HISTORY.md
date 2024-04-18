@@ -1,5 +1,7 @@
 # Release History
 
+## css-sanitizer x.x.x (not yet released)
+
 ## css-sanitizer 5.3.0 (2024-04-18)
 * Harden security by disallowing CSS custom properties for `border-color`
 * Add support for fallback values for CSS custom properties in color attributes.
