@@ -616,7 +616,7 @@ class MatcherFactory {
 	 * For example, `border-color` allows up to 4 `var(...)` expressions to
 	 * potentially be concatenated.
 	 *
-	 * @see https://www.w3.org/TR/css-variables-1/#custom-property
+	 * @see https://www.w3.org/TR/2022/CR-css-variables-1-20220616/#custom-property
 	 * @return Matcher
 	 */
 	public function safeColor() {

@@ -14,7 +14,7 @@ use Wikimedia\CSS\Objects\Token;
  *
  * This utilises regex to match the custom property --[a-zA-Z][a-zA-Z0-9-] without any input validation.
  *
- * @see https://www.w3.org/TR/css-variables-1/#custom-property
+ * @see https://www.w3.org/TR/2022/CR-css-variables-1-20220616/#custom-property
  */
 class CustomPropertyMatcher extends Matcher {
 
