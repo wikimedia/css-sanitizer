@@ -73,6 +73,8 @@ class UnorderedGroup extends Matcher {
 			/** @var $curMatcher Matcher|null */
 			/** @var $iter Iterator<GrammarMatch> */
 			[ $lastMatch, $matchers, $matcherIter, $curMatcher, $iter ] = $stack[count( $stack ) - 1];
+			// Ignore EmptyIterator here
+			'@phan-var Iterator $iter';
 
 			// If the top of the stack has more matches, process the next one.
 			if ( $iter->valid() ) {
