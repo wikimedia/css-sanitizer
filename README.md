@@ -91,12 +91,12 @@ The sanitizer recognizes the following CSS modules:
 * [UI 4 Level 4, 2020-01-02](https://www.w3.org/TR/2020/WD-css-ui-4-20200102)
 * [Writing Modes Level 4, 2019-07-30](https://www.w3.org/TR/2019/CR-css-writing-modes-4-20190730)
 * [Selectors Level 4, 2019-02-25](https://www.w3.org/TR/2019/WD-css-pseudo-4-20190225/)
+* [Logical Properties and Values Level 1, 2018-08-27](https://www.w3.org/TR/2018/WD-css-logical-1-20180827/)
 
 And also,
 * The `touch-action` property from
 [Pointer Events Level 2, 2019-04-04](https://www.w3.org/TR/2019/REC-pointerevents2-20190404/)
 * `:dir()` pseudo-class from [Selectors Level 4, 2022-11-11](https://www.w3.org/TR/2022/WD-selectors-4-20221111/#the-dir-pseudo)
-* Flow-relative values, `inline-start` and `inline-end` for `float` and `clear` from [CSS Logical Properties and Values Level 1, 2018-08-27](https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#directional-keywords)
 
 Running tests
 -------------

@@ -77,6 +77,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssShapes1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssMasking1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssSizing3( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssLogical1( $matcherFactory ) );
 	}
 
 	/**
@@ -113,7 +114,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['padding'] = Quantifier::count( $matcherFactory->lengthPercentage(), 1, 4 );
 
 		// https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html
-		// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/
+		// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#directional-keywords
 		$props['float'] = new KeywordMatcher( [ 'left', 'right', 'inline-start', 'inline-end', 'none' ] );
 		$props['clear'] = new KeywordMatcher( [ 'none', 'left', 'right', 'both', 'inline-start', 'inline-end' ] );
 
@@ -1767,6 +1768,107 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['max-height'] = $props['max-width'];
 
 		$props['box-sizing'] = new KeywordMatcher( [ 'content-box', 'border-box' ] );
+
+		$this->cache[__METHOD__] = $props;
+		return $props;
+	}
+
+	/**
+	 * Properties for CSS Logical 1
+	 * @see https://www.w3.org/TR/2018/WD-css-logical-1-20180827/
+	 * @param MatcherFactory $matcherFactory Factory for Matchers
+	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
+	 */
+	protected function cssLogical1( MatcherFactory $matcherFactory ) {
+		// @codeCoverageIgnoreStart
+		if ( isset( $this->cache[__METHOD__] ) ) {
+			return $this->cache[__METHOD__];
+		}
+		// @codeCoverageIgnoreEnd
+
+		$cssSizing3 = $this->cssSizing3( $matcherFactory );
+		$css2 = $this->css2( $matcherFactory );
+		$cssPosition3 = $this->cssPosition3( $matcherFactory );
+		$cssBorderBackground3 = $this->cssBorderBackground3( $matcherFactory );
+		$borderCombo = UnorderedGroup::someOf( [
+			$cssBorderBackground3['border-top-width'],
+			$cssBorderBackground3['border-top-style'],
+			$matcherFactory->color(),
+		] );
+
+		$props = [
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#dimension-properties
+			'block-size' => $cssSizing3['width'],
+			'inline-size' => $cssSizing3['width'],
+			'min-block-size' => $cssSizing3['min-width'],
+			'min-inline-size' => $cssSizing3['min-width'],
+			'max-block-size' => $cssSizing3['max-width'],
+			'max-inline-size' => $cssSizing3['max-width'],
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#margin-properties
+			'margin-block-start' => $css2['margin-top'],
+			'margin-block-end' => $css2['margin-top'],
+			'margin-inline-start' => $css2['margin-top'],
+			'margin-inline-end' => $css2['margin-top'],
+			'margin-block' => Quantifier::count( $css2['margin-top'], 1, 2 ),
+			'margin-inline' => Quantifier::count( $css2['margin-top'], 1, 2 ),
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#inset-properties
+			'inset-block-start' => $cssPosition3['top'],
+			'inset-block-end' => $cssPosition3['top'],
+			'inset-inline-start' => $cssPosition3['top'],
+			'inset-inline-end' => $cssPosition3['top'],
+			'inset-block' => Quantifier::count( $cssPosition3['top'], 1, 2 ),
+			'inset-inline' => Quantifier::count( $cssPosition3['top'], 1, 2 ),
+			'inset' => Quantifier::count( $cssPosition3['top'], 1, 4 ),
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#padding-properties
+			'padding-block-start' => $css2['padding-top'],
+			'padding-block-end' => $css2['padding-top'],
+			'padding-inline-start' => $css2['padding-top'],
+			'padding-inline-end' => $css2['padding-top'],
+			'padding-block' => Quantifier::count( $css2['padding-top'], 1, 2 ),
+			'padding-inline' => Quantifier::count( $css2['padding-top'], 1, 2 ),
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#border-width
+			'border-block-start-width' => $cssBorderBackground3['border-top-width'],
+			'border-block-end-width' => $cssBorderBackground3['border-top-width'],
+			'border-inline-start-width' => $cssBorderBackground3['border-top-width'],
+			'border-inline-end-width' => $cssBorderBackground3['border-top-width'],
+			'border-block-width' => Quantifier::count( $cssBorderBackground3['border-top-width'], 1, 2 ),
+			'border-inline-width' => Quantifier::count( $cssBorderBackground3['border-top-width'], 1, 2 ),
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#border-style
+			'border-block-start-style' => $cssBorderBackground3['border-top-style'],
+			'border-block-end-style' => $cssBorderBackground3['border-top-style'],
+			'border-inline-start-style' => $cssBorderBackground3['border-top-style'],
+			'border-inline-end-style' => $cssBorderBackground3['border-top-style'],
+			'border-block-style' => Quantifier::count( $cssBorderBackground3['border-top-style'], 1, 2 ),
+			'border-inline-style' => Quantifier::count( $cssBorderBackground3['border-top-style'], 1, 2 ),
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#border-color
+			'border-block-start-color' => $cssBorderBackground3['border-top-color'],
+			'border-block-end-color' => $cssBorderBackground3['border-top-color'],
+			'border-inline-start-color' => $cssBorderBackground3['border-top-color'],
+			'border-inline-end-color' => $cssBorderBackground3['border-top-color'],
+			'border-block-color' => Quantifier::count( $cssBorderBackground3['border-top-color'], 1, 2 ),
+			'border-inline-color' => Quantifier::count( $cssBorderBackground3['border-top-color'], 1, 2 ),
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#border-shorthands
+			'border-block-start' => $borderCombo,
+			'border-block-end' => $borderCombo,
+			'border-inline-start' => $borderCombo,
+			'border-inline-end' => $borderCombo,
+			// both are equivalent to 'border-block-start' per the spec
+			'border-block' => $borderCombo,
+			'border-inline' => $borderCombo,
+
+			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#border-radius-shorthands
+			'border-start-start-radius' => $cssBorderBackground3['border-top-left-radius'],
+			'border-start-end-radius' => $cssBorderBackground3['border-top-left-radius'],
+			'border-end-start-radius' => $cssBorderBackground3['border-top-left-radius'],
+			'border-end-end-radius' => $cssBorderBackground3['border-top-left-radius'],
+		];
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
