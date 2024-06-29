@@ -1320,6 +1320,7 @@ class MatcherFactory {
 	 * following sources:
 	 * - https://www.w3.org/TR/2018/REC-selectors-3-20181106/#pseudo-classes
 	 * - https://www.w3.org/TR/2019/WD-css-pseudo-4-20190225/
+	 * - https://drafts.csswg.org/selectors/#the-dir-pseudo
 	 *
 	 * @return Matcher
 	 */
@@ -1328,6 +1329,7 @@ class MatcherFactory {
 			$colon = new TokenMatcher( Token::T_COLON );
 			$ows = $this->optionalWhitespace();
 			$anplusb = new Juxtaposition( [ $ows, $this->cssANplusB(), $ows ] );
+			$dirValues = new KeywordMatcher( [ 'ltr', 'rtl' ] );
 			$this->cache[__METHOD__] = new Alternative( [
 				new Juxtaposition( [
 					$colon,
@@ -1340,6 +1342,7 @@ class MatcherFactory {
 							'first-line', 'first-letter', 'before', 'after',
 						] ),
 						new FunctionMatcher( 'lang', new Juxtaposition( [ $ows, $this->ident(), $ows ] ) ),
+						new FunctionMatcher( 'dir', new Juxtaposition( [ $ows, $dirValues, $ows ] ) ),
 						new FunctionMatcher( 'nth-child', $anplusb ),
 						new FunctionMatcher( 'nth-last-child', $anplusb ),
 						new FunctionMatcher( 'nth-of-type', $anplusb ),

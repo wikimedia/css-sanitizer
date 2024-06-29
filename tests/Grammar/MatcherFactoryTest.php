@@ -650,6 +650,8 @@ class MatcherFactoryTest extends TestCase {
 			[ 'cssPseudo', ': : before', null ],
 			[ 'cssPseudo', ':lang(xyz)' ],
 			[ 'cssPseudo', ':lang( xyz )' ],
+			[ 'cssPseudo', ':dir(ltr)' ],
+			[ 'cssPseudo', ':dir( rtl )' ],
 			[ 'cssPseudo', ':nth-child(2n+1)' ],
 
 			[ 'cssNegation', ':not(xyz)' ],
