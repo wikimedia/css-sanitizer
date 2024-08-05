@@ -1320,7 +1320,7 @@ class MatcherFactory {
 	 * following sources:
 	 * - https://www.w3.org/TR/2018/REC-selectors-3-20181106/#pseudo-classes
 	 * - https://www.w3.org/TR/2019/WD-css-pseudo-4-20190225/
-	 * - https://drafts.csswg.org/selectors/#the-dir-pseudo
+	 * - https://www.w3.org/TR/2022/WD-selectors-4-20221111/#the-dir-pseudo
 	 *
 	 * @return Matcher
 	 */

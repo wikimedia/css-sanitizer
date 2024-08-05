@@ -113,7 +113,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['padding'] = Quantifier::count( $matcherFactory->lengthPercentage(), 1, 4 );
 
 		// https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html
-		// https://drafts.csswg.org/css-logical/#float-clear
+		// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/
 		$props['float'] = new KeywordMatcher( [ 'left', 'right', 'inline-start', 'inline-end', 'none' ] );
 		$props['clear'] = new KeywordMatcher( [ 'none', 'left', 'right', 'both', 'inline-start', 'inline-end' ] );
 
