@@ -1,6 +1,8 @@
 # Release History
 
 ## css-sanitizer x.x.x (not yet released)
+* Add support for :dir() pseudo-class
+* Add support for CSS Logical 1 properties and values
 
 ## css-sanitizer 5.3.0 (2024-04-18)
 * Harden security by disallowing CSS custom properties for `border-color`
