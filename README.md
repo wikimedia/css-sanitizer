@@ -98,6 +98,7 @@ And also,
 [Pointer Events Level 2, 2019-04-04](https://www.w3.org/TR/2019/REC-pointerevents2-20190404/)
 * `:dir()` pseudo-class from [Selectors Level 4, 2022-11-11](https://www.w3.org/TR/2022/WD-selectors-4-20221111/#the-dir-pseudo)
 * Accessibility related media features from [Media Queries Level 5](https://drafts.csswg.org/mediaqueries-5/#mf-user-preferences) including prefers-reduced-motion, prefers-reduced-transparency, prefers-contrast and forced-colors.
+* `light-dark()` color function from [Color Module Level 5, 2024-02-29](https://www.w3.org/TR/2024/WD-css-color-5-20240229/#funcdef-light-dark)
 
 Running tests
 -------------

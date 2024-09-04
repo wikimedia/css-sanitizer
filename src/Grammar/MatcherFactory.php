@@ -631,9 +631,13 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a color value, including a possible custom property
-	 * reference.
+	 * reference and light-dark color function.
 	 *
-	 * @see https://www.w3.org/TR/2018/REC-css-color-3-20180619/#colorunits
+	 * Follows:
+	 * * https://www.w3.org/TR/2018/REC-css-color-3-20180619/#colorunits
+	 * * https://www.w3.org/TR/css-variables-1/
+	 * * https://www.w3.org/TR/2024/WD-css-color-5-20240229/#funcdef-light-dark
+	 *
 	 * @return Matcher
 	 */
 	public function color() {
@@ -646,6 +650,16 @@ class MatcherFactory {
 							$this->colorWords(),
 							$this->colorHex(),
 						] ) ),
+				], true ) ),
+				new FunctionMatcher( 'light-dark', new Juxtaposition( [
+						new Alternative( [
+							$this->colorWords(),
+							$this->colorHex(),
+						] ),
+						new Alternative( [
+							$this->colorWords(),
+							$this->colorHex(),
+						] ),
 				], true ) ),
 			] );
 		}
