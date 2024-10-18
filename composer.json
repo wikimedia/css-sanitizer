@@ -45,8 +45,8 @@
 			"phpcbf"
 		],
 		"update-history": "update-history patch",
-		"phpunit": "phpunit $PHPUNIT_ARGS",
-		"coverage": "phpunit --coverage-html coverage $PHPUNIT_ARGS",
+		"phpunit": "phpunit",
+		"coverage": "phpunit --coverage-html coverage",
 		"test": [
 			"@lint",
 			"@phpcs",
