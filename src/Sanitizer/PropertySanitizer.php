@@ -30,7 +30,7 @@ class PropertySanitizer extends Sanitizer {
 	 * @param Matcher|null $cssWideKeywordsMatcher Matcher for keywords that should
 	 *  be recognized for all known properties.
 	 */
-	public function __construct( array $properties = [], Matcher $cssWideKeywordsMatcher = null ) {
+	public function __construct( array $properties = [], ?Matcher $cssWideKeywordsMatcher = null ) {
 		$this->setKnownProperties( $properties );
 		$this->setCssWideKeywordsMatcher( $cssWideKeywordsMatcher ?: new NothingMatcher );
 	}

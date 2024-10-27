@@ -16,7 +16,7 @@ class DeclarationList extends CSSObjectList {
 	protected static $objectType = Declaration::class;
 
 	/** @inheritDoc */
-	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
+	protected function getSeparator( CSSObject $left, ?CSSObject $right = null ) {
 		if ( $right ) {
 			return [
 				new Token( Token::T_SEMICOLON ),

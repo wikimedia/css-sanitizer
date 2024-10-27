@@ -24,7 +24,7 @@ class Stylesheet implements CSSObject {
 	/**
 	 * @param RuleList|null $rules
 	 */
-	public function __construct( RuleList $rules = null ) {
+	public function __construct( ?RuleList $rules = null ) {
 		$this->ruleList = $rules ?: new RuleList();
 	}
 

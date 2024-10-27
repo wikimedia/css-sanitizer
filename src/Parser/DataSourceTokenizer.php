@@ -154,7 +154,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 *  position instead of at the current position.
 	 * @param array $data Extra data about the error.
 	 */
-	protected function parseError( $tag, array $position = null, array $data = [] ) {
+	protected function parseError( $tag, ?array $position = null, array $data = [] ) {
 		if ( $position ) {
 			if ( isset( $position['position'] ) ) {
 				$position = $position['position'];

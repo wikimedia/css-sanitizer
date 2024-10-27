@@ -26,7 +26,7 @@ class TokenListTokenizer implements Tokenizer {
 	 * @param Token[]|TokenList $tokens Tokens to return
 	 * @param Token|null $eof Token to copy as EOF
 	 */
-	public function __construct( $tokens, Token $eof = null ) {
+	public function __construct( $tokens, ?Token $eof = null ) {
 		if ( $tokens instanceof TokenList ) {
 			$this->tokens = $tokens->toTokenArray();
 		} elseif ( is_array( $tokens ) ) {

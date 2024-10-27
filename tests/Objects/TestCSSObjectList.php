@@ -14,7 +14,7 @@ class TestCSSObjectList extends CSSObjectList {
 	public $separator = null;
 
 	/** @inheritDoc */
-	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
+	protected function getSeparator( CSSObject $left, ?CSSObject $right = null ) {
 		return $this->separator ?: parent::getSeparator( $left, $right );
 	}
 }

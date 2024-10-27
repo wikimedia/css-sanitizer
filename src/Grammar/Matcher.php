@@ -189,7 +189,7 @@ abstract class Matcher {
 	 * @return GrammarMatch
 	 */
 	protected function makeMatch(
-		ComponentValueList $list, $start, $end, GrammarMatch $submatch = null, array $stack = []
+		ComponentValueList $list, $start, $end, ?GrammarMatch $submatch = null, array $stack = []
 	) {
 		$matches = array_column( $stack, 0 );
 		$matches[] = $submatch;

@@ -224,7 +224,7 @@ class CSSObjectList implements Countable, SeekableIterator, ArrayAccess, CSSObje
 	 * @param CSSObject|null $right
 	 * @return Token[]
 	 */
-	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
+	protected function getSeparator( CSSObject $left, ?CSSObject $right = null ) {
 		return [];
 	}
 

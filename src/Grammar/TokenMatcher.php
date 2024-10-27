@@ -25,7 +25,7 @@ class TokenMatcher extends Matcher {
 	 * @param callable|null $callback Something to call to further validate the token.
 	 *  bool callback( Token )
 	 */
-	public function __construct( $type, callable $callback = null ) {
+	public function __construct( $type, ?callable $callback = null ) {
 		$this->type = $type;
 		$this->callback = $callback;
 	}

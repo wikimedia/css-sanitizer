@@ -82,7 +82,7 @@ class AtRule extends Rule implements DeclarationOrAtRule {
 	 * Set the block
 	 * @param SimpleBlock|null $block
 	 */
-	public function setBlock( SimpleBlock $block = null ) {
+	public function setBlock( ?SimpleBlock $block = null ) {
 		if ( $block->getStartTokenType() !== Token::T_LEFT_BRACE ) {
 			throw new InvalidArgumentException( 'At-rule block must be delimited by {}' );
 		}

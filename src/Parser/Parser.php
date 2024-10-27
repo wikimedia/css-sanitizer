@@ -103,7 +103,7 @@ class Parser {
 	 * @param Token|null $eof EOF-token
 	 * @return static
 	 */
-	public static function newFromTokens( array $tokens, Token $eof = null ) {
+	public static function newFromTokens( array $tokens, ?Token $eof = null ) {
 		$tokenizer = new TokenListTokenizer( $tokens, $eof );
 		return new static( $tokenizer );
 	}

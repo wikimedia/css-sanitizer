@@ -16,7 +16,7 @@ class RuleList extends CSSObjectList {
 	protected static $objectType = Rule::class;
 
 	/** @inheritDoc */
-	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
+	protected function getSeparator( CSSObject $left, ?CSSObject $right = null ) {
 		return $right ? [ new Token( Token::T_WHITESPACE, [ 'significant' => false ] ) ] : [];
 	}
 }

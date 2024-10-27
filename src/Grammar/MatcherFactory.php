@@ -936,7 +936,7 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function cssSupportsCondition(
-		PropertySanitizer $declarationSanitizer = null, $strict = true
+		?PropertySanitizer $declarationSanitizer = null, $strict = true
 	) {
 		$ws = $this->significantWhitespace();
 		$anythingPlus = new AnythingMatcher( [ 'quantifier' => '+' ] );
@@ -977,7 +977,7 @@ class MatcherFactory {
 	 * @param PropertySanitizer|null $declarationSanitizer Check declarations against this Sanitizer
 	 * @return Matcher
 	 */
-	public function cssDeclaration( PropertySanitizer $declarationSanitizer = null ) {
+	public function cssDeclaration( ?PropertySanitizer $declarationSanitizer = null ) {
 		$anythingPlus = new AnythingMatcher( [ 'quantifier' => '+' ] );
 
 		return new CheckedMatcher(

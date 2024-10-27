@@ -25,7 +25,7 @@ class UrlMatcher extends FunctionMatcher {
 	 *  - modifierMatcher: (Matcher) Matcher for URL modifiers. The default is
 	 *    a NothingMatcher.
 	 */
-	public function __construct( callable $urlCheck = null, array $options = [] ) {
+	public function __construct( ?callable $urlCheck = null, array $options = [] ) {
 		if ( isset( $options['modifierMatcher'] ) ) {
 			$modifierMatcher = $options['modifierMatcher'];
 			if ( !$modifierMatcher instanceof Matcher ) {

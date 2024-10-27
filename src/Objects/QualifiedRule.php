@@ -21,7 +21,7 @@ class QualifiedRule extends Rule {
 	protected $block;
 
 	/** @inheritDoc */
-	public function __construct( Token $token = null ) {
+	public function __construct( ?Token $token = null ) {
 		parent::__construct( $token ?: new Token( Token::T_EOF ) );
 		$this->prelude = new ComponentValueList();
 		$this->block = SimpleBlock::newFromDelimiter( Token::T_LEFT_BRACE );
@@ -52,7 +52,7 @@ class QualifiedRule extends Rule {
 	 * Set the block
 	 * @param SimpleBlock|null $block
 	 */
-	public function setBlock( SimpleBlock $block = null ) {
+	public function setBlock( ?SimpleBlock $block = null ) {
 		if ( $block->getStartTokenType() !== Token::T_LEFT_BRACE ) {
 			throw new InvalidArgumentException( 'Qualified rule block must be delimited by {}' );
 		}

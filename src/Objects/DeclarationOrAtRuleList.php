@@ -16,7 +16,7 @@ class DeclarationOrAtRuleList extends CSSObjectList {
 	protected static $objectType = DeclarationOrAtRule::class;
 
 	/** @inheritDoc */
-	protected function getSeparator( CSSObject $left, CSSObject $right = null ) {
+	protected function getSeparator( CSSObject $left, ?CSSObject $right = null ) {
 		$ret = [];
 		if ( $left instanceof Declaration ) {
 			$ret[] = new Token( Token::T_SEMICOLON, [ 'significant' => (bool)$right ] );
