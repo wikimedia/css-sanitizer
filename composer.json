@@ -24,7 +24,7 @@
 		"ext-mbstring": "*",
 		"ext-iconv": "*",
 		"wikimedia/utfnormal": "^3.0.1 || ^4.0.0",
-		"wikimedia/scoped-callback": "3.0.0 || 4.0.0"
+		"wikimedia/scoped-callback": "3.0.0 || 4.0.0 || 5.0.0"
 	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "44.0.0",
