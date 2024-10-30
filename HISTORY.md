@@ -1,8 +1,16 @@
 # Release History
 
-## css-sanitizer x.x.x (not yet released)
-* Add support for :dir() pseudo-class
+## css-sanitizer 5.4.0 (2024-10-30)
+* Add support for `:dir()` pseudo-class
 * Add support for CSS Logical 1 properties and values
+
+* code: Use explicit nullable type on parameter arguments
+* build: Phan must ignore EmptyIterator type in UnorderedGroup
+* build: Updating composer dependencies
+* build: Updating mediawiki/mediawiki-codesniffer to 44.0.0
+* build: Allow wikimedia/scopedcallback 5.0.0
+* build: Allow wikimedia/testing-access-wrapper 3.0.0
+* build: Remove use of `$PHPUNIT_ARGS`
 
 ## css-sanitizer 5.3.0 (2024-04-18)
 * Harden security by disallowing CSS custom properties for `border-color`
