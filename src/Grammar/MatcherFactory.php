@@ -790,6 +790,8 @@ class MatcherFactory {
 	/**
 	 * Matcher for a CSS media query
 	 * @see https://www.w3.org/TR/2017/CR-mediaqueries-4-20170905/#mq-syntax
+	 * Level 5 accessibility queries are also supported
+	 * @see https://drafts.csswg.org/mediaqueries-5/#mf-user-preferences
 	 * @param bool $strict Only allow defined query types
 	 * @return Matcher
 	 */
@@ -812,7 +814,9 @@ class MatcherFactory {
 				];
 				$discreteFeatures = [
 					'orientation', 'scan', 'grid', 'update', 'overflow-block', 'overflow-inline', 'color-gamut',
-					'pointer', 'hover', 'any-pointer', 'any-hover', 'scripting', 'prefers-color-scheme'
+					'pointer', 'hover', 'any-pointer', 'any-hover', 'scripting', 'prefers-color-scheme',
+					'prefers-reduced-motion', 'prefers-reduced-transparency',
+					'prefers-contrast', 'forced-colors'
 				];
 				$mfName = new KeywordMatcher( array_merge(
 					$rangeFeatures,
