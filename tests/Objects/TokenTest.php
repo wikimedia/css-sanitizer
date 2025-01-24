@@ -478,7 +478,9 @@ class TokenTest extends TestCase {
 		$plusToken = new Token( Token::T_DELIM, '+' );
 		$starToken = new Token( Token::T_DELIM, '*' );
 		$slashToken = new Token( Token::T_DELIM, '/' );
+		$ltToken = new Token( Token::T_DELIM, '<' );
 		$percentToken = new Token( Token::T_DELIM, '%' );
+		$bangToken = new Token( Token::T_DELIM, '!' );
 
 		return [
 			[ $identToken, $identToken, true ],
@@ -623,6 +625,21 @@ class TokenTest extends TestCase {
 			[ $slashToken, $parenToken, false ],
 			[ $slashToken, $starToken, true ],
 			[ $slashToken, $percentToken, false ],
+
+			// Not required by spec, but help prevent XSS in foreign content (T381617)
+			[ $ltToken, $identToken, true ],
+			[ $ltToken, $functionToken, true ],
+			[ $ltToken, $urlToken, true ],
+			[ $ltToken, $badurlToken, true ],
+			[ $ltToken, $minusToken, false ],
+			[ $ltToken, $numberToken, false ],
+			[ $ltToken, $percentageToken, false ],
+			[ $ltToken, $cdcToken, false ],
+			[ $ltToken, $parenToken, false ],
+			[ $ltToken, $starToken, false ],
+			[ $ltToken, $percentToken, false ],
+			[ $ltToken, $bangToken, true ],
+			[ $ltToken, $slashToken, true ],
 
 			// Something not in either table, for good measure
 			[ new Token( Token::T_EOF ), new Token( Token::T_EOF ), false ],
