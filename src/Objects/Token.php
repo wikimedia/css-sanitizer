@@ -518,6 +518,8 @@ class Token extends ComponentValue {
 			'.' => [ self::T_NUMBER, self::T_PERCENTAGE, self::T_DIMENSION ],
 			'+' => [ self::T_NUMBER, self::T_PERCENTAGE, self::T_DIMENSION ],
 			'/' => [ '*' ],
+			// Not required by spec, but help prevent XSS in foreign content (T381617)
+			'<' => [ self::T_IDENT, self::T_FUNCTION, self::T_URL, self::T_BAD_URL, '!', '/' ],
 		];
 
 		$t1 = $firstToken->type === self::T_DELIM ? $firstToken->value : $firstToken->type;
