@@ -164,6 +164,14 @@ class UtilTest extends TestCase {
 			new Token( Token::T_LEFT_BRACE ),
 			new Token( Token::T_RIGHT_BRACE ),
 		] ) );
+
+		$this->assertSame( '</**//style>', Util::stringify( [
+			new Token( Token::T_DELIM, '<' ),
+			new Token( Token::T_DELIM, '/' ),
+			new Token( Token::T_IDENT, 'style' ),
+			new Token( Token::T_DELIM, '>' ),
+			// should not be </style> (T381617)
+		] ) );
 	}
 
 	/**
