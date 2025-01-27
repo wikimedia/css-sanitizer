@@ -1,4 +1,11 @@
 # Release History
+## css-sanizer 5.5.0 (2024-01-27)
+* Ensure <-token and identifiers are always separated as a security
+  paranoia measure
+* Add support for prefers-reduced-motion, prefers-reduced-transparency,
+  prefers-contrast and forced-colors media queries
+* Add support for light-dark() color function
+* [build] Bump dependencies
 
 ## css-sanitizer 5.4.0 (2024-10-30)
 * Add support for `:dir()` pseudo-class
