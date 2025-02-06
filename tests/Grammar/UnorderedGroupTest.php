@@ -36,7 +36,7 @@ class UnorderedGroupTest extends MatcherTestBase {
 	public function testConstructors( $func, $all ) {
 		$matcher = new TokenMatcher( Token::T_COMMA );
 		$expect = new UnorderedGroup( [ $matcher ], $all );
-		$ret = call_user_func_array( [ UnorderedGroup::class, $func ], [ [ $matcher ] ] );
+		$ret = UnorderedGroup::$func( [ $matcher ] );
 		$this->assertEquals( $expect, $ret );
 	}
 

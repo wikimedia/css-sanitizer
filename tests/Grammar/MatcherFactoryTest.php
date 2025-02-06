@@ -39,7 +39,7 @@ class MatcherFactoryTest extends TestCase {
 			$matcher = MatcherFactory::singleton()->cssMediaQuery( false );
 		} elseif ( is_array( $what ) ) {
 			$func = array_shift( $what );
-			$matcher = call_user_func_array( [ MatcherFactory::singleton(), $func ], $what );
+			$matcher = MatcherFactory::singleton()->$func( ...$what );
 		} else {
 			$matcher = MatcherFactory::singleton()->$what();
 			if ( $what === 'significantWhitespace' || $what === 'optionalWhitespace' ) {

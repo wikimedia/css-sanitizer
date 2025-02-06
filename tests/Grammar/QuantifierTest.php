@@ -30,7 +30,7 @@ class QuantifierTest extends MatcherTestBase {
 		$matcher = new TokenMatcher( Token::T_COMMA );
 		$expect = new Quantifier( $matcher, $min, $max, $commas );
 		array_unshift( $args, $matcher );
-		$ret = call_user_func_array( [ Quantifier::class, $func ], $args );
+		$ret = Quantifier::$func( ...$args );
 		$this->assertEquals( $expect, $ret );
 	}
 
