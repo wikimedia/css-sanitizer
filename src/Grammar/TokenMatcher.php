@@ -34,7 +34,7 @@ class TokenMatcher extends Matcher {
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
 		$cv = $values[$start] ?? null;
 		if ( $cv instanceof Token && $cv->type() === $this->type &&
-			( !$this->callback || call_user_func( $this->callback, $cv ) )
+			( !$this->callback || ( $this->callback )( $cv ) )
 		) {
 			yield $this->makeMatch( $values, $start, $this->next( $values, $start, $options ) );
 		}
