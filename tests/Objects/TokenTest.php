@@ -95,7 +95,7 @@ class TokenTest extends TestCase {
 			unset( $expect['position'], $expect['start'], $expect['end'] );
 
 			foreach ( $expect as $k => $v ) {
-				$this->assertSame( $v, call_user_func( [ $token, $k ] ), $k );
+				$this->assertSame( $v, $token->$k(), $k );
 			}
 
 			// Test this too
@@ -115,7 +115,7 @@ class TokenTest extends TestCase {
 
 			$token = new Token( $type, $value2 );
 			foreach ( $expect as $k => $v ) {
-				$this->assertSame( $v, call_user_func( [ $token, $k ] ), $k );
+				$this->assertSame( $v, $token->$k(), $k );
 			}
 		}
 	}

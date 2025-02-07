@@ -61,7 +61,7 @@ class UrlMatcher extends FunctionMatcher {
 		$cv = $values[$start] ?? null;
 		if ( $cv instanceof Token && $cv->type() === Token::T_URL ) {
 			$url = $cv->value();
-			if ( !$this->urlCheck || call_user_func( $this->urlCheck, $url, [] ) ) {
+			if ( !$this->urlCheck || ( $this->urlCheck )( $url, [] ) ) {
 				$match = new GrammarMatch( $values, $start, 1, 'url' );
 				yield $this->makeMatch( $values, $start, $this->next( $values, $start, $options ), $match );
 			}
@@ -85,7 +85,7 @@ class UrlMatcher extends FunctionMatcher {
 					}
 				}
 			}
-			if ( $url && ( !$this->urlCheck || call_user_func( $this->urlCheck, $url, $modifiers ) ) ) {
+			if ( $url && ( !$this->urlCheck || ( $this->urlCheck )( $url, $modifiers ) ) ) {
 				yield $match;
 			}
 		}
