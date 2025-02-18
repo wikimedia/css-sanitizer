@@ -65,7 +65,7 @@ class ParserTest extends TestCase {
 	 * Class-builder for testing
 	 * @param CSSObject $obj
 	 * @param array $vars Values for the class's fields
-	 * @return object
+	 * @return CSSObject
 	 */
 	private static function mk( $obj, $vars ) {
 		$wrapper = TestingAccessWrapper::newFromObject( $obj );

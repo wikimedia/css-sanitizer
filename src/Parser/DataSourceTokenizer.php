@@ -29,7 +29,7 @@ class DataSourceTokenizer implements Tokenizer {
 	/** @var int position in the line in the input */
 	protected $pos = 0;
 
-	/** @var string|null|object The most recently consumed character */
+	/** @var string|null|\stdClass The most recently consumed character */
 	protected $currentCharacter = null;
 
 	/** @var string|null The next character to be consumed */
