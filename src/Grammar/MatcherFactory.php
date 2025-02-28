@@ -1006,10 +1006,10 @@ class MatcherFactory {
 			] );
 	}
 
+	/***************************************************************************/
+	// region   CSS Selectors Level 3
 	/**
 	 * @name   CSS Selectors Level 3
-	 * @{
-	 *
 	 * https://www.w3.org/TR/2018/REC-selectors-3-20181106/#w3cselgrammar
 	 */
 
@@ -1498,11 +1498,15 @@ class MatcherFactory {
 			] );
 	}
 
-	/** @} */
+	// endregion -- end of CSS Selectors Level 3
 
 }
 
-/**
- * For really cool vim folding this needs to be at the end:
- * vim: foldmarker=@{,@} foldmethod=marker
+/*
+ * This file uses VisualStudio style region/endregion fold markers which are
+ * recognised by PHPStorm. If modelines are enabled, the following editor
+ * configuration will also enable folding in vim, if it is in the last 5 lines
+ * of the file. We also use "@name" which creates sections in Doxygen.
+ *
+ * vim: foldmarker=//\ region,//\ endregion foldmethod=marker
  */
