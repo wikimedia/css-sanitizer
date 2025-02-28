@@ -55,10 +55,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function optionalWhitespace() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new WhitespaceMatcher( [ 'significant' => false ] );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new WhitespaceMatcher( [ 'significant' => false ] );
 	}
 
 	/**
@@ -66,10 +64,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function significantWhitespace() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new WhitespaceMatcher( [ 'significant' => true ] );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new WhitespaceMatcher( [ 'significant' => true ] );
 	}
 
 	/**
@@ -77,10 +73,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function comma() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_COMMA );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_COMMA );
 	}
 
 	/**
@@ -88,10 +82,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function ident() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_IDENT );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_IDENT );
 	}
 
 	/**
@@ -124,10 +116,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function string() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_STRING );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_STRING );
 	}
 
 	/**
@@ -148,10 +138,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function url( $type ) {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new UrlMatcher();
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new UrlMatcher();
 	}
 
 	/**
@@ -160,15 +148,13 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function cssWideKeywords() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new KeywordMatcher( [
+		return $this->cache[__METHOD__]
+			??= new KeywordMatcher( [
 				// https://www.w3.org/TR/2019/CR-css-values-3-20190606/#common-keywords
 				'initial', 'inherit', 'unset',
 				// added by https://www.w3.org/TR/2018/CR-css-cascade-4-20180828/#all-shorthand
 				'revert'
 			] );
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -267,15 +253,13 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	protected function rawInteger() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				// The spec says it must match /^[+-]\d+$/, but the tokenizer
 				// should have marked any other number token as a 'number'
 				// anyway so let's not bother checking.
 				return $t->typeFlag() === 'integer';
 			} );
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -293,10 +277,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function integer() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc( $this->rawInteger(), 'integer' );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= $this->calc( $this->rawInteger(), 'integer' );
 	}
 
 	/**
@@ -305,10 +287,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function rawNumber() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_NUMBER );
 	}
 
 	/**
@@ -317,10 +297,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function number() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc( $this->rawNumber(), 'number' );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= $this->calc( $this->rawNumber(), 'number' );
 	}
 
 	/**
@@ -329,9 +307,9 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function ratio() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
+		return $this->cache[__METHOD__]
 			// <ratio> = <number [0,∞]> [ / <number [0,∞]> ]?
-			$this->cache[__METHOD__] = new Alternative( [
+			??= new Alternative( [
 				$this->rawNumber(),
 				new Juxtaposition( [
 					$this->rawNumber(),
@@ -341,8 +319,6 @@ class MatcherFactory {
 					$this->rawNumber(),
 				] ),
 			] );
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -351,10 +327,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function rawPercentage() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_PERCENTAGE );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_PERCENTAGE );
 	}
 
 	/**
@@ -363,10 +337,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function percentage() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc( $this->rawPercentage(), 'percentage' );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= $this->calc( $this->rawPercentage(), 'percentage' );
 	}
 
 	/**
@@ -375,13 +347,11 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function lengthPercentage() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc(
+		return $this->cache[__METHOD__]
+			??= $this->calc(
 				new Alternative( [ $this->rawLength(), $this->rawPercentage() ] ),
 				'length'
 			);
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -390,13 +360,11 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function frequencyPercentage() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc(
+		return $this->cache[__METHOD__]
+			??= $this->calc(
 				new Alternative( [ $this->rawFrequency(), $this->rawPercentage() ] ),
 				'frequency'
 			);
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -405,13 +373,11 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function anglePercentage() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc(
+		return $this->cache[__METHOD__]
+			??= $this->calc(
 				new Alternative( [ $this->rawAngle(), $this->rawPercentage() ] ),
 				'angle'
 			);
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -420,13 +386,11 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function timePercentage() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc(
+		return $this->cache[__METHOD__]
+			??= $this->calc(
 				new Alternative( [ $this->rawTime(), $this->rawPercentage() ] ),
 				'time'
 			);
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -435,13 +399,11 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function numberPercentage() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc(
+		return $this->cache[__METHOD__]
+			??= $this->calc(
 				new Alternative( [ $this->rawNumber(), $this->rawPercentage() ] ),
 				'number'
 			);
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -450,10 +412,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function dimension() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_DIMENSION );
 	}
 
 	/**
@@ -461,12 +421,10 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function zero() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_NUMBER, static function ( Token $t ) {
 				return $t->value() === 0 || $t->value() === 0.0;
 			} );
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -494,10 +452,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function length() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc( $this->rawLength(), 'length' );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= $this->calc( $this->rawLength(), 'length' );
 	}
 
 	/**
@@ -524,10 +480,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function angle() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc( $this->rawAngle(), 'angle' );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= $this->calc( $this->rawAngle(), 'angle' );
 	}
 
 	/**
@@ -554,10 +508,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function time() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc( $this->rawTime(), 'time' );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= $this->calc( $this->rawTime(), 'time' );
 	}
 
 	/**
@@ -584,10 +536,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function frequency() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = $this->calc( $this->rawFrequency(), 'frequency' );
-		}
-		return $this->cache[__METHOD__];
+		return $this->cache[__METHOD__]
+			??= $this->calc( $this->rawFrequency(), 'frequency' );
 	}
 
 	/**
@@ -596,12 +546,10 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function resolution() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
+		return $this->cache[__METHOD__]
+			??= new TokenMatcher( Token::T_DIMENSION, static function ( Token $t ) {
 				return preg_match( '/^(dpi|dpcm|dppx)$/i', $t->unit() );
 			} );
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -642,13 +590,11 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function safeColor() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new Alternative( array_merge( [
+		return $this->cache[__METHOD__]
+			??= new Alternative( array_merge( [
 				$this->colorWords(),
 				$this->colorHex(),
 			], $this->colorFuncs() ) );
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -663,8 +609,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function color() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new Alternative( [
+		return $this->cache[__METHOD__]
+			??= new Alternative( [
 				$this->safeColor(),
 				new FunctionMatcher( 'var', new Juxtaposition( [
 						new CustomPropertyMatcher(),
@@ -684,8 +630,6 @@ class MatcherFactory {
 						] ),
 				], true ) ),
 			] );
-		}
-		return $this->cache[__METHOD__];
 	}
 
 	/**
@@ -961,11 +905,8 @@ class MatcherFactory {
 	 */
 	public function cssMediaQueryList( $strict = true ) {
 		$key = __METHOD__ . ':' . ( $strict ? 'strict' : 'unstrict' );
-		if ( !isset( $this->cache[$key] ) ) {
-			$this->cache[$key] = Quantifier::hash( $this->cssMediaQuery( $strict ), 0, INF );
-		}
-
-		return $this->cache[$key];
+		return $this->cache[$key]
+			??= Quantifier::hash( $this->cssMediaQuery( $strict ), 0, INF );
 	}
 
 	/**
@@ -1049,8 +990,8 @@ class MatcherFactory {
 	 * @return Matcher
 	 */
 	public function cssSingleEasingFunction() {
-		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$this->cache[__METHOD__] = new Alternative( [
+		return $this->cache[__METHOD__]
+			??= new Alternative( [
 				new KeywordMatcher( [
 					'ease', 'linear', 'ease-in', 'ease-out', 'ease-in-out', 'step-start', 'step-end'
 				] ),
@@ -1062,9 +1003,6 @@ class MatcherFactory {
 				], true ) ),
 				new FunctionMatcher( 'cubic-bezier', Quantifier::hash( $this->number(), 4, 4 ) ),
 			] );
-		}
-
-		return $this->cache[__METHOD__];
 	}
 
 	/**
