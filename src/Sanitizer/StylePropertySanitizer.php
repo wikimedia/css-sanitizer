@@ -76,7 +76,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssFilter1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssShapes1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssMasking1( $matcherFactory ) );
-		$this->addKnownProperties( $this->cssSizing3( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssSizing4( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssLogical1( $matcherFactory ) );
 	}
 
@@ -622,7 +622,9 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['column-width'] = new Alternative( array_merge(
 			[ $matcherFactory->length(), $auto ],
 			// Additional values from https://www.w3.org/TR/2019/WD-css-sizing-3-20190522/
-			$this->getSizingAdditions( $matcherFactory )
+			// Note! This adds support for a now invalid `column-width: min-width`.
+			// Should probably be removed once new CSS specifications are released.
+			$this->getSizingAdditions3( $matcherFactory )
 		) );
 		$props['column-count'] = new Alternative( [ $matcherFactory->integer(), $auto ] );
 		$props['columns'] = UnorderedGroup::someOf( [ $props['column-width'], $props['column-count'] ] );
@@ -948,7 +950,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['flex-shrink'] = $matcherFactory->number();
 		$props['flex-basis'] = new Alternative( [
 			new KeywordMatcher( [ 'content' ] ),
-			$this->cssSizing3( $matcherFactory )['width']
+			$this->cssSizing4( $matcherFactory )['width']
 		] );
 		$props['flex'] = new Alternative( [
 			new KeywordMatcher( 'none' ),
@@ -1726,7 +1728,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 	 * @param MatcherFactory $matcherFactory Factory for Matchers
 	 * @return Matcher[] Array of matchers
 	 */
-	protected function getSizingAdditions( MatcherFactory $matcherFactory ) {
+	protected function getSizingAdditions3( MatcherFactory $matcherFactory ) {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
 			$lengthPct = $matcherFactory->lengthPercentage();
 			$this->cache[__METHOD__] = [
@@ -1742,12 +1744,36 @@ class StylePropertySanitizer extends PropertySanitizer {
 	}
 
 	/**
-	 * Properties for CSS Intrinsic and Extrinsic Sizing Level 3
-	 * @see https://www.w3.org/TR/2019/WD-css-sizing-3-20190522/
+	 * Additional keywords and functions from CSS Box Sizing Level 3 and 4
+	 * @see https://www.w3.org/TR/css-sizing-3/#sizing-values
+	 * @see https://www.w3.org/TR/css-sizing-4/#sizing-values
+	 * @param MatcherFactory $matcherFactory Factory for Matchers
+	 * @return Matcher[] Array of matchers
+	 */
+	protected function getSizingAdditions( MatcherFactory $matcherFactory ) {
+		if ( !isset( $this->cache[__METHOD__] ) ) {
+			$lengthPct = $matcherFactory->lengthPercentage();
+			$this->cache[__METHOD__] = [
+				new KeywordMatcher( [
+					'max-content', 'min-content', 'stretch', 'fit-content', 'contain'
+				] ),
+				// fit-content() as a function https://developer.mozilla.org/en-US/docs/Web/CSS/fit-content_function
+				new FunctionMatcher( 'fit-content', $lengthPct ),
+				// Prefixed for FF v3-v93 (until 2021) https://caniuse.com/?search=fit-content
+				new FunctionMatcher( '-moz-fit-content', $lengthPct ),
+			];
+		}
+		return $this->cache[__METHOD__];
+	}
+
+	/**
+	 * Properties for CSS Box Sizing Level 3 and 4
+	 * @see https://www.w3.org/TR/css-sizing-3/#sizing-values
+	 * @see https://www.w3.org/TR/css-sizing-4/#sizing-values
 	 * @param MatcherFactory $matcherFactory Factory for Matchers
 	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
 	 */
-	protected function cssSizing3( MatcherFactory $matcherFactory ) {
+	protected function cssSizing4( MatcherFactory $matcherFactory ) {
 		// @codeCoverageIgnoreStart
 		if ( isset( $this->cache[__METHOD__] ) ) {
 			return $this->cache[__METHOD__];
@@ -1768,6 +1794,32 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['max-height'] = $props['max-width'];
 
 		$props['box-sizing'] = new KeywordMatcher( [ 'content-box', 'border-box' ] );
+		// https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+		// auto || <ratio>
+		$props['aspect-ratio'] = UnorderedGroup::someOf( [ $auto, $matcherFactory->ratio() ] );
+		// https://developer.mozilla.org/en-US/docs/Web/CSS/contain-intrinsic-size
+		// auto? [ none | <length> ]
+		$containIntrinsic = new Juxtaposition( [
+			Quantifier::optional( $auto ),
+			new Alternative( [
+				$none,
+				$lengthPct,
+			] ),
+		] );
+		$props['contain-intrinsic-width'] = $containIntrinsic;
+		$props['contain-intrinsic-height'] = $containIntrinsic;
+		$props['contain-intrinsic-block-size'] = $containIntrinsic;
+		$props['contain-intrinsic-inline-size'] = $containIntrinsic;
+		$props['contain-intrinsic-size'] = Quantifier::count( $containIntrinsic, 1, 2 );
+		// https://drafts.csswg.org/css-sizing-4/#intrinsic-contribution-override
+		// legacy | zero-if-scroll || zero-if-extrinsic
+		$props['min-intrinsic-sizing'] = new Alternative( [
+			new KeywordMatcher( 'legacy' ),
+			UnorderedGroup::someOf( [
+				new KeywordMatcher( 'zero-if-scroll' ),
+				new KeywordMatcher( 'zero-if-extrinsic' ),
+			] ),
+		] );
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
@@ -1786,7 +1838,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		}
 		// @codeCoverageIgnoreEnd
 
-		$cssSizing3 = $this->cssSizing3( $matcherFactory );
+		$cssSizing4 = $this->cssSizing4( $matcherFactory );
 		$css2 = $this->css2( $matcherFactory );
 		$cssPosition3 = $this->cssPosition3( $matcherFactory );
 		$cssBorderBackground3 = $this->cssBorderBackground3( $matcherFactory );
@@ -1798,12 +1850,12 @@ class StylePropertySanitizer extends PropertySanitizer {
 
 		$props = [
 			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#dimension-properties
-			'block-size' => $cssSizing3['width'],
-			'inline-size' => $cssSizing3['width'],
-			'min-block-size' => $cssSizing3['min-width'],
-			'min-inline-size' => $cssSizing3['min-width'],
-			'max-block-size' => $cssSizing3['max-width'],
-			'max-inline-size' => $cssSizing3['max-width'],
+			'block-size' => $cssSizing4['width'],
+			'inline-size' => $cssSizing4['width'],
+			'min-block-size' => $cssSizing4['min-width'],
+			'min-inline-size' => $cssSizing4['min-width'],
+			'max-block-size' => $cssSizing4['max-width'],
+			'max-inline-size' => $cssSizing4['max-width'],
 
 			// https://www.w3.org/TR/2018/WD-css-logical-1-20180827/#margin-properties
 			'margin-block-start' => $css2['margin-top'],

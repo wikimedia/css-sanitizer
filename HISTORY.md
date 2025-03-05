@@ -1,4 +1,10 @@
 # Release History
+
+## css-sanitizer x.x.x (not yet released)
+* Add support for CSS Box Sizing Level 4 (as seen in draft from 2025-02-24)
+	- values: stretch, fit-content, and contain;
+	- properties: aspect-ratio, contain-intrinsic-* (size, width, height, block-size, inline-size), min-intrinsic-size;
+
 ## css-sanizer 5.5.0 (2024-01-27)
 * Ensure <-token and identifiers are always separated as a security
   paranoia measure

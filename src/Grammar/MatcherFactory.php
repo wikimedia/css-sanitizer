@@ -324,6 +324,28 @@ class MatcherFactory {
 	}
 
 	/**
+	 * Ratio values
+	 * @see https://www.w3.org/TR/2024/WD-css-values-4-20240312/#ratios
+	 * @return Matcher
+	 */
+	public function ratio() {
+		if ( !isset( $this->cache[__METHOD__] ) ) {
+			// <ratio> = <number [0,∞]> [ / <number [0,∞]> ]?
+			$this->cache[__METHOD__] = new Alternative( [
+				$this->rawNumber(),
+				new Juxtaposition( [
+					$this->rawNumber(),
+					$this->optionalWhitespace(),
+					new DelimMatcher( [ '/' ] ),
+					$this->optionalWhitespace(),
+					$this->rawNumber(),
+				] ),
+			] );
+		}
+		return $this->cache[__METHOD__];
+	}
+
+	/**
 	 * Matcher for a percentage value, without calc()
 	 * @see https://www.w3.org/TR/2019/CR-css-values-3-20190606/#percentages
 	 * @return Matcher
