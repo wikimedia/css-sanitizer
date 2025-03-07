@@ -5,7 +5,7 @@
 	- values: stretch, fit-content, and contain;
 	- properties: aspect-ratio, contain-intrinsic-* (size, width, height, block-size, inline-size), min-intrinsic-size;
 
-## css-sanizer 5.5.0 (2024-01-27)
+## css-sanizer 5.5.0 (2025-01-27)
 * Ensure <-token and identifiers are always separated as a security
   paranoia measure
 * Add support for prefers-reduced-motion, prefers-reduced-transparency,
