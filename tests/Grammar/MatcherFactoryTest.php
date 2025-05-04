@@ -58,7 +58,7 @@ class MatcherFactoryTest extends TestCase {
 		}
 	}
 
-	public function provideMatchers() {
+	public static function provideMatchers() {
 		$img = 'http://www.example.com/foo.jpg';
 		$dummy = new ComponentValueList();
 		$san = new PropertySanitizer( [

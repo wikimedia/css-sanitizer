@@ -61,7 +61,7 @@ class UrangeMatcherTest extends MatcherTestBase {
 		}
 	}
 
-	public function provideMatch() {
+	public static function provideMatch() {
 		return [
 			'ident' => [ 'U+abcd', true, 0xabcd, 0xabcd ],
 			'dimension' => [ 'U+12cd', true, 0x12cd, 0x12cd ],
