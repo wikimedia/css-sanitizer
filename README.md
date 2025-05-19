@@ -56,7 +56,7 @@ Conformance
 The library follows the following grammar specifications:
 
 * [CSS Syntax Level 3, 2019-07-16][CSSSYN]
-* [CSS Values and Units Module Level 3, 2019-06-06][CSSVAL]
+* [CSS Values and Units Module Level 4, 2024-03-12][CSSVAL]
 * [CSS Selectors Level 3, 2018-11-06][CSSSEL]
 
 The sanitizer recognizes the following CSS modules:
@@ -177,6 +177,6 @@ Additional release history is in [`HISTORY.md`](./HISTORY.md).
 [Latest Stable Version]: https://poser.pugx.org/wikimedia/css-sanitizer/v/stable.svg
 [License]: https://poser.pugx.org/wikimedia/css-sanitizer/license.svg
 [CSSSYN]: https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/
-[CSSVAL]: https://www.w3.org/TR/2019/CR-css-values-3-20190606/
+[CSSVAL]: https://www.w3.org/TR/2024/WD-css-values-4-20240312/
 [CSSSEL]: https://www.w3.org/TR/2018/REC-selectors-3-20181106/
 [CSSWORK]: https://www.w3.org/Style/CSS/current-work

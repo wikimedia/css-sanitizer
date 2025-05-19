@@ -12,7 +12,7 @@ use Wikimedia\CSS\Objects\CSSFunction;
 use Wikimedia\CSS\Objects\Token;
 
 /**
- * Matcher that matches a CSSFunction for a URL or a T_URL token
+ * Matcher that matches a CSSFunction for a URL function or a T_URL token
  */
 class UrlMatcher extends FunctionMatcher {
 	/** @var callable|null */
@@ -41,7 +41,12 @@ class UrlMatcher extends FunctionMatcher {
 		] );
 
 		$this->urlCheck = $urlCheck;
-		parent::__construct( 'url', $funcContents );
+		parent::__construct(
+			static function ( $name ) {
+				return in_array( strtolower( $name ), [ 'url', 'src' ], true );
+			},
+			$funcContents
+		);
 	}
 
 	/**
