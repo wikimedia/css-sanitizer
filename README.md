@@ -107,6 +107,51 @@ Running tests
     composer install --prefer-dist
     composer test
 
+Adding properties
+-----------------
+
+CSS specifications typically contain a summary of value grammars in the property
+index section. These value grammars map directly to PHP code.
+
+[Component value types](https://www.w3.org/TR/css-values-4/#component-types)
+
+| Syntax         | css-sanitizer code                       |
+|----------------|------------------------------------------|
+| `foo`          | `new KeywordMatcher( 'foo' )`            |
+| `foo \| bar`   | `new KeywordMatcher( [ 'foo', 'bar' ] )` |
+| `<string>`     | `$matcherFactory->string()`              |
+| `<url>`        | `$matcherFactory->url()`                 |
+| `<integer>`    | `$matcherFactory->integer()`             |
+| `<number>`     | `$matcherFactory->number()`              |
+| `<ratio>`      | `$matcherFactory->ratio()`               |
+| `<percentage>` | `$matcherFactory->percentage()`          |
+| `<length>`     | `$matcherFactory->length()`              |
+| `<frequency>`  | `$matcherFactory->frequency()`           |
+| `<angle>`      | `$matcherFactory->angle()`               |
+| `<time>`       | `$matcherFactory->time()`                |
+| `<resolution>` | `$matcherFactory->resolution()`          |
+
+[Component value combinators](https://www.w3.org/TR/css-values-4/#component-combinators)
+
+| Syntax      | css-sanitizer code                   |
+|-------------|--------------------------------------|
+| `a b`       | `new Juxtaposition( [ a, b ] )`      |
+| `a && b`    | `UnorderedGroup::allOf( [ a, b ] )`  |
+| `a  \|\| b` | `UnorderedGroup::someOf( [ a, b ] )` |
+| `a \| b`    | `new Alternative( [ a, b ] )`        |
+
+[Component value multipliers](https://www.w3.org/TR/css-values-4/#component-multipliers)
+
+| Syntax   | css-sanitizer code             |
+|----------|--------------------------------|
+| `a*`     | `Quantifier::star( a )`        |
+| `a+`     | `Quantifier::plus( a )`        |
+| `a?`     | `Quantifier::optional( a )`    |
+| `a{3,4}` | `Quantifier::count( a, 3, 4 )` |
+| `a#`     | `Quantifier::hash( a )`        |
+| `a!`     | `new NonEmpty( a )`            |
+
+
 Releasing a new version
 -----------------------
 
