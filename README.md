@@ -93,6 +93,7 @@ The sanitizer recognizes the following CSS modules:
 * [Writing Modes Level 4, 2019-07-30](https://www.w3.org/TR/2019/CR-css-writing-modes-4-20190730)
 * [Selectors Level 4, 2019-02-25](https://www.w3.org/TR/2019/WD-css-pseudo-4-20190225/)
 * [Logical Properties and Values Level 1, 2018-08-27](https://www.w3.org/TR/2018/WD-css-logical-1-20180827/)
+* [Ruby Level 1, 2022-12-31](https://www.w3.org/TR/2022/WD-css-ruby-1-20221231/)
 
 And also,
 * The `touch-action` property from

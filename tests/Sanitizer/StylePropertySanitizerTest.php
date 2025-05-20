@@ -596,6 +596,33 @@ class StylePropertySanitizerTest extends TestCase {
 			[ 'border-start-end-radius: 0 5px' ],
 			[ 'border-end-start-radius: 1em' ],
 			[ 'border-end-end-radius: 5px 10px' ],
+
+			// cssRuby1
+			[ 'ruby-merge: none', 'bad-value-for-property' ],
+			[ 'ruby-merge: collapse', 'bad-value-for-property' ],
+			[ 'ruby-merge: 10px', 'bad-value-for-property' ],
+			[ 'ruby-merge: merge separate', 'bad-value-for-property' ],
+			[ 'ruby-merge: merge auto', 'bad-value-for-property' ],
+			[ 'ruby-merge: auto separate', 'bad-value-for-property' ],
+			[ 'ruby-merge: separate' ],
+			[ 'ruby-merge: merge' ],
+			[ 'ruby-merge: auto' ],
+			[ 'ruby-overhang: auto none', 'bad-value-for-property' ],
+			[ 'ruby-overhang: none auto', 'bad-value-for-property' ],
+			[ 'ruby-overhang: auto auto', 'bad-value-for-property' ],
+			[ 'ruby-overhang: none none', 'bad-value-for-property' ],
+			[ 'ruby-overhang: auto 2px', 'bad-value-for-property' ],
+			[ 'ruby-overhang: none 2px', 'bad-value-for-property' ],
+			[ 'ruby-overhang: auto' ],
+			[ 'ruby-overhang: none' ],
+			[ 'ruby-position: auto', 'bad-value-for-property' ],
+			[ 'ruby-position: center', 'bad-value-for-property' ],
+			[ 'ruby-position: above', 'bad-value-for-property' ],
+			[ 'ruby-position: 10px 20px', 'bad-value-for-property' ],
+			[ 'ruby-position: over under', 'bad-value-for-property' ],
+			[ 'ruby-position: over' ],
+			[ 'ruby-position: under' ],
+			[ 'ruby-position: inter-character' ],
 		];
 	}
 }
