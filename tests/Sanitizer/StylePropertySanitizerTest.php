@@ -93,7 +93,6 @@ class StylePropertySanitizerTest extends TestCase {
 			[ 'line-height: 3' ],
 			[ 'vertical-align: middle' ],
 			[ 'clip: rect(1px, auto, 1em, auto)' ],
-			[ 'visibility: hidden' ],
 			[ 'list-style-type: circle' ],
 			[ 'content: "foo" url("image.jpg") counter(foobar) counter(foobaz, disc) attr(data-foo-baz)' ],
 			[ 'content: "nope" url("bad.jpg")', 'bad-value-for-property' ],
@@ -117,6 +116,8 @@ class StylePropertySanitizerTest extends TestCase {
 			[ 'display: grid' ],
 			[ 'display: inline table' ],
 			[ 'display: list-item' ],
+			[ 'visibility: hidden' ],
+			[ 'order: 6' ],
 
 			// cssPosition3
 			[ 'position: absolute' ],

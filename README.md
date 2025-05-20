@@ -69,7 +69,7 @@ The sanitizer recognizes the following CSS modules:
 * [Color Level 4, 2025-04-24](https://www.w3.org/TR/2025/CRD-css-color-4-20250424)
 * [Compositing Level 1, 2015-01-13](https://www.w3.org/TR/2015/CR-compositing-1-20150113/)
 * [CSS Level 2, 2011-06-07](https://www.w3.org/TR/2011/REC-CSS2-20110607/)
-* [Display Level 3, 2019-07-11](https://www.w3.org/TR/2019/CR-css-display-3-20190711)
+* [Display Level 3, 2023-03-30](https://www.w3.org/TR/2023/CR-css-display-3-20230330/)
 * [Filter Effects Level 1, 2018-12-18](https://www.w3.org/TR/2018/WD-filter-effects-1-20181218)
 * [Flexbox Level 1, 2018-11-19](https://www.w3.org/TR/2018/CR-css-flexbox-1-20181119)
 * [Fonts Level 3, 2018-09-20](https://www.w3.org/TR/2018/REC-css-fonts-3-20180920)
