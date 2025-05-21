@@ -87,6 +87,7 @@ The sanitizer recognizes the following CSS modules:
 * [Text Decorations Level 3, 2019-08-13](https://www.w3.org/TR/2019/CR-css-text-decor-3-20190813)
 * [Easing Level 1, 2019-04-30](https://www.w3.org/TR/2019/CR-css-easing-1-20190430/)
 * [Transforms Level 1, 2019-02-14](https://www.w3.org/TR/2019/CR-css-transforms-1-20190214)
+* [Transforms Level 2, 2021-11-09](https://www.w3.org/TR/2021/WD-css-transforms-2-20211109/)
 * [Transitions Level 1, 2018-10-11](https://www.w3.org/TR/2018/WD-css-transitions-1-20181011)
 * [UI 3 Level 3, 2018-06-21](https://www.w3.org/TR/2018/REC-css-ui-3-20180621)
 * [UI 4 Level 4, 2020-01-02](https://www.w3.org/TR/2020/WD-css-ui-4-20200102)
