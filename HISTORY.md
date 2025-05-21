@@ -1,6 +1,6 @@
 # Release History
 
-## css-sanitizer x.x.x (not yet released)
+## css-sanitizer 6.0.0 (2025-07-23)
 
 New modules:
 * Add support for CSS Box Sizing Level 4 (as seen in draft from 2025-02-24)
