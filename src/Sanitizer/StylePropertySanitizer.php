@@ -60,7 +60,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssImages3( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssFonts3( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssMulticol( $matcherFactory ) );
-		$this->addKnownProperties( $this->cssOverflow3( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssOverflow4( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssUI4( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssCompositing1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssWritingModes4( $matcherFactory ) );
@@ -656,7 +656,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 
 	/**
 	 * Properties for CSS Overflow Module Level 3
-	 * @see https://www.w3.org/TR/2018/WD-css-overflow-3-20180731/
+	 * @see https://www.w3.org/TR/2023/WD-css-overflow-3-20230329/
 	 * @param MatcherFactory $matcherFactory Factory for Matchers
 	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
 	 */
@@ -675,24 +675,82 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['overflow-y'] = $overflow;
 		$props['overflow-inline'] = $overflow;
 		$props['overflow-block'] = $overflow;
-
-		$props['text-overflow'] = new KeywordMatcher( [ 'clip', 'ellipsis' ] );
-		$props['block-overflow'] = new Alternative( [
-			new KeywordMatcher( [ 'clip', 'ellipsis' ] ),
-			$matcherFactory->string(),
+		$props['overflow-clip-margin'] = UnorderedGroup::someOf( [
+			new KeywordMatcher( [ 'content-box', 'padding-box', 'border-box' ] ),
+			$matcherFactory->length()
 		] );
 
+		$props['text-overflow'] = new KeywordMatcher( [ 'clip', 'ellipsis' ] );
+
+		$props['scroll-behavior'] = new KeywordMatcher( [ 'auto', 'smooth' ] );
+		$props['scrollbar-gutter'] = new Alternative( [
+			new KeywordMatcher( 'auto' ),
+			UnorderedGroup::allOf( [
+				new KeywordMatcher( 'stable' ),
+				Quantifier::optional( new KeywordMatcher( 'both-edges' ) )
+			] )
+		] );
+
+		$this->cache[__METHOD__] = $props;
+		return $props;
+	}
+
+	/**
+	 * Properties for CSS Overflow Module Level 4
+	 * @see https://www.w3.org/TR/2023/WD-css-overflow-4-20230321/
+	 * @param MatcherFactory $matcherFactory Factory for Matchers
+	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
+	 */
+	protected function cssOverflow4( MatcherFactory $matcherFactory ) {
+		// @codeCoverageIgnoreStart
+		if ( isset( $this->cache[__METHOD__] ) ) {
+			return $this->cache[__METHOD__];
+		}
+		// @codeCoverageIgnoreEnd
+		$props = $this->cssOverflow3( $matcherFactory );
+		$props['-webkit-line-clamp'] = new Alternative( [
+			new KeywordMatcher( 'none' ),
+			$matcherFactory->integer()
+		] );
+		$props['block-ellipsis'] = new Alternative( [
+			new KeywordMatcher( [ 'none', 'auto' ] ),
+			$matcherFactory->string()
+		] );
+		$props['continue'] = new KeywordMatcher( [ 'auto', 'discard' ] );
 		$props['line-clamp'] = new Alternative( [
 			new KeywordMatcher( 'none' ),
 			new Juxtaposition( [
 				$matcherFactory->integer(),
-				Quantifier::optional( $props['block-overflow'] ),
+				Quantifier::optional( $props['block-ellipsis'] ),
 			] ),
 		] );
 		$props['max-lines'] = new Alternative( [
 			new KeywordMatcher( 'none' ), $matcherFactory->integer()
 		] );
-		$props['continue'] = new KeywordMatcher( [ 'auto', 'discard' ] );
+		$clipMargin = $props['overflow-clip-margin'];
+		$props['overflow-clip-margin-block'] = $clipMargin;
+		$props['overflow-clip-margin-block-end'] = $clipMargin;
+		$props['overflow-clip-margin-block-start'] = $clipMargin;
+		$props['overflow-clip-margin-bottom'] = $clipMargin;
+		$props['overflow-clip-margin-inline'] = $clipMargin;
+		$props['overflow-clip-margin-inline-end'] = $clipMargin;
+		$props['overflow-clip-margin-inline-start'] = $clipMargin;
+		$props['overflow-clip-margin-inline-left'] = $clipMargin;
+		$props['overflow-clip-margin-left'] = $clipMargin;
+		$props['overflow-clip-margin-right'] = $clipMargin;
+		$props['overflow-clip-margin-top'] = $clipMargin;
+		$props['text-overflow'] = Quantifier::count(
+			new Alternative( [
+				new KeywordMatcher( [ 'clip', 'ellipsis' ] ),
+				$matcherFactory->string(),
+				new KeywordMatcher( 'fade' ),
+				new FunctionMatcher(
+					'fade',
+					new Alternative( [ $matcherFactory->length(), $matcherFactory->percentage() ] )
+				)
+			] ),
+			1, 2
+		);
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
