@@ -766,6 +766,13 @@ class MatcherFactoryTest extends TestCase {
 			[ 'cssPseudo', ':dir(ltr)' ],
 			[ 'cssPseudo', ':dir( rtl )' ],
 			[ 'cssPseudo', ':nth-child(2n+1)' ],
+			[ 'cssPseudo', '::first-line' ],
+			[ 'cssPseudo', '::first-letter' ],
+			[ 'cssPseudo', '::first-letter::prefix' ],
+			[ 'cssPseudo', '::first-letter::postfix' ],
+			[ 'cssPseudo', '::prefix', null ],
+			[ 'cssPseudo', '::target-text' ],
+			[ 'cssPseudo', '::file-selector-button' ],
 
 			[ 'cssNegation', ':not(xyz)' ],
 			[ 'cssNegation', ':not( xyz )' ],

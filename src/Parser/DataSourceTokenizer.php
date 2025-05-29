@@ -16,7 +16,7 @@ use Wikimedia\CSS\Objects\Token;
  * Parse CSS into tokens
  *
  * This implements the tokenizer from the CSS Syntax Module Level 3 candidate recommendation.
- * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/
+ * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/
  */
 class DataSourceTokenizer implements Tokenizer {
 
@@ -49,7 +49,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Read a character from the data source
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#input-preprocessing
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#input-preprocessing
 	 * @return string One UTF-8 character, or empty string on EOF
 	 */
 	protected function nextChar() {
@@ -173,7 +173,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Read a token from the data source
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-token
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-token
 	 * @return Token
 	 * @suppress PhanPluginDuplicateAdjacentStatement,PhanPluginDuplicateSwitchCaseLooseEquality
 	 */
@@ -343,7 +343,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Consume a numeric token
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-numeric-token
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-numeric-token
 	 * @param array $data Data for the new token (typically contains just 'position')
 	 * @return Token
 	 */
@@ -363,7 +363,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Consume an ident-like token
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-ident-like-token
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-ident-like-token
 	 * @param array $data Data for the new token (typically contains just 'position')
 	 * @return Token
 	 */
@@ -399,7 +399,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 *
 	 * This assumes the leading quote or apostrophe has already been consumed.
 	 *
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-string-token
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-string-token
 	 * @param string $endChar Ending character of the string
 	 * @param array $data Data for the new token (typically contains just 'position')
 	 * @return Token
@@ -452,7 +452,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 *
 	 * This assumes the leading "url(" has already been consumed.
 	 *
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-url-token
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-url-token
 	 * @param array $data Data for the new token (typically contains just 'position')
 	 * @return Token
 	 */
@@ -537,7 +537,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Clean up after finding an error in a URL
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-remnants-of-bad-url
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-remnants-of-bad-url
 	 */
 	protected function consumeBadUrlRemnants() {
 		while ( true ) {
@@ -553,7 +553,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Indicate if a character is whitespace
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#whitespace
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#whitespace
 	 * @param string $char A single UTF-8 character
 	 * @return bool
 	 */
@@ -563,7 +563,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Indicate if a character is a name-start code point
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#name-start-code-point
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#name-start-code-point
 	 * @param string $char A single UTF-8 character
 	 * @return bool
 	 */
@@ -578,7 +578,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Indicate if a character is a name code point
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#name-code-point
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#name-code-point
 	 * @param string $char A single UTF-8 character
 	 * @return bool
 	 */
@@ -594,7 +594,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Indicate if a character is non-printable
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#non-printable-code-point
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#non-printable-code-point
 	 * @param string $char A single UTF-8 character
 	 * @return bool
 	 */
@@ -610,7 +610,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Indicate if a character is a digit
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#digit
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#digit
 	 * @param string $char A single UTF-8 character
 	 * @return bool
 	 */
@@ -623,7 +623,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Indicate if a character is a hex digit
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#hex-digit
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#hex-digit
 	 * @param string $char A single UTF-8 character
 	 * @return bool
 	 */
@@ -638,7 +638,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Determine if two characters constitute a valid escape
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#starts-with-a-valid-escape
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#starts-with-a-valid-escape
 	 * @param string $char1
 	 * @param string $char2
 	 * @return bool
@@ -649,7 +649,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Determine if three characters would start an identifier
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#would-start-an-identifier
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#would-start-an-identifier
 	 * @param string $char1
 	 * @param string $char2
 	 * @param string $char3
@@ -670,7 +670,7 @@ class DataSourceTokenizer implements Tokenizer {
 
 	/**
 	 * Determine if three characters would start a number
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#starts-with-a-number
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#starts-with-a-number
 	 * @param string $char1
 	 * @param string $char2
 	 * @param string $char3
@@ -695,7 +695,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 *
 	 * This assumes the leading backslash is consumed.
 	 *
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-escaped-code-point
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-escaped-code-point
 	 * @return string Escaped character
 	 */
 	protected function consumeEscape() {
@@ -736,7 +736,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 * self::wouldStartIdentifier() or the like before calling the method if
 	 * necessary.
 	 *
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-name
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-name
 	 * @return string Name
 	 */
 	protected function consumeName() {
@@ -764,7 +764,7 @@ class DataSourceTokenizer implements Tokenizer {
 	 * Note this does not do validation on the input stream. Call
 	 * self::wouldStartNumber() before calling the method if necessary.
 	 *
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#consume-number
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#consume-number
 	 * @return array [ string $value, int|float $number, string $type ('integer' or 'number') ]
 	 * @suppress PhanPluginDuplicateAdjacentStatement
 	 */
@@ -836,7 +836,7 @@ class DataSourceTokenizer implements Tokenizer {
 		}
 
 		// 6. We assume PHP's casting follows the same rules as
-		// https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#convert-string-to-number
+		// https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#convert-string-to-number
 		$value = $type === 'integer' ? (int)$repr : (float)$repr;
 
 		// 7.

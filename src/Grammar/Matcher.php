@@ -21,7 +21,7 @@ use Wikimedia\CSS\Objects\Token;
  * object that will determine whether a ComponentValueList actually matches
  * this grammar.
  *
- * [SYN3]: https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/
+ * [SYN3]: https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/
  * [VAL4]: https://www.w3.org/TR/2024/WD-css-values-4-20240312/
  */
 abstract class Matcher {

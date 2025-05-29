@@ -116,7 +116,7 @@ class MatcherFactory {
 		$exclude = array_merge( [
 			// https://www.w3.org/TR/2024/WD-css-values-4-20240312/#common-keywords
 			'initial', 'inherit', 'unset', 'default',
-			// https://www.w3.org/TR/2018/CR-css-cascade-4-20180828/#all-shorthand
+			// https://www.w3.org/TR/2022/CR-css-cascade-4-20220113/#all-shorthand
 			'revert'
 		], $exclude );
 		return new TokenMatcher( Token::T_IDENT, static function ( Token $t ) use ( $exclude ) {
@@ -167,7 +167,7 @@ class MatcherFactory {
 			??= new KeywordMatcher( [
 				// https://www.w3.org/TR/2024/WD-css-values-4-20240312/#common-keywords
 				'initial', 'inherit', 'unset',
-				// added by https://www.w3.org/TR/2018/CR-css-cascade-4-20180828/#all-shorthand
+				// added by https://www.w3.org/TR/2022/CR-css-cascade-4-20220113/#all-shorthand
 				'revert'
 			] );
 	}
@@ -774,14 +774,14 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for an image value
-	 * @see https://www.w3.org/TR/2019/CR-css-images-3-20191010/#image-values
+	 * @see https://www.w3.org/TR/2023/CRD-css-images-3-20231218/#image-values
 	 * @return Matcher
 	 */
 	public function image() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			// https://www.w3.org/TR/2019/CR-css-images-3-20191010/#gradients
+			// https://www.w3.org/TR/2023/CRD-css-images-3-20231218/#gradients
 			$c = $this->comma();
-			$colorStop = UnorderedGroup::allOf( [
+			$colorStop = new Juxtaposition( [
 				$this->color(),
 				Quantifier::optional( $this->lengthPercentage() ),
 			] );
@@ -891,7 +891,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for a bg-position value
-	 * @see https://www.w3.org/TR/2017/CR-css-backgrounds-3-20171017/#typedef-bg-position
+	 * @see https://www.w3.org/TR/2024/CRD-css-backgrounds-3-20240311/#typedef-bg-position
 	 * @return Matcher
 	 */
 	public function bgPosition() {
@@ -1135,7 +1135,7 @@ class MatcherFactory {
 
 	/**
 	 * Matcher for single easing functions from CSS Easing Functions Level 1
-	 * @see https://www.w3.org/TR/2019/CR-css-easing-1-20190430/#typedef-easing-function
+	 * @see https://www.w3.org/TR/2023/CRD-css-easing-1-20230213/#typedef-easing-function
 	 * @return Matcher
 	 */
 	public function cssSingleEasingFunction() {
@@ -1486,7 +1486,7 @@ class MatcherFactory {
 	 * Although this actually only matches the pseudo-selectors defined in the
 	 * following sources:
 	 * - https://www.w3.org/TR/2018/REC-selectors-3-20181106/#pseudo-classes
-	 * - https://www.w3.org/TR/2019/WD-css-pseudo-4-20190225/
+	 * - https://www.w3.org/TR/2022/WD-css-pseudo-4-20221230/
 	 * - https://www.w3.org/TR/2022/WD-selectors-4-20221111/#the-dir-pseudo
 	 *
 	 * @return Matcher
@@ -1519,9 +1519,18 @@ class MatcherFactory {
 				new Juxtaposition( [
 					$colon,
 					$colon,
-					new KeywordMatcher( [
-						'first-line', 'first-letter', 'before', 'after', 'selection', 'inactive-selection',
-						'spelling-error', 'grammar-error', 'marker', 'placeholder'
+					new Alternative( [
+						new Juxtaposition( [
+							new KeywordMatcher( 'first-letter' ),
+							$colon,
+							$colon,
+							new KeywordMatcher( [ 'prefix', 'postfix' ] ),
+						] ),
+						new KeywordMatcher( [
+							'first-line', 'first-letter', 'before', 'after', 'selection', 'target-text',
+							'spelling-error', 'grammar-error', 'marker', 'placeholder',
+							'file-selector-button',
+						] ),
 					] ),
 				] ),
 			] );
@@ -1533,7 +1542,7 @@ class MatcherFactory {
 	/**
 	 * An "AN+B" form
 	 *
-	 * https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#anb-microsyntax
+	 * https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#anb-microsyntax
 	 *
 	 * @return Matcher
 	 */

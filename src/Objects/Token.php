@@ -468,7 +468,7 @@ class Token extends ComponentValue {
 
 	/**
 	 * Indicate whether the two tokens need to be separated
-	 * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#serialization
+	 * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#serialization
 	 * @param Token $firstToken
 	 * @param Token $secondToken
 	 * @return bool

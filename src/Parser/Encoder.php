@@ -13,7 +13,7 @@ use UtfNormal\Utils;
 /**
  * Character set conversion for CSS
  *
- * @see https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#input-byte-stream
+ * @see https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#input-byte-stream
  */
 class Encoder {
 
