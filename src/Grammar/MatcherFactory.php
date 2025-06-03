@@ -268,7 +268,7 @@ class MatcherFactory {
 	public function colorHex(): TokenMatcher {
 		return $this->cache[__METHOD__]
 			??= new TokenMatcher( Token::T_HASH, static function ( Token $t ) {
-				return preg_match( '/^([0-9a-f]{3}|[0-9a-f]{6})$/i', $t->value() );
+				return preg_match( '/^([0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', $t->value() );
 			} );
 	}
 
@@ -559,20 +559,58 @@ class MatcherFactory {
 	 */
 	protected function colorFuncs() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$i = $this->integer();
 			$n = $this->number();
 			$p = $this->percentage();
+			$hue = new Alternative( [ $this->angle(), $n ] );
+
+			$none = new KeywordMatcher( 'none' );
+			$nPNone = new Alternative( [ $this->numberPercentage(), $none ] );
+			$hueNone = new Alternative( [ $hue, $none ] );
+
+			$colorSpaceParams = new Alternative( [
+				new Juxtaposition( [
+					new KeywordMatcher( [
+						'srgb', 'srgb-linear', 'display-p3', 'a98-rgb',
+						'prophoto-rgb', 'rec2020'
+					] ),
+					Quantifier::count( $nPNone, 3, 3 ),
+				] ),
+				new Juxtaposition( [
+					new KeywordMatcher( [ 'xyz', 'xyz-d50', 'xyz-d65' ] ),
+					Quantifier::count( $nPNone, 3, 3 ),
+				] ),
+			] );
+
+			$optionalAlpha = Quantifier::optional( new Juxtaposition(
+				[ new DelimMatcher( '/' ), new Alternative( [ $nPNone, $none ] ) ]
+			) );
+			$optionalLegacyAlpha = Quantifier::optional( $nPNone );
+
+			$rgb = new Alternative( [
+				new Juxtaposition( [ Quantifier::hash( $p, 3, 3 ), $optionalLegacyAlpha ], true ),
+				new Juxtaposition( [ Quantifier::hash( $n, 3, 3 ), $optionalLegacyAlpha ], true ),
+				new Juxtaposition( [ $nPNone, $nPNone, $nPNone, $optionalAlpha ] ),
+			] );
+			$hsl = new Alternative( [
+				new Juxtaposition( [ $hue, $p, $p, $optionalLegacyAlpha ], true ),
+				new Juxtaposition( [ $hueNone, $nPNone, $nPNone, $optionalAlpha ] ),
+			] );
+			$hwb = new Juxtaposition( [ $hueNone, $nPNone, $nPNone, $optionalAlpha ] );
+			$lab = new Juxtaposition( [ $nPNone, $nPNone, $nPNone, $optionalAlpha ] );
+			$lch = new Juxtaposition( [ $nPNone, $nPNone, $hueNone, $optionalAlpha ] );
+			$color = new Juxtaposition( [ $colorSpaceParams, $optionalAlpha ] );
+
 			$this->cache[__METHOD__] = [
-				new FunctionMatcher( 'rgb', new Alternative( [
-					Quantifier::hash( $i, 3, 3 ),
-					Quantifier::hash( $p, 3, 3 ),
-				] ) ),
-				new FunctionMatcher( 'rgba', new Alternative( [
-					new Juxtaposition( [ $i, $i, $i, $n ], true ),
-					new Juxtaposition( [ $p, $p, $p, $n ], true ),
-				] ) ),
-				new FunctionMatcher( 'hsl', new Juxtaposition( [ $n, $p, $p ], true ) ),
-				new FunctionMatcher( 'hsla', new Juxtaposition( [ $n, $p, $p, $n ], true ) ),
+				new FunctionMatcher( 'rgb', $rgb ),
+				new FunctionMatcher( 'rgba', $rgb ),
+				new FunctionMatcher( 'hsl', $hsl ),
+				new FunctionMatcher( 'hsla', $hsl ),
+				new FunctionMatcher( 'hwb', $hwb ),
+				new FunctionMatcher( 'lab', $lab ),
+				new FunctionMatcher( 'lch', $lch ),
+				new FunctionMatcher( 'oklab', $lab ),
+				new FunctionMatcher( 'oklch', $lch ),
+				new FunctionMatcher( 'color', $color )
 			];
 		}
 		return $this->cache[__METHOD__];
@@ -603,7 +641,7 @@ class MatcherFactory {
 	 * reference and light-dark color function.
 	 *
 	 * Follows:
-	 * * https://www.w3.org/TR/2018/REC-css-color-3-20180619/#colorunits
+	 * * https://www.w3.org/TR/2025/CRD-css-color-4-20250424/
 	 * * https://www.w3.org/TR/css-variables-1/
 	 * * https://www.w3.org/TR/2024/WD-css-color-5-20240229/#funcdef-light-dark
 	 *
@@ -1487,14 +1525,21 @@ class MatcherFactory {
 				'orangered', 'orchid', 'palegoldenrod', 'palegreen',
 				'paleturquoise', 'palevioletred', 'papayawhip',
 				'peachpuff', 'peru', 'pink', 'plum', 'powderblue',
-				'rosybrown', 'royalblue', 'saddlebrown', 'salmon',
+				'rebeccapurple', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon',
 				'sandybrown', 'seagreen', 'seashell', 'sienna', 'skyblue',
 				'slateblue', 'slategray', 'slategrey', 'snow',
 				'springgreen', 'steelblue', 'tan', 'thistle', 'tomato',
 				'turquoise', 'violet', 'wheat', 'whitesmoke',
 				'yellowgreen',
-				// Other keywords. Intentionally omitting the deprecated system colors.
+				// Other keywords
 				'transparent', 'currentColor',
+				// System colors
+				'AccentColor', 'AccentColorText', 'ActiveText',
+				'ButtonBorder', 'ButtonFace', 'ButtonText',
+				'Canvas', 'CanvasText', 'Field', 'FieldText',
+				'GrayText', 'Highlight', 'HighlightText',
+				'LinkText', 'Mark', 'MarkText',
+				'SelectedItem', 'SelectedItemText', 'VisitedText',
 			] );
 	}
 

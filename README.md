@@ -66,7 +66,7 @@ The sanitizer recognizes the following CSS modules:
 * [Backgrounds Level 3, 2017-10-17](https://www.w3.org/TR/2017/CR-css-backgrounds-3-20171017/)
 * [Break Level 3, 2018-12-04](https://www.w3.org/TR/2018/CR-css-break-3-20181204/)
 * [Cascade Level 4, 2018-08-28](https://www.w3.org/TR/2018/CR-css-cascade-4-20180828)
-* [Color Level 3, 2018-06-19](https://www.w3.org/TR/2018/REC-css-color-3-20180619)
+* [Color Level 4, 2025-04-24](https://www.w3.org/TR/2025/CRD-css-color-4-20250424)
 * [Compositing Level 1, 2015-01-13](https://www.w3.org/TR/2015/CR-compositing-1-20150113/)
 * [CSS Level 2, 2011-06-07](https://www.w3.org/TR/2011/REC-CSS2-20110607/)
 * [Display Level 3, 2019-07-11](https://www.w3.org/TR/2019/CR-css-display-3-20190711)

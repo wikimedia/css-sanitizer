@@ -4,6 +4,7 @@
 * Add support for CSS Box Sizing Level 4 (as seen in draft from 2025-02-24)
 	- values: stretch, fit-content, and contain;
 	- properties: aspect-ratio, contain-intrinsic-* (size, width, height, block-size, inline-size), min-intrinsic-size;
+* Update Color to Level 4 (2025-04-24)
 
 ## css-sanizer 5.5.0 (2025-01-27)
 * Ensure <-token and identifiers are always separated as a security
