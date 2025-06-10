@@ -135,7 +135,6 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['clip'] = new Alternative( [
 			$auto, new FunctionMatcher( 'rect', Quantifier::hash( $autoLength, 4, 4 ) ),
 		] );
-		$props['visibility'] = new KeywordMatcher( [ 'visible', 'hidden', 'collapse' ] );
 
 		// https://www.w3.org/TR/2011/REC-CSS2-20110607/generate.html
 		$props['list-style-type'] = new KeywordMatcher( [
@@ -197,7 +196,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 
 	/**
 	 * Properties for CSS Display Module Level 3
-	 * @see https://www.w3.org/TR/2019/CR-css-display-3-20190711/
+	 * @see https://www.w3.org/TR/2023/CR-css-display-3-20230330/
 	 * @param MatcherFactory $matcherFactory Factory for Matchers
 	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
 	 */
@@ -235,6 +234,10 @@ class StylePropertySanitizer extends PropertySanitizer {
 				'inline-block', 'inline-table', 'inline-flex', 'inline-grid',
 			] ),
 		] );
+
+		$props['visibility'] = new KeywordMatcher( [ 'visible', 'hidden', 'collapse' ] );
+
+		$props['order'] = $matcherFactory->integer();
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
@@ -945,7 +948,6 @@ class StylePropertySanitizer extends PropertySanitizer {
 		] );
 		$props['flex-wrap'] = new KeywordMatcher( [ 'nowrap', 'wrap', 'wrap-reverse' ] );
 		$props['flex-flow'] = UnorderedGroup::someOf( [ $props['flex-direction'], $props['flex-wrap'] ] );
-		$props['order'] = $matcherFactory->integer();
 		$props['flex-grow'] = $matcherFactory->number();
 		$props['flex-shrink'] = $matcherFactory->number();
 		$props['flex-basis'] = new Alternative( [
@@ -967,6 +969,11 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['align-items'] = $align['align-items'];
 		$props['align-self'] = $align['align-self'];
 		$props['align-content'] = $align['align-content'];
+
+		// 'order' was copied into display-3 in CR 2023-03-30
+		// Removed from flexbox in the ED as of 2025-03-10, it can be removed
+		// here once we update our flexbox version.
+		$props['order'] = $this->cssDisplay3( $matcherFactory )['order'];
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
@@ -1489,10 +1496,6 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$props['align-items'] = $align['align-items'];
 		$props['justify-content'] = $align['justify-content'];
 		$props['align-content'] = $align['align-content'];
-
-		// Grid uses Flexbox's order property too. Copying is ok as long as
-		// it's the identical object.
-		$props['order'] = $this->cssFlexbox3( $matcherFactory )['order'];
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
