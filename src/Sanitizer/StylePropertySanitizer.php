@@ -78,6 +78,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssMasking1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssSizing4( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssLogical1( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssRuby1( $matcherFactory ) );
 	}
 
 	/**
@@ -1927,5 +1928,28 @@ class StylePropertySanitizer extends PropertySanitizer {
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
+	}
+
+	/**
+	 * Properties for CSS Ruby Annotation Layout Module Level 1
+	 * @see https://www.w3.org/TR/2022/WD-css-ruby-1-20221231/
+	 * @param MatcherFactory $matcherFactory
+	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
+	 */
+	protected function cssRuby1( $matcherFactory ) {
+		return $this->cache[__METHOD__] ??= [
+			'ruby-position' => new Alternative( [
+				UnorderedGroup::someOf( [
+					new KeywordMatcher( 'alternate' ),
+					new KeywordMatcher( [ 'over', 'under' ] ),
+				] ),
+				new KeywordMatcher( [ 'inter-character' ] )
+			] ),
+			'ruby-merge' => new KeywordMatcher( [ 'separate', 'merge', 'auto' ] ),
+			'ruby-align' => new KeywordMatcher( [
+				'start', 'center', 'space-between', 'space-around '
+			] ),
+			'ruby-overhang' => new KeywordMatcher( [ 'auto', 'none' ] ),
+		];
 	}
 }
