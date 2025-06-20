@@ -9,6 +9,7 @@
 * Update Display Level 3 to CR 2023-03-30
 * Add support for Ruby Level 1 (WD 2022-12-31)
 * Add support for Transforms Level 2 (WD 2021-11-09)
+* Update Overflow Level 3 to WD 2023-03-29 and add support for Overflow Level 4 (WD 2023-03-21)
 
 ## css-sanitizer 5.5.0 (2025-01-27)
 * Ensure <-token and identifiers are always separated as a security
