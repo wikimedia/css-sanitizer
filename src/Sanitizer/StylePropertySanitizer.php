@@ -67,7 +67,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssTransitions( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssAnimations( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssFlexbox3( $matcherFactory ) );
-		$this->addKnownProperties( $this->cssTransforms1( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssTransforms2( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssText3( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssTextDecor3( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssAlign3( $matcherFactory ) );
@@ -981,6 +981,70 @@ class StylePropertySanitizer extends PropertySanitizer {
 	}
 
 	/**
+	 * Get a matcher for any transform function for a given level of the
+	 * Transforms module.
+	 *
+	 * @see https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/
+	 * @see https://www.w3.org/TR/2021/WD-css-transforms-2-20211109/
+	 *
+	 * @param MatcherFactory $matcherFactory
+	 * @param int $level
+	 * @return Alternative
+	 */
+	protected function transformFunc( MatcherFactory $matcherFactory, int $level ) {
+		$a = $matcherFactory->angle();
+		$az = new Alternative( [
+			$matcherFactory->zero(),
+			$a,
+		] );
+		$n = $matcherFactory->number();
+		$l = $matcherFactory->length();
+		$lp = $matcherFactory->lengthPercentage();
+		$np = new Alternative( [ $n, $matcherFactory->percentage() ] );
+
+		$level1 = [
+			'matrix' => Quantifier::hash( $n, 6, 6 ),
+			'translate' => Quantifier::hash( $lp, 1, 2 ),
+			'translateX' => $lp,
+			'translateY' => $lp,
+			'scale' => Quantifier::hash( $n, 1, 2 ),
+			'scaleX' => $n,
+			'scaleY' => $n,
+			'rotate' => $az,
+			'skew' => Quantifier::hash( $az, 1, 2 ),
+			'skewX' => $az,
+			'skewY' => $az,
+		];
+
+		$level2 = [
+			'scale' => Quantifier::hash( $np, 1, 2 ),
+			'scaleX' => $np,
+			'scaleY' => $np,
+			'matrix3d' => Quantifier::hash( $n, 16, 16 ),
+			'translate3d' => new Juxtaposition( [ $lp, $lp, $l ], true ),
+			'translateZ' => $l,
+			'scale3d' => Quantifier::hash( $np, 3, 3 ),
+			'scaleZ' => $np,
+			'rotate3d' => new Juxtaposition( [ $n, $n, $n, $az ], true ),
+			'rotateX' => $az,
+			'rotateY' => $az,
+			'rotateZ' => $az,
+			'perspective' => new Alternative( [ $l, new KeywordMatcher( 'none' ) ] ),
+		];
+
+		if ( $level === 1 ) {
+			$funcs = $level1;
+		} else {
+			$funcs = $level2 + $level1;
+		}
+		$funcMatchers = [];
+		foreach ( $funcs as $name => $contents ) {
+			$funcMatchers[] = new FunctionMatcher( $name, $contents );
+		}
+		return new Alternative( $funcMatchers );
+	}
+
+	/**
 	 * Properties for CSS Transforms Module Level 1
 	 *
 	 * @see https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/
@@ -995,12 +1059,6 @@ class StylePropertySanitizer extends PropertySanitizer {
 		// @codeCoverageIgnoreEnd
 
 		$props = [];
-		$a = $matcherFactory->angle();
-		$az = new Alternative( [
-			$matcherFactory->zero(),
-			$a,
-		] );
-		$n = $matcherFactory->number();
 		$l = $matcherFactory->length();
 		$ol = Quantifier::optional( $l );
 		$lp = $matcherFactory->lengthPercentage();
@@ -1010,19 +1068,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 
 		$props['transform'] = new Alternative( [
 			new KeywordMatcher( 'none' ),
-			Quantifier::plus( new Alternative( [
-				new FunctionMatcher( 'matrix', Quantifier::hash( $n, 6, 6 ) ),
-				new FunctionMatcher( 'translate', Quantifier::hash( $lp, 1, 2 ) ),
-				new FunctionMatcher( 'translateX', $lp ),
-				new FunctionMatcher( 'translateY', $lp ),
-				new FunctionMatcher( 'scale', Quantifier::hash( $n, 1, 2 ) ),
-				new FunctionMatcher( 'scaleX', $n ),
-				new FunctionMatcher( 'scaleY', $n ),
-				new FunctionMatcher( 'rotate', $az ),
-				new FunctionMatcher( 'skew', Quantifier::hash( $az, 1, 2 ) ),
-				new FunctionMatcher( 'skewX', $az ),
-				new FunctionMatcher( 'skewY', $az ),
-			] ) )
+			Quantifier::plus( $this->transformFunc( $matcherFactory, 1 ) )
 		] );
 
 		$props['transform-origin'] = new Alternative( [
@@ -1046,6 +1092,68 @@ class StylePropertySanitizer extends PropertySanitizer {
 
 		$this->cache[__METHOD__] = $props;
 		return $props;
+	}
+
+	/**
+	 * Properties for CSS Transforms Module Levels 1 and 2
+	 *
+	 * @see https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/
+	 * @see https://www.w3.org/TR/2021/WD-css-transforms-2-20211109/
+	 * @param MatcherFactory $matcherFactory Factory for Matchers
+	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
+	 */
+	protected function cssTransforms2( MatcherFactory $matcherFactory ) {
+		if ( !isset( $this->cache[__METHOD__] ) ) {
+			$none = new KeywordMatcher( 'none' );
+
+			$this->cache[__METHOD__] = [
+				'transform' => new Alternative( [
+					new KeywordMatcher( 'none' ),
+					Quantifier::plus( $this->transformFunc( $matcherFactory, 2 ) )
+				] ),
+				'backface-visibility' => new KeywordMatcher( [ 'visible', 'hidden' ] ),
+				'perspective' => new Alternative( [
+					$none,
+					$matcherFactory->length()
+				] ),
+				'perspective-origin' => $matcherFactory->position(),
+				'rotate' => new Alternative( [
+					$none,
+					$matcherFactory->angle(),
+					UnorderedGroup::allOf( [
+						new Alternative( [
+							new KeywordMatcher( [ 'x', 'y', 'z' ] ),
+							Quantifier::count( $matcherFactory->number(), 3, 3 )
+						] ),
+						$matcherFactory->angle()
+					] )
+				] ),
+				'scale' => new Alternative( [
+					$none,
+					Quantifier::count(
+						new Alternative( [
+							$matcherFactory->number(),
+							$matcherFactory->percentage()
+						] ),
+						1, 3
+					)
+				] ),
+				'transform-style' => new KeywordMatcher( [ 'flat', 'preserve-3d' ] ),
+				'translate' => new Alternative( [
+					$none,
+					new Juxtaposition( [
+						$matcherFactory->lengthPercentage(),
+						Quantifier::optional(
+							new Juxtaposition( [
+								$matcherFactory->lengthPercentage(),
+								Quantifier::optional( $matcherFactory->length() )
+							] )
+						)
+					] )
+				] )
+			] + $this->cssTransforms1( $matcherFactory );
+		}
+		return $this->cache[__METHOD__];
 	}
 
 	/**
