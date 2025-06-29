@@ -79,6 +79,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssSizing4( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssLogical1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssRuby1( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssLists3( $matcherFactory ) );
 	}
 
 	/**
@@ -138,25 +139,21 @@ class StylePropertySanitizer extends PropertySanitizer {
 		] );
 
 		// https://www.w3.org/TR/2011/REC-CSS2-20110607/generate.html
-		$props['list-style-type'] = new KeywordMatcher( [
-			'disc', 'circle', 'square', 'decimal', 'decimal-leading-zero', 'lower-roman', 'upper-roman',
-			'lower-greek', 'lower-latin', 'upper-latin', 'armenian', 'georgian', 'lower-alpha',
-			'upper-alpha', 'none'
-		] );
 		$props['content'] = new Alternative( [
 			new KeywordMatcher( [ 'normal', 'none' ] ),
 			Quantifier::plus( new Alternative( [
 				$matcherFactory->string(),
 				// Replaces <url> per https://www.w3.org/TR/css-images-3/#placement
 				$matcherFactory->image(),
+				// Updated by https://www.w3.org/TR/2020/WD-css-lists-3-20201117/#counter-functions
 				new FunctionMatcher( 'counter', new Juxtaposition( [
 					$matcherFactory->ident(),
-					Quantifier::optional( $props['list-style-type'] ),
+					Quantifier::optional( $matcherFactory->counterStyle() ),
 				], true ) ),
 				new FunctionMatcher( 'counters', new Juxtaposition( [
 					$matcherFactory->ident(),
 					$matcherFactory->string(),
-					Quantifier::optional( $props['list-style-type'] ),
+					Quantifier::optional( $matcherFactory->counterStyle() ),
 				], true ) ),
 				new FunctionMatcher( 'attr', $matcherFactory->ident() ),
 				new KeywordMatcher( [ 'open-quote', 'close-quote', 'no-open-quote', 'no-close-quote' ] ),
@@ -166,22 +163,6 @@ class StylePropertySanitizer extends PropertySanitizer {
 			$none, Quantifier::plus( new Juxtaposition( [
 				$matcherFactory->string(), $matcherFactory->string()
 			] ) ),
-		] );
-		$props['counter-reset'] = new Alternative( [
-			$none,
-			Quantifier::plus( new Juxtaposition( [
-				$matcherFactory->ident(), Quantifier::optional( $matcherFactory->integer() )
-			] ) ),
-		] );
-		$props['counter-increment'] = $props['counter-reset'];
-		$props['list-style-image'] = new Alternative( [
-			$none,
-			// Replaces <url> per https://www.w3.org/TR/css-images-3/#placement
-			$matcherFactory->image()
-		] );
-		$props['list-style-position'] = new KeywordMatcher( [ 'inside', 'outside' ] );
-		$props['list-style'] = UnorderedGroup::someOf( [
-			$props['list-style-type'], $props['list-style-position'], $props['list-style-image']
 		] );
 
 		// https://www.w3.org/TR/2011/REC-CSS2-20110607/tables.html
@@ -2117,5 +2098,53 @@ class StylePropertySanitizer extends PropertySanitizer {
 			] ),
 			'ruby-overhang' => new KeywordMatcher( [ 'auto', 'none' ] ),
 		];
+	}
+
+	/**
+	 * CSS Lists and Counters Module Level 3
+	 * @see https://www.w3.org/TR/2020/WD-css-lists-3-20201117/
+	 *
+	 * @param MatcherFactory $matcherFactory
+	 * @return Matcher[]
+	 */
+	protected function cssLists3( MatcherFactory $matcherFactory ) {
+		// @codeCoverageIgnoreStart
+		if ( isset( $this->cache[__METHOD__] ) ) {
+			return $this->cache[__METHOD__];
+		}
+		// @codeCoverageIgnoreEnd
+		$none = new KeywordMatcher( 'none' );
+		$props = [];
+
+		$props['counter-increment'] = $props['counter-reset'] = $props['counter-set'] =
+			new Alternative( [
+				Quantifier::plus( new Juxtaposition( [
+					$matcherFactory->customIdent( [ 'none' ] ),
+					Quantifier::optional( $matcherFactory->integer() )
+				] ) ),
+				$none
+			] );
+
+		$props['list-style-image'] = new Alternative( [
+			$matcherFactory->image(),
+			$none
+		] );
+
+		$props['list-style-position'] = new KeywordMatcher( [ 'inside', 'outside' ] );
+
+		$props['list-style-type'] = new Alternative( [
+			$matcherFactory->counterStyle(),
+			$matcherFactory->string(),
+			$none
+		] );
+
+		$props['list-style'] = UnorderedGroup::someOf( [
+			$props['list-style-position'], $props['list-style-image'], $props['list-style-type']
+		] );
+
+		$props['marker-side'] = new KeywordMatcher( [ 'match-self', 'match-parent' ] );
+
+		$this->cache[__METHOD__] = $props;
+		return $props;
 	}
 }

@@ -55,8 +55,8 @@ abstract class RuleSanitizerTestBase extends TestCase {
 			$this->assertNull( $ret );
 		} else {
 			$this->assertNotNull( $ret );
-			$this->assertSame( $output, (string)$ret );
-			$this->assertSame( $minified, Util::stringify( $ret, [ 'minify' => true ] ) );
+			$this->assertSame( $output, (string)$ret, 'unminified' );
+			$this->assertSame( $minified, Util::stringify( $ret, [ 'minify' => true ] ), 'minified' );
 		}
 
 		$this->assertEquals( (string)$oldRule, (string)$rule, 'Rule wasn\'t overwritten' );

@@ -2,14 +2,18 @@
 
 ## css-sanitizer x.x.x (not yet released)
 * Add support for CSS Box Sizing Level 4 (as seen in draft from 2025-02-24)
-	- values: stretch, fit-content, and contain;
-	- properties: aspect-ratio, contain-intrinsic-* (size, width, height, block-size, inline-size), min-intrinsic-size;
+  - values: stretch, fit-content, and contain;
+  - properties: aspect-ratio, contain-intrinsic-* (size, width, height,
+    block-size, inline-size), min-intrinsic-size;
 * Update Color to Level 4 (2025-04-24)
 * Update Values and Units to Level 4 (WD 2024-03-12)
 * Update Display Level 3 to CR 2023-03-30
 * Add support for Ruby Level 1 (WD 2022-12-31)
 * Add support for Transforms Level 2 (WD 2021-11-09)
-* Update Overflow Level 3 to WD 2023-03-29 and add support for Overflow Level 4 (WD 2023-03-21)
+* Update Overflow Level 3 to WD 2023-03-29 and add support for Overflow Level 4
+  (WD 2023-03-21)
+* Add support for Lists and Counters Level 3 (WD 2020-11-17) and Counter Styles
+  Level 3 (WD 2021-07-27)
 
 ## css-sanitizer 5.5.0 (2025-01-27)
 * Ensure <-token and identifiers are always separated as a security

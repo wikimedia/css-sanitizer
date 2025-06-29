@@ -1154,6 +1154,46 @@ class MatcherFactory {
 			] );
 	}
 
+	/**
+	 * Matcher for <counter-style>
+	 * @see https://www.w3.org/TR/2021/CR-css-counter-styles-3-20210727/#typedef-counter-style
+	 * @return Matcher
+	 */
+	public function counterStyle() {
+		return $this->cache[__METHOD__] ??= new Alternative( [
+			$this->customIdent( [ 'none' ] ),
+			new FunctionMatcher(
+				'symbols',
+				// "If the system is alphabetic or numeric, there must be at least two
+				// <string>s or <image>s, or else the function is invalid."
+				// Implement that by modifying the grammar
+				new Alternative( [
+					new Juxtaposition( [
+						new KeywordMatcher( [ 'numeric', 'alphabetic' ] ),
+						Quantifier::count(
+							new Alternative( [
+								$this->string(),
+								$this->image()
+							] ),
+							2, INF
+						)
+					] ),
+					new Juxtaposition( [
+						Quantifier::optional( new KeywordMatcher( [
+							'cyclic', 'symbolic', 'fixed'
+						] ) ),
+						Quantifier::plus(
+							new Alternative( [
+								$this->string(),
+								$this->image()
+							] )
+						)
+					] )
+				] )
+			)
+		] );
+	}
+
 	/***************************************************************************/
 	// region   CSS Selectors Level 3
 	/**
