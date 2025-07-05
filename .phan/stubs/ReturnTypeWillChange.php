@@ -1,5 +1,0 @@
-<?php
-
-#[\Attribute]
-class ReturnTypeWillChange {
-}

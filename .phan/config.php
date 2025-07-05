@@ -3,19 +3,13 @@ $cfg = require __DIR__ . '/../vendor/mediawiki/mediawiki-phan-config/src/config-
 
 $cfg['scalar_implicit_cast'] = true;
 
-$cfg['target_php_version'] = '7.4';
+$cfg['target_php_version'] = '8.1';
 $cfg['directory_list'] = [
 	'src',
 	'tests',
 	'vendor',
 ];
 $cfg['exclude_analysis_directory_list'] = [ 'vendor/', 'coverage/', 'doc/' ];
-
-// T311928 - ReturnTypeWillChange only exists in PHP >= 8.1; seen as a comment on PHP < 8.0
-$cfg['file_list'] = array_merge(
-	$cfg['file_list'],
-	class_exists( ReturnTypeWillChange::class ) ? [] : [ '.phan/stubs/ReturnTypeWillChange.php' ]
-);
 
 // Makes phan crash, see T324207.
 $cfg['exclude_file_list'][] = 'tests/Objects/CSSObjectListTest.php';
