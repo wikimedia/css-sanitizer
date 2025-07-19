@@ -420,7 +420,7 @@ class Token extends ComponentValue {
 					$unit = '%';
 				} elseif ( $this->type === self::T_DIMENSION ) {
 					$unit = self::escapeIdent( $this->unit );
-					if ( strpos( $number, 'e' ) === false && strpos( $number, 'E' ) === false &&
+					if ( !str_contains( $number, 'e' ) && !str_contains( $number, 'E' ) &&
 						preg_match( '/^[eE][+-]?\d/', $unit )
 					) {
 						// Unit would look like exponential notation, so escape the leading "e"

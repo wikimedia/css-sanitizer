@@ -265,7 +265,7 @@ class Encoder {
 	 */
 	public static function convert( $text, $encodings = [] ) {
 		// First, check for a BOM and honor that if it's present.
-		if ( strpos( $text, "\xef\xbb\xbf" ) === 0 ) {
+		if ( str_starts_with( $text, "\xef\xbb\xbf" ) ) {
 			// UTF-8 with BOM (convert it anyway in case the BOM is a lie)
 			return self::doConvert( 'UTF-8', substr( $text, 3 ) );
 		}
