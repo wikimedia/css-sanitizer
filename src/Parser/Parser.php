@@ -508,6 +508,7 @@ class Parser {
 			!strcasecmp( $v2->value(), 'important' )
 		) {
 			// This removes the "!" and "important" (5), and also any whitespace between/after (6)
+			// @phan-suppress-next-line PhanPossiblyInfiniteLoop
 			while ( isset( $value[$l1] ) ) {
 				$value->remove( $l1 );
 			}

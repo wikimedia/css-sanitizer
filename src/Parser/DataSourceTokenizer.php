@@ -264,6 +264,7 @@ class DataSourceTokenizer implements Tokenizer {
 						$this->parseError( 'unclosed-comment', $pos );
 					}
 					$this->consumeCharacter();
+					// @phan-suppress-next-line PhanPossiblyInfiniteRecursionSameParams
 					return $this->consumeToken();
 				}
 
