@@ -207,6 +207,11 @@ class MatcherFactory {
 			$this->cache[__METHOD__] = $calcSum;
 
 			$calcKeyword = new KeywordMatcher( [ 'e', 'pi', 'infinity', '-infinity', 'NaN' ] );
+			// calc() forces values to be numeric so it is safe to allow custom props here
+			$customProp = new FunctionMatcher( 'var', new Juxtaposition( [
+				new CustomPropertyMatcher(),
+				Quantifier::optional( $calcSum ),
+			], true ) );
 
 			// Complete the recursive rule <calc-value>
 			$calcValue = new Alternative( [
@@ -214,6 +219,7 @@ class MatcherFactory {
 				$this->dimension(),
 				$this->percentage(),
 				$calcKeyword,
+				$customProp,
 				new BlockMatcher( Token::T_LEFT_PAREN, $calcSum )
 			] );
 		}
