@@ -47,7 +47,6 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 		}
 		if ( $method ) {
 			$rm = new ReflectionMethod( $san, $method );
-			$rm->setAccessible( true );
 			$san->method( 'doSanitize' )->willReturnCallback( static function ( $rule ) use ( $rm, $san, $arg ) {
 				$ret = clone $rule;
 				// @phan-suppress-next-line PhanPossiblyUndeclaredVariable $arg set when reaching this code
