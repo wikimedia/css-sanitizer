@@ -15,6 +15,7 @@ use Wikimedia\TestingAccessWrapper;
 class CheckedMatcherTest extends MatcherTestBase {
 
 	public function testGenerateMatches() {
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$matcher = $this->getMockBuilder( Matcher::class )
 			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();

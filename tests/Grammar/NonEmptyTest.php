@@ -22,6 +22,7 @@ class NonEmptyTest extends MatcherTestBase {
 	 * @param array $expect
 	 */
 	public function testGenerateMatches( $start, $ret, $expect ) {
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$matcher = $this->getMockBuilder( Matcher::class )
 			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();

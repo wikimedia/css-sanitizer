@@ -34,6 +34,7 @@ class DataSourceTokenizerTest extends TestCase {
 		$this->assertSame( '-', $t->nextChar() );
 		$this->assertSame( DataSource::EOF, $t->nextChar() );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$mock = $this->getMockForAbstractClass( DataSource::class );
 		$mock->method( 'readCharacter' )->willReturnOnConsecutiveCalls(
 			"\u{D7FF}", "\u{D800}", "\u{DFFF}", "\u{E000}", DataSource::EOF

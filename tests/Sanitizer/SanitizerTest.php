@@ -22,6 +22,7 @@ class SanitizerTest extends TestCase {
 
 	public function testErrors() {
 		$sanitizer = TestingAccessWrapper::newFromObject(
+			// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 			$this->getMockForAbstractClass( Sanitizer::class )
 		);
 
@@ -42,6 +43,7 @@ class SanitizerTest extends TestCase {
 
 	public function testStashErrors() {
 		$sanitizer = TestingAccessWrapper::newFromObject(
+			// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 			$this->getMockForAbstractClass( Sanitizer::class )
 		);
 
@@ -82,25 +84,25 @@ class SanitizerTest extends TestCase {
 
 		$mb = $this->getMockBuilder( Sanitizer::class )->onlyMethods( [ 'doSanitize' ] );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san = $mb->getMockForAbstractClass();
 		$san->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal False positive
 			->with( $this->identicalTo( $block ) )
 			->willReturn( null );
 		'@phan-var Sanitizer $san';
 		$this->assertNull( $san->sanitize( $block ) );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san = $mb->getMockForAbstractClass();
 		$san->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal False positive
 			->with( $this->identicalTo( $block ) )
 			->willReturn( $block2 );
 		'@phan-var Sanitizer $san';
 		$this->assertSame( $block2, $san->sanitize( $block ) );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san = $mb->getMockForAbstractClass();
 		$san->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal False positive
 			->with( $this->identicalTo( $block ) )
 			->willReturn( $block );
 		'@phan-var Sanitizer $san';
@@ -112,15 +114,16 @@ class SanitizerTest extends TestCase {
 		$token2 = new Token( Token::T_COMMA );
 
 		$sanitizer1 = TestingAccessWrapper::newFromObject(
+			// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 			$this->getMockForAbstractClass( Sanitizer::class )
 		);
 		$sanitizer1->sanitizationErrors = [ [ 'x', 1, 2 ] ];
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$sanitizer2 = $this->getMockBuilder( Sanitizer::class )
 			->onlyMethods( [ 'doSanitize', 'getSanitizationErrors', 'clearSanitizationErrors' ] )
 			->getMockForAbstractClass();
 		$sanitizer2->expects( $this->once() )->method( 'doSanitize' )
-			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal False positive
 			->with( $this->identicalTo( $token1 ) )
 			->willReturn( $token2 );
 		$sanitizer2->expects( $this->once() )->method( 'getSanitizationErrors' )
@@ -140,6 +143,7 @@ class SanitizerTest extends TestCase {
 		$token3o = new Token( Token::T_SEMICOLON );
 
 		$sanitizer1 = TestingAccessWrapper::newFromObject(
+			// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 			$this->getMockForAbstractClass( Sanitizer::class )
 		);
 		$sanitizer1->sanitizationErrors = [ [ 'x', 1, 2 ] ];
@@ -167,6 +171,7 @@ class SanitizerTest extends TestCase {
 		$mb = $this->getMockBuilder( RuleSanitizer::class )
 			->onlyMethods( [ 'handlesRule', 'getIndex', 'doSanitize' ] );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san1 = $mb->getMockForAbstractClass();
 		$san1->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san1';
@@ -179,6 +184,7 @@ class SanitizerTest extends TestCase {
 			return $rule;
 		} );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san2 = $mb->getMockForAbstractClass();
 		$san2->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san2';
@@ -191,6 +197,7 @@ class SanitizerTest extends TestCase {
 			return $rule;
 		} );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san3 = $mb->getMockForAbstractClass();
 		$san3->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san3';
@@ -203,6 +210,7 @@ class SanitizerTest extends TestCase {
 			return null;
 		} );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$sanX = $mb->getMockForAbstractClass();
 		$sanX->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 			return $rule->getName() === 'san2';
@@ -221,6 +229,7 @@ class SanitizerTest extends TestCase {
 		$r8 = new AtRule( new Token( $AT, [ 'value' => 'san2', 'position' => [ 8, 1 ] ] ) );
 		$test = new RuleList( [ $r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8 ] );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san = TestingAccessWrapper::newFromObject( $this->getMockForAbstractClass( Sanitizer::class ) );
 		$ret = $san->sanitizeRules( [ $san1, $san2, $san3, $sanX ], $test );
 		$this->assertInstanceOf( RuleList::class, $ret );

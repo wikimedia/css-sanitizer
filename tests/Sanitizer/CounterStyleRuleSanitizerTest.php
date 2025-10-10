@@ -5,6 +5,10 @@ use Wikimedia\CSS\Sanitizer\CounterStyleAtRuleSanitizer;
 use Wikimedia\CSS\Sanitizer\RuleSanitizerTestBase;
 
 // phpcs:disable Generic.Files.LineLength
+
+/**
+ * @covers \Wikimedia\CSS\Sanitizer\CounterStyleAtRuleSanitizer
+ */
 class CounterStyleRuleSanitizerTest extends RuleSanitizerTestBase {
 
 	protected function getSanitizer( $options = [] ) {

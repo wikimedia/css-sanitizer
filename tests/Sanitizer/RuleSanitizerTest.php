@@ -23,6 +23,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 	protected function getSanitizer( $options = [] ) {
 		$mb = $this->getMockBuilder( RuleSanitizer::class )
 			->onlyMethods( [ 'doSanitize', 'handlesRule' ] );
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$san = $mb->getMockForAbstractClass();
 		$san->method( 'handlesRule' )->willReturn( true );
 
@@ -34,6 +35,7 @@ class RuleSanitizerTest extends RuleSanitizerTestBase {
 
 			case 'rules':
 				$method = 'sanitizeRuleBlock';
+				// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 				$arg = [ $mb->getMockForAbstractClass() ];
 				$arg[0]->method( 'handlesRule' )->willReturnCallback( static function ( $rule ) {
 					return $rule instanceof AtRule && !strcasecmp( $rule->getName(), 'foo' );

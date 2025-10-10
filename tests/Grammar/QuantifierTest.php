@@ -167,6 +167,7 @@ class QuantifierTest extends MatcherTestBase {
 
 	public function testEmptyMatch() {
 		$list = new ComponentValueList();
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$matcher = $this->getMockBuilder( Matcher::class )
 			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();

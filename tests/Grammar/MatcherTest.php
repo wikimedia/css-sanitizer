@@ -44,6 +44,7 @@ class MatcherTest extends MatcherTestBase {
 	}
 
 	public function testDefaultOptions() {
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$matcher = $this->getMockForAbstractClass( Matcher::class );
 		'@phan-var Matcher $matcher';
 
@@ -74,6 +75,7 @@ class MatcherTest extends MatcherTestBase {
 
 	public function testNext() {
 		$matcher = TestingAccessWrapper::newFromObject(
+			// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 			$this->getMockForAbstractClass( Matcher::class )
 		);
 
@@ -115,6 +117,7 @@ class MatcherTest extends MatcherTestBase {
 	 * @param bool $expect
 	 */
 	public function testMatch( $list, $options, $ret, $expectStart, $expect ) {
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$matcher = $this->getMockBuilder( Matcher::class )
 			->onlyMethods( [ 'generateMatches' ] )
 			->getMockForAbstractClass();
@@ -196,6 +199,7 @@ class MatcherTest extends MatcherTestBase {
 			$Iws, $tok, $ws, $Iws, $tok, $ws, $expectBlock, $ws
 		] );
 
+		// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 		$matcher = $this->getMockForAbstractClass( Matcher::class );
 		$matcher->method( 'generateMatches' )->willReturn( new ArrayIterator( [
 			new GrammarMatch( $testList, 1, 6, null, [
@@ -224,6 +228,7 @@ class MatcherTest extends MatcherTestBase {
 	public function testMakeMatch() {
 		$dummy = new ComponentValueList();
 		$matcher = TestingAccessWrapper::newFromObject(
+			// @phan-suppress-next-line PhanDeprecatedFunction Soft-deprecated in phpunit 10
 			$this->getMockForAbstractClass( Matcher::class )
 		);
 		$matcher2 = TestingAccessWrapper::newFromObject( $matcher->capture( 'foo' ) );
