@@ -759,21 +759,12 @@ class MatcherFactory {
 			??= new Alternative( [
 				$this->safeColor(),
 				new FunctionMatcher( 'var', new Juxtaposition( [
-						new CustomPropertyMatcher(),
-						Quantifier::optional( new Alternative( [
-							$this->colorWords(),
-							$this->colorHex(),
-						] ) ),
+					new CustomPropertyMatcher(),
+					Quantifier::optional( $this->safeColor() ),
 				], true ) ),
 				new FunctionMatcher( 'light-dark', new Juxtaposition( [
-						new Alternative( [
-							$this->colorWords(),
-							$this->colorHex(),
-						] ),
-						new Alternative( [
-							$this->colorWords(),
-							$this->colorHex(),
-						] ),
+					$this->safeColor(),
+					$this->safeColor(),
 				], true ) ),
 			] );
 	}
