@@ -80,6 +80,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 		$this->addKnownProperties( $this->cssLogical1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssRuby1( $matcherFactory ) );
 		$this->addKnownProperties( $this->cssLists3( $matcherFactory ) );
+		$this->addKnownProperties( $this->cssScrollSnap1( $matcherFactory ) );
 	}
 
 	/**
@@ -2192,6 +2193,75 @@ class StylePropertySanitizer extends PropertySanitizer {
 		] );
 
 		$props['marker-side'] = new KeywordMatcher( [ 'match-self', 'match-parent' ] );
+
+		$this->cache[__METHOD__] = $props;
+		return $props;
+	}
+
+	/**
+	 * Properties for CSS Scroll Snap Module Level 1
+	 * @see https://www.w3.org/TR/2021/CR-css-scroll-snap-1-20210311/
+	 * @param MatcherFactory $matcherFactory
+	 * @return Matcher[] Array mapping declaration names (lowercase) to Matchers for the values
+	 */
+	protected function cssScrollSnap1( MatcherFactory $matcherFactory ) {
+		// @codeCoverageIgnoreStart
+		if ( isset( $this->cache[__METHOD__] ) ) {
+			return $this->cache[__METHOD__];
+		}
+		// @codeCoverageIgnoreEnd
+
+		$props = [];
+		$none = new KeywordMatcher( 'none' );
+		$auto = new KeywordMatcher( 'auto' );
+		$length = $matcherFactory->length();
+		$lp = $matcherFactory->lengthPercentage();
+
+		// https://www.w3.org/TR/2021/CR-css-scroll-snap-1-20210311/#scroll-snap-type
+		$props['scroll-snap-type'] = new Alternative( [
+			$none,
+			new Juxtaposition( [
+				new KeywordMatcher( [ 'x', 'y', 'block', 'inline', 'both' ] ),
+				Quantifier::optional( new KeywordMatcher( [ 'mandatory', 'proximity' ] ) ),
+			] ),
+		] );
+
+		// https://www.w3.org/TR/2021/CR-css-scroll-snap-1-20210311/#scroll-padding
+		$props['scroll-padding'] = Quantifier::count( new Alternative( [ $auto, $lp ] ), 1, 4 );
+
+		$props['scroll-padding-top'] = new Alternative( [ $auto, $lp ] );
+		$props['scroll-padding-right'] = new Alternative( [ $auto, $lp ] );
+		$props['scroll-padding-bottom'] = new Alternative( [ $auto, $lp ] );
+		$props['scroll-padding-left'] = new Alternative( [ $auto, $lp ] );
+
+		$props['scroll-padding-inline'] = Quantifier::count( new Alternative( [ $auto, $lp ] ), 1, 2 );
+		$props['scroll-padding-inline-start'] = new Alternative( [ $auto, $lp ] );
+		$props['scroll-padding-inline-end'] = new Alternative( [ $auto, $lp ] );
+		$props['scroll-padding-block'] = Quantifier::count( new Alternative( [ $auto, $lp ] ), 1, 2 );
+		$props['scroll-padding-block-start'] = new Alternative( [ $auto, $lp ] );
+		$props['scroll-padding-block-end'] = new Alternative( [ $auto, $lp ] );
+
+		// https://www.w3.org/TR/2021/CR-css-scroll-snap-1-20210311/#scroll-margin
+		$props['scroll-margin'] = Quantifier::count( $length, 1, 4 );
+
+		$props['scroll-margin-top'] = $length;
+		$props['scroll-margin-right'] = $length;
+		$props['scroll-margin-bottom'] = $length;
+		$props['scroll-margin-left'] = $length;
+
+		$props['scroll-margin-inline'] = Quantifier::count( $length, 1, 2 );
+		$props['scroll-margin-inline-start'] = $length;
+		$props['scroll-margin-inline-end'] = $length;
+		$props['scroll-margin-block'] = Quantifier::count( $length, 1, 2 );
+		$props['scroll-margin-block-start'] = $length;
+		$props['scroll-margin-block-end'] = $length;
+
+		// https://www.w3.org/TR/2021/CR-css-scroll-snap-1-20210311/#scroll-snap-align
+		$props['scroll-snap-align'] = Quantifier::count( new KeywordMatcher( [ 'none', 'start', 'end', 'center' ] ),
+			1, 2 );
+
+		// https://www.w3.org/TR/2021/CR-css-scroll-snap-1-20210311/#scroll-snap-stop
+		$props['scroll-snap-stop'] = new KeywordMatcher( [ 'normal', 'always' ] );
 
 		$this->cache[__METHOD__] = $props;
 		return $props;

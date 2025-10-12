@@ -1,5 +1,8 @@
 # Release History
 
+## css-sanitizer (unreleased)
+* Add support for CSS Scroll Snap Module Level 1
+
 ## css-sanitizer 6.0.0 (2025-07-23)
 
 New modules:

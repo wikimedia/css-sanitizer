@@ -87,6 +87,7 @@ The sanitizer recognizes the following CSS modules:
 * [Position Level 3, 2025-03-11](https://www.w3.org/TR/2025/WD-css-position-3-20250311/)
 * [Pseudo-Elements Level 4, 2022-12-30](https://www.w3.org/TR/2022/WD-css-pseudo-4-20221230/)
 * [Ruby Level 1, 2022-12-31](https://www.w3.org/TR/2022/WD-css-ruby-1-20221231/)
+* [Scroll Snap Module Level 1](https://www.w3.org/TR/2021/CR-css-scroll-snap-1-20210311/)
 * [Shapes Level 1, 2022-11-15](https://www.w3.org/TR/2022/CRD-css-shapes-1-20221115/)
 * [Sizing Level 3, 2021-12-17](https://www.w3.org/TR/2021/WD-css-sizing-3-20211217/)
 * [Sizing Level 4, 2025-02-24](https://drafts.csswg.org/css-sizing-4/)
