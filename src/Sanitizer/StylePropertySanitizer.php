@@ -2143,7 +2143,7 @@ class StylePropertySanitizer extends PropertySanitizer {
 			] ),
 			'ruby-merge' => new KeywordMatcher( [ 'separate', 'merge', 'auto' ] ),
 			'ruby-align' => new KeywordMatcher( [
-				'start', 'center', 'space-between', 'space-around '
+				'start', 'center', 'space-between', 'space-around'
 			] ),
 			'ruby-overhang' => new KeywordMatcher( [ 'auto', 'none' ] ),
 		];
