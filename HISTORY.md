@@ -1,7 +1,8 @@
 # Release History
 
-## css-sanitizer (unreleased)
+## css-sanitizer 6.1.0 (2025-10-29)
 * Add support for CSS Scroll Snap Module Level 1
+* Fix `ruby-align: space-around` support
 
 ## css-sanitizer 6.0.0 (2025-07-23)
 
