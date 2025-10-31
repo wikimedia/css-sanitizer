@@ -193,6 +193,10 @@ class MatcherFactoryTest extends TestCase {
 			[ 'number', 'calc(pi)' ],
 			[ 'number', 'pow(3px, 2)' ],
 
+			[ 'ratio', '5' ],
+			[ 'ratio', '5 / 6' ],
+			[ 'ratio', '5 / 0' ],
+
 			[ 'percentage', '12', false ],
 			[ 'percentage', '12%' ],
 			[ 'percentage', '+12%' ],
@@ -715,6 +719,9 @@ class MatcherFactoryTest extends TestCase {
 			[ 'cssSingleEasingFunction', 'steps( 77, end )' ],
 			[ 'cssSingleEasingFunction', 'steps( 77, jump-both )' ],
 			[ 'cssSingleEasingFunction', 'cubic-bezier( 1, 3.4, +5, -1e2 )' ],
+
+			[ 'counterStyle', 'decimal' ],
+			[ 'counterStyle', 'symbols( numeric "A" "B" )' ],
 
 			[ 'cssSelector', '', null ],
 
