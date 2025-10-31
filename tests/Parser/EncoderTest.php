@@ -94,6 +94,16 @@ class EncoderTest extends TestCase {
 				'@charset "piglatin1"; f�o',
 				[ 'transport' => 'bogus', 'environment' => 'bogus' ],
 			],
+			'fallback to UTF-8 no environment' => [
+				"@charset \"piglatin1\"; f\xf3o",
+				'@charset "piglatin1"; f�o',
+				[ 'transport' => 'bogus' ],
+			],
+			'fallback to UTF-8 no transport' => [
+				"@charset \"piglatin1\"; f\xf3o",
+				'@charset "piglatin1"; f�o',
+				[ 'environment' => 'bogus' ],
+			],
 			'lying @charset' => [
 				"@charset \"utf-16be\"; f\xf3o",
 				'@charset "utf-16be"; f�o',
