@@ -485,6 +485,9 @@ class MatcherFactoryTest extends TestCase {
 			[ 'safeColor', 'rgb(0%,0%,0%)' ],
 			[ 'safeColor', 'rgb(0.1%,0%,0%)' ],
 			[ 'safeColor', 'rgb( 0% , 0% , 0% )' ],
+			[ 'safeColor', 'rgb( var(--a), var(--b), var(--c) )' ],
+			[ 'safeColor', 'rgb( var(--a) var(--b) var(--c) )' ],
+			[ 'safeColor', 'rgb( var(--a) var(--b) var(--c) / var(--d) )' ],
 			[ 'safeColor', 'rgba(0 0% none)' ],
 			[ 'safeColor', 'rgba(0 0% none / 0.1)' ],
 			[ 'safeColor', 'rgba( 0, 0, 0 )' ],
@@ -529,6 +532,8 @@ class MatcherFactoryTest extends TestCase {
 			[ 'safeColor', 'oklch(0% 0 0 / 0.5)' ],
 			[ 'safeColor', 'color(display-p3 0 0 0)' ],
 			[ 'safeColor', 'color(display-p3 0 0 0 / 0)' ],
+			[ 'safeColor', 'color(display-p3 var(--a) var(--b) var(--c) / var(--e))' ],
+			[ 'safeColor', 'color(var(--x) var(--a) var(--b) var(--c) / var(--d))', false ],
 
 			[ 'image', "url({$img})" ],
 			[ 'image', "url('{$img}')" ],

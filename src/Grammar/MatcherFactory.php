@@ -661,17 +661,33 @@ class MatcherFactory {
 	}
 
 	/**
+	 * Matcher for either a given value type or a var() with the value type
+	 * as fallback.
+	 *
+	 * @param Matcher $fallback
+	 * @return Matcher
+	 */
+	private function rawOrCustomProp( Matcher $fallback ): Matcher {
+		$withCustomProp = new FunctionMatcher( 'var', new Juxtaposition( [
+			new CustomPropertyMatcher(),
+			Quantifier::optional( $fallback ),
+		], true ) );
+		return new Alternative( [ $fallback, $withCustomProp ] );
+	}
+
+	/**
 	 * Matchers for color functions
 	 * @return Matcher[]
 	 */
 	protected function colorFuncs() {
 		if ( !isset( $this->cache[__METHOD__] ) ) {
-			$n = $this->number();
-			$p = $this->percentage();
+			// Color functions require arguments to be numeric so allowing var() is safe
+			$n = $this->rawOrCustomProp( $this->number() );
+			$p = $this->rawOrCustomProp( $this->percentage() );
 			$hue = new Alternative( [ $this->angle(), $n ] );
 
 			$none = new KeywordMatcher( 'none' );
-			$nPNone = new Alternative( [ $this->numberPercentage(), $none ] );
+			$nPNone = new Alternative( [ $this->rawOrCustomProp( $this->numberPercentage() ), $none ] );
 			$hueNone = new Alternative( [ $hue, $none ] );
 
 			$colorSpaceParams = new Alternative( [
