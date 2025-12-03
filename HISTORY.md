@@ -1,5 +1,11 @@
 # Release History
 
+## css-sanitizer 6.2.0 (2025-12-03)
+* Allow var() inside calc() and other math functions
+* Allow color functions inside var() fallback
+* Allow color functions inside light-dark() function
+* Allow var() inside color functions
+
 ## css-sanitizer 6.1.0 (2025-10-29)
 * Add support for CSS Scroll Snap Module Level 1
 * Fix `ruby-align: space-around` support
