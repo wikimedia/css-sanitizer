@@ -680,10 +680,10 @@ class DataSourceTokenizer implements Tokenizer {
 	 * @return bool
 	 */
 	protected static function wouldStartNumber( $char1, $char2, $char3 ) {
-		if ( $char1 === '+' || $char1 === '-' ) {
+		if ( ( $char1 === '+' || $char1 === '-' ) && $char2 !== DataSource::EOF ) {
 			return self::isDigit( $char2 ) ||
 				( $char2 === '.' && self::isDigit( $char3 ) );
-		} elseif ( $char1 === '.' ) {
+		} elseif ( $char1 === '.' && $char2 !== DataSource::EOF ) {
 			return self::isDigit( $char2 );
 		// @codeCoverageIgnoreStart
 		// Nothing reaches this code
@@ -707,9 +707,12 @@ class DataSourceTokenizer implements Tokenizer {
 		$this->consumeCharacter();
 
 		// 1-6 hexits, plus one optional whitespace character
-		if ( self::isHexDigit( $this->currentCharacter ) ) {
+		if ( $this->currentCharacter !== DataSource::EOF && self::isHexDigit( $this->currentCharacter ) ) {
 			$num = $this->currentCharacter;
-			while ( strlen( $num ) < 6 && self::isHexDigit( $this->nextCharacter ) ) {
+			while ( strlen( $num ) < 6 &&
+				$this->nextCharacter !== DataSource::EOF &&
+				self::isHexDigit( $this->nextCharacter )
+			) {
 				$this->consumeCharacter();
 				$num .= $this->currentCharacter;
 			}
@@ -785,7 +788,7 @@ class DataSourceTokenizer implements Tokenizer {
 		}
 
 		// 3.
-		while ( self::isDigit( $this->nextCharacter ) ) {
+		while ( $this->nextCharacter !== DataSource::EOF && self::isDigit( $this->nextCharacter ) ) {
 			$this->consumeCharacter();
 			$repr .= $this->currentCharacter;
 		}
@@ -802,7 +805,7 @@ class DataSourceTokenizer implements Tokenizer {
 				// 4.3.
 				$type = 'number';
 				// 4.4.
-				while ( self::isDigit( $this->nextCharacter ) ) {
+				while ( $this->nextCharacter !== DataSource::EOF && self::isDigit( $this->nextCharacter ) ) {
 					$this->consumeCharacter();
 					$repr .= $this->currentCharacter;
 				}
@@ -833,7 +836,7 @@ class DataSourceTokenizer implements Tokenizer {
 				// 5.3.
 				$type = 'number';
 				// 5.4.
-				while ( self::isDigit( $this->nextCharacter ) ) {
+				while ( $this->nextCharacter !== DataSource::EOF && self::isDigit( $this->nextCharacter ) ) {
 					$this->consumeCharacter();
 					$repr .= $this->currentCharacter;
 				}
