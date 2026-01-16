@@ -701,6 +701,14 @@ class ParserTest extends TestCase {
 				] )
 			],
 
+			'Parse a simple value as value list' => [
+				'parseComponentValueList',
+				'white',
+				new ComponentValueList( [
+					new Token( 'ident', [ 'position' => [ 1, 1 ], 'value' => 'white' ] ),
+				] )
+			],
+
 			'Parse a list of comma separated component values' => [
 				'parseCommaSeparatedComponentValueList',
 				',.?{}foo,/*@pp*/bar',

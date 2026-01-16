@@ -746,7 +746,9 @@ class DataSourceTokenizer implements Tokenizer {
 		while ( true ) {
 			$this->consumeCharacter();
 
-			if ( self::isNameCharacter( $this->currentCharacter ) ) {
+			if ( $this->currentCharacter === DataSource::EOF ) {
+				break;
+			} elseif ( self::isNameCharacter( $this->currentCharacter ) ) {
 				$name .= $this->currentCharacter;
 			} elseif ( self::isValidEscape( $this->currentCharacter, $this->nextCharacter ) ) {
 				$name .= $this->consumeEscape();
