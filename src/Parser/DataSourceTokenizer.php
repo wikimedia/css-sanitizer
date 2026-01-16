@@ -571,7 +571,7 @@ class DataSourceTokenizer implements Tokenizer {
 	protected static function isNameStartCharacter( $char ) {
 		// Every non-ASCII character is a name start character, so we can just
 		// check the first byte.
-		$char = ord( $char );
+		$char = ord( $char[0] );
 		return ( $char >= 0x41 && $char <= 0x5a ) ||
 			( $char >= 0x61 && $char <= 0x7a ) ||
 			$char >= 0x80 || $char === 0x5f;
@@ -586,7 +586,7 @@ class DataSourceTokenizer implements Tokenizer {
 	protected static function isNameCharacter( $char ) {
 		// Every non-ASCII character is a name character, so we can just check
 		// the first byte.
-		$char = ord( $char );
+		$char = ord( $char[0] );
 		return ( $char >= 0x41 && $char <= 0x5a ) ||
 			( $char >= 0x61 && $char <= 0x7a ) ||
 			( $char >= 0x30 && $char <= 0x39 ) ||
@@ -602,7 +602,7 @@ class DataSourceTokenizer implements Tokenizer {
 	protected static function isNonPrintable( $char ) {
 		// No non-ASCII character is non-printable, so we can just check the
 		// first byte.
-		$char = ord( $char );
+		$char = ord( $char[0] );
 		return ( $char >= 0x00 && $char <= 0x08 ) ||
 			$char === 0x0b ||
 			( $char >= 0x0e && $char <= 0x1f ) ||
@@ -618,7 +618,7 @@ class DataSourceTokenizer implements Tokenizer {
 	protected static function isDigit( $char ) {
 		// No non-ASCII character is a digit, so we can just check the first
 		// byte.
-		$char = ord( $char );
+		$char = ord( $char[0] );
 		return $char >= 0x30 && $char <= 0x39;
 	}
 
@@ -631,7 +631,7 @@ class DataSourceTokenizer implements Tokenizer {
 	protected static function isHexDigit( $char ) {
 		// No non-ASCII character is a hex digit, so we can just check the
 		// first byte.
-		$char = ord( $char );
+		$char = ord( $char[0] );
 		return ( $char >= 0x30 && $char <= 0x39 ) ||
 			( $char >= 0x41 && $char <= 0x46 ) ||
 			( $char >= 0x61 && $char <= 0x66 );
