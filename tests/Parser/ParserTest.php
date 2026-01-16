@@ -618,6 +618,28 @@ class ParserTest extends TestCase {
 				[ [ 'unexpected-token-in-declaration-list', 1, 11 ], [ 'expected-colon', 1, 26 ] ]
 			],
 
+			'Parse simple declaration list' => [
+				'parseDeclarationList',
+				"opacity:1",
+				new DeclarationList( [
+					self::mk(
+						new Declaration( new Token( 'ident', [ 'position' => [ 1, 1 ], 'value' => 'opacity' ] ) ), [
+							'value' => new ComponentValueList( [
+								new Token(
+									'number',
+									[
+										'position' => [ 1, 9 ],
+										'value' => '1',
+										'typeFlag' => 'integer',
+										'representation' => '1'
+									]
+								)
+							] )
+						]
+					)
+				] ),
+			],
+
 			'Parse a component value' => [
 				'parseComponentValue',
 				'  ?  ',

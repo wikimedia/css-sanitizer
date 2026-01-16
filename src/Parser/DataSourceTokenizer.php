@@ -657,7 +657,9 @@ class DataSourceTokenizer implements Tokenizer {
 	 * @return bool
 	 */
 	protected static function wouldStartIdentifier( $char1, $char2, $char3 ) {
-		if ( $char1 === '-' ) {
+		if ( $char1 === DataSource::EOF ) {
+			return false;
+		} elseif ( $char1 === '-' && $char2 !== DataSource::EOF ) {
 			return self::isNameStartCharacter( $char2 ) || $char2 === '-' ||
 				self::isValidEscape( $char2, $char3 );
 		} elseif ( self::isNameStartCharacter( $char1 ) ) {
