@@ -190,20 +190,20 @@ class UtilTest extends TestCase {
 		$this->assertSame( 'U/**/+123/**/-456', Util::stringify( $tokenList ) );
 
 		$tokenList = new TokenList( [ new Token( Token::T_IDENT, 'U' ), $n1, $n2 ] );
-		// @phan-suppress-next-line PhanNonClassMethodCall False positive
+		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 3 );
 		$this->assertSame( 'U+123-456', Util::stringify( $tokenList ) );
 
 		$tokenList = new TokenList( [ new Token( Token::T_IDENT, 'U' ), $n1, $n2 ] );
-		// @phan-suppress-next-line PhanNonClassMethodCall False positive
+		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 2 );
-		// @phan-suppress-next-line PhanNonClassMethodCall False positive
+		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 1 );
 		$this->assertSame( 'U+123/**/-456', Util::stringify( $tokenList ) );
 
 		// Not really expected, but valid.
 		$tokenList = new TokenList( [ new Token( Token::T_IDENT, 'U' ), $n1, $q, $q, $q ] );
-		// @phan-suppress-next-line PhanNonClassMethodCall False positive
+		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 3 );
 		$this->assertSame( 'U+123???', Util::stringify( $tokenList ) );
 	}

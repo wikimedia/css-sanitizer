@@ -38,7 +38,7 @@ class UrangeMatcherTest extends MatcherTestBase {
 
 		if ( !$match ) {
 			$this->assertCount( 0, $matches );
-			// @phan-suppress-next-line PhanNonClassMethodCall False positive
+			// @phan-suppress-next-line PhanUndeclaredMethod False positive
 			$this->assertSame( 0, $list[0]->urangeHack() );
 		} else {
 			$this->assertNotCount( 0, $matches );
@@ -56,7 +56,7 @@ class UrangeMatcherTest extends MatcherTestBase {
 
 			$len = count( $list ) - $remaining;
 			$this->assertSame( $len, $m->getLength() );
-			// @phan-suppress-next-line PhanNonClassMethodCall False positive
+			// @phan-suppress-next-line PhanUndeclaredMethod False positive
 			$this->assertSame( $len, $list[0]->urangeHack() );
 		}
 	}

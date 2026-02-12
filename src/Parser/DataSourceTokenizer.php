@@ -255,7 +255,8 @@ class DataSourceTokenizer implements Tokenizer {
 					$this->consumeCharacter();
 					$this->consumeCharacter();
 					while ( $this->currentCharacter !== DataSource::EOF &&
-						// @phan-suppress-next-line PhanSuspiciousValueComparisonInLoop
+						// phan doesn't see the side effects of ::consumeCharacter
+						// @phan-suppress-next-line PhanImpossibleValueComparisonInLoop
 						!( $this->currentCharacter === '*' && $this->nextCharacter === '/' )
 					) {
 						$this->consumeCharacter();
