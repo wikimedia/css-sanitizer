@@ -7,6 +7,7 @@
 namespace Wikimedia\CSS;
 
 use PHPUnit\Framework\TestCase;
+use Wikimedia\CSS\Objects\Stylesheet;
 use Wikimedia\CSS\Parser\Parser;
 use Wikimedia\CSS\Sanitizer\StylesheetSanitizer;
 
@@ -23,6 +24,7 @@ class MinificationTest extends TestCase {
 	public function testStylesheets( $input, $output ) {
 		$sheet = Parser::newFromString( $input )->parseStylesheet();
 		$ret = StylesheetSanitizer::newDefault()->sanitize( $sheet );
+		'@phan-var Stylesheet $ret';
 		$this->assertSame( $output, Util::stringify( $ret, [ 'minify' => true ] ) );
 	}
 

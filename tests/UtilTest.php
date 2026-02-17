@@ -2,6 +2,7 @@
 /**
  * @file
  * @license https://opensource.org/licenses/Apache-2.0 Apache-2.0
+ * @phan-file-suppress PhanAccessMethodInternal
  */
 
 namespace Wikimedia\CSS;
@@ -190,20 +191,16 @@ class UtilTest extends TestCase {
 		$this->assertSame( 'U/**/+123/**/-456', Util::stringify( $tokenList ) );
 
 		$tokenList = new TokenList( [ new Token( Token::T_IDENT, 'U' ), $n1, $n2 ] );
-		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 3 );
 		$this->assertSame( 'U+123-456', Util::stringify( $tokenList ) );
 
 		$tokenList = new TokenList( [ new Token( Token::T_IDENT, 'U' ), $n1, $n2 ] );
-		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 2 );
-		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 1 );
 		$this->assertSame( 'U+123/**/-456', Util::stringify( $tokenList ) );
 
 		// Not really expected, but valid.
 		$tokenList = new TokenList( [ new Token( Token::T_IDENT, 'U' ), $n1, $q, $q, $q ] );
-		// @phan-suppress-next-line PhanUndeclaredMethod False positive
 		$tokenList[0]->urangeHack( 3 );
 		$this->assertSame( 'U+123???', Util::stringify( $tokenList ) );
 	}

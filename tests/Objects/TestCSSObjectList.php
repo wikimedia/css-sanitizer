@@ -6,6 +6,7 @@
 
 namespace Wikimedia\CSS\Objects;
 
+/** @extends CSSObjectList<TestCSSObjectListItem> */
 class TestCSSObjectList extends CSSObjectList {
 	/** @var string */
 	protected static $objectType = TestCSSObjectListItem::class;

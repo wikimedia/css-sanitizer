@@ -43,7 +43,6 @@ class GrammarMatch {
 	) {
 		Util::assertAllInstanceOf( $capturedMatches, self::class, '$capturedMatches' );
 
-		// @phan-suppress-next-line PhanTypeMismatchProperty Likely a Phan bug?
 		$this->values = $list->slice( $start, $length );
 		$this->start = $start;
 		$this->length = $length;

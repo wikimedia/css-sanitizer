@@ -11,6 +11,7 @@ use Wikimedia\CSS\Parser\Parser;
 
 /**
  * Represent a list of CSS tokens
+ * @extends CSSObjectList<Token>
  */
 class TokenList extends CSSObjectList {
 	/**
