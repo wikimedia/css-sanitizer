@@ -1,5 +1,9 @@
 # Release History
 
+## css-sanitizer 6.2.1 (2026-03-04)
+* Pass first byte to ord() in DataSourceTokenizer for PHP 8.5 compatibility
+* Add comprehensive EOF checks in DataSourceTokenizer
+
 ## css-sanitizer 6.2.0 (2025-12-03)
 * Allow var() inside calc() and other math functions
 * Allow color functions inside var() fallback
