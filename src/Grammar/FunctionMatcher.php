@@ -49,7 +49,6 @@ class FunctionMatcher extends Matcher {
 
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
-		// @phan-suppress-next-line PhanCoalescingNeverNull
 		$cv = $values[$start] ?? null;
 		if ( $cv instanceof CSSFunction &&
 			( !$this->nameCheck || ( $this->nameCheck )( $cv->getName() ) )

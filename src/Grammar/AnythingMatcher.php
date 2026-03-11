@@ -63,7 +63,6 @@ class AnythingMatcher extends Matcher {
 		$lastMatch = $this->quantifier === '*' ? $this->makeMatch( $values, $start, $start ) : null;
 		do {
 			$newMatch = null;
-			// @phan-suppress-next-line PhanCoalescingNeverNullInLoop
 			$cv = $values[$start] ?? null;
 			if ( $cv instanceof Token ) {
 				switch ( $cv->type() ) {

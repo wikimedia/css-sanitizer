@@ -32,7 +32,6 @@ class TokenMatcher extends Matcher {
 
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
-		// @phan-suppress-next-line PhanCoalescingNeverNull
 		$cv = $values[$start] ?? null;
 		if ( $cv instanceof Token && $cv->type() === $this->type &&
 			( !$this->callback || ( $this->callback )( $cv ) )

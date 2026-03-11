@@ -20,7 +20,6 @@ class CustomPropertyMatcher extends Matcher {
 
 	/** @inheritDoc */
 	protected function generateMatches( ComponentValueList $values, $start, array $options ) {
-		// @phan-suppress-next-line PhanCoalescingNeverNull
 		$cv = $values[$start] ?? null;
 		if ( $cv instanceof Token && $cv->type() === Token::T_IDENT
 			&& preg_match( '/^\-\-[a-zA-Z][a-zA-Z0-9-]*$/', $cv->value() ) ) {
