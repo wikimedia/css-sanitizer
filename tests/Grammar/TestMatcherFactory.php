@@ -31,7 +31,7 @@ class TestMatcherFactory extends MatcherFactory {
 		$key = __METHOD__ . ':' . $type;
 		if ( !isset( $this->cache[$key] ) ) {
 			$this->cache[$key] = new TokenMatcher( Token::T_STRING, static function ( $url ) use ( $type ) {
-				return str_contains( $url, $type );
+				return str_contains( (string)$url, $type );
 			} );
 		}
 		return $this->cache[$key];
