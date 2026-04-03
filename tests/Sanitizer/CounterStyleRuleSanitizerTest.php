@@ -1,4 +1,5 @@
 <?php
+declare( strict_types = 1 );
 
 use Wikimedia\CSS\Grammar\TestMatcherFactory;
 use Wikimedia\CSS\Sanitizer\CounterStyleAtRuleSanitizer;
