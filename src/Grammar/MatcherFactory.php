@@ -260,8 +260,7 @@ class MatcherFactory {
 			'sign' => 1,
 		];
 		return static function ( $name ) use ( $funcArgs, $argType ) {
-			// phpcs:ignore Generic.ControlStructures.DisallowYodaConditions
-			return $funcArgs[ strtolower( $name ) ] ?? null === $argType;
+			return ( $funcArgs[ strtolower( $name ) ] ?? null ) === $argType;
 		};
 	}
 
