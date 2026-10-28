@@ -39,6 +39,7 @@ class CSSObjectListTest extends TestCase {
 		$list = new TestCSSObjectList( [ $value1, $value2, $value3 ] );
 
 		try {
+			// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal The mismatch is tested here
 			$list->add( new Token( Token::T_WHITESPACE ) );
 			$this->fail( 'Expected exception not thrown' );
 		} catch ( InvalidArgumentException $ex ) {
@@ -358,6 +359,7 @@ class CSSObjectListTest extends TestCase {
 	 * @param array $expect
 	 */
 	public function testGetPosition( $tokens, $expect ) {
+		// @phan-suppress-next-line PhanTypeMismatchArgument Generic list used with plain tokens
 		$list = new TestCSSObjectList( $tokens );
 		$this->assertSame( $expect, $list->getPosition() );
 	}

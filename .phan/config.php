@@ -13,9 +13,6 @@ $cfg['directory_list'] = [
 ];
 $cfg['exclude_analysis_directory_list'] = [ 'vendor/', 'coverage/', 'doc/' ];
 
-// Makes phan crash, see T324207.
-$cfg['exclude_file_list'][] = 'tests/Objects/CSSObjectListTest.php';
-
 // By default mediawiki-phan-config ignores the 'use of deprecated <foo>' errors.
 // $cfg['suppress_issue_types'][] = '<some phan issue>';
 
