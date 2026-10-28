@@ -19,7 +19,7 @@ $stylesheet = $parser->parseStylesheet();
 
 /** Report any parser errors **/
 
-foreach ( $parser->getParseErrors() as list( $code, $line, $pos ) ) {
+foreach ( $parser->getParseErrors() as [ $code, $line, $pos ] ) {
 	// $code is a string that should be suitable as a key for an i18n library.
 	// See errors.md for details.
 	$error = lookupI18nMessage( "css-parse-error-$code" );
@@ -35,7 +35,7 @@ $newStylesheet = $sanitizer->sanitize( $stylesheet );
 
 /** Report any sanitizer errors **/
 
-foreach ( $sanitizer->getSanitizationErrors() as list( $code, $line, $pos ) ) {
+foreach ( $sanitizer->getSanitizationErrors() as [ $code, $line, $pos ] ) {
 	// $code is a string that should be suitable as a key for an i18n library.
 	// See errors.md for details.
 	$error = lookupI18nMessage( "css-sanitization-error-$code" );
