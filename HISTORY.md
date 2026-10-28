@@ -1,5 +1,17 @@
 # Release History
 
+## css-sanitizer 6.2.2 (2026-10-28)
+* Fix precedence in MatcherFactory::makeFuncNameChecker()
+* Token: Only pass floats to is_finite()
+* Declare strict types on all PHP files
+
+* build: Allow wikimedia/scoped-callback 6.0.0
+* build: Drop support for wikimedia/scoped-callback < 5.0
+* build: Stop excluding CSSObjectListTest from phan analysis
+* build: Updating mediawiki/mediawiki-codesniffer to 51.0.0
+* build: Updating mediawiki/mediawiki-codesniffer to 52.0.0
+* build: Updating mediawiki/mediawiki-phan-config to 0.20.0
+
 ## css-sanitizer 6.2.1 (2026-03-04)
 * Pass first byte to ord() in DataSourceTokenizer for PHP 8.5 compatibility
 * Add comprehensive EOF checks in DataSourceTokenizer
