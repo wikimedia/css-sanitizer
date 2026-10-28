@@ -10,7 +10,6 @@ namespace Wikimedia\CSS\Parser;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use UtfNormal\Utils;
 
 /**
  * @covers \Wikimedia\CSS\Parser\StringDataSource
@@ -80,22 +79,14 @@ class StringDataSourceTest extends TestCase {
 		$source = new StringDataSource(
 			"\x00\x7f\xc2\x80\xdf\xbf\xe0\xa0\x80\xef\xbf\xbf\xf0\x90\x80\x80\xf4\x8f\xbf\xbf"
 		);
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0, Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0x7f, Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0x80, Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0x7ff, Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0x800, Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0xffff, Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0x10000, Utils::utf8ToCodepoint( $source->readCharacter() ) );
-		// @phan-suppress-next-line PhanDeprecatedFunction We're still claiming to support UtfNormal 2.0.0
-		$this->assertSame( 0x10ffff, Utils::utf8ToCodepoint( $source->readCharacter() ) );
+		$this->assertSame( 0, mb_ord( $source->readCharacter() ) );
+		$this->assertSame( 0x7f, mb_ord( $source->readCharacter() ) );
+		$this->assertSame( 0x80, mb_ord( $source->readCharacter() ) );
+		$this->assertSame( 0x7ff, mb_ord( $source->readCharacter() ) );
+		$this->assertSame( 0x800, mb_ord( $source->readCharacter() ) );
+		$this->assertSame( 0xffff, mb_ord( $source->readCharacter() ) );
+		$this->assertSame( 0x10000, mb_ord( $source->readCharacter() ) );
+		$this->assertSame( 0x10ffff, mb_ord( $source->readCharacter() ) );
 		$this->assertSame( DataSource::EOF, $source->readCharacter() );
 	}
 }
