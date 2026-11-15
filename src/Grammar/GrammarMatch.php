@@ -125,7 +125,7 @@ class GrammarMatch {
 	public function getUniqueID() {
 		$data = [ $this->start, $this->length, $this->name ];
 		foreach ( $this->capturedMatches as $m ) {
-			$data[] = $m->getUniqueId();
+			$data[] = $m->getUniqueID();
 		}
 		return md5( implode( "\n", $data ) );
 	}
